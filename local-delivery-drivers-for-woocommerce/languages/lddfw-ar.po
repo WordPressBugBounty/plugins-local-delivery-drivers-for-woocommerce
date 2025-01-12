@@ -1,0 +1,2932 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: BUG-EMAIL-ADDR <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: yyyy-mm-dd hh:mm+0000\n"
+"PO-Revision-Date: 2022-08-04 13:39+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.4; wp-6.0.1"
+
+#: admin/class-lddfw-admin.php:2140
+#, php-format
+msgid "%s minutes"
+msgstr "%s دقيقة"
+
+#: includes/class-lddfw-orders.php:1066
+msgid "<<"
+msgstr "<<"
+
+#: includes/class-lddfw-orders.php:1067
+msgid ">>"
+msgstr ">>"
+
+#: includes/class-lddfw-assigned-order-email-driver.php:74
+msgid "A new order has been assigned to you!"
+msgstr "تمت إضافة طلبية جديدة اليك!"
+
+#: includes/class-lddfw-password.php:227
+msgid ""
+"A password reset link was sent. Click the link in the email to create a new "
+"password. If you do not receive an email within 5 minutes, please click on "
+"the resend email button below."
+msgstr ""
+"تم إرسال رابط لتغيير كلمة العبور. إضغط على الرابط المتوفر في البريد "
+"الإلكتروني من اجل تغيير كلمة العبور."
+
+#: includes/class-lddfw-application.php:80
+msgid "A server error occurred and your email was not sent"
+msgstr "وقع خلل فني بجهاز السيرفر ولم يتم إرسال بريدك الإلكتروني"
+
+#: admin/class-lddfw-admin.php:2074
+msgid "About the driver tracking:"
+msgstr "بخصوص مراقبة السائق:"
+
+#: admin/class-lddfw-admin.php:3945
+msgid "About the tracking page:"
+msgstr "بخصوص صفحة المراقبة:"
+
+#: includes/class-lddfw-screens.php:790
+msgid "Access Denied, You do not have permissions to access this order"
+msgstr "الدخول محضور، ليس لديك الإذن بالدخول لهذا الطلب"
+
+#: includes/class-lddfw-driver.php:728
+msgid "Account"
+msgstr "الحساب"
+
+#: admin/class-lddfw-admin.php:3470
+msgid "Active"
+msgstr "مفعَّل"
+
+#: includes/class-lddfw-reports.php:575
+msgid "Active drivers"
+msgstr "السائقون الناشطون"
+
+#: includes/class-lddfw-order.php:856 includes/class-lddfw-order.php:906
+msgid "Add"
+msgstr "إضافة"
+
+#: includes/class-lddfw-order.php:837
+msgid "Add a photo to order."
+msgstr "إضافة صورة للطلبية."
+
+#: includes/class-lddfw-order.php:887
+msgid "Add a signature to order."
+msgstr "إضافة توقيع للطلبية."
+
+#: admin/class-lddfw-admin.php:2147
+msgid "Add minutes to the estimated time of arrival."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1208
+msgid "Add minutes to the ETA"
+msgstr ""
+
+#: includes/class-lddfw-order.php:716
+msgid "Add more orders"
+msgstr "إضافة طلبيات جديدة"
+
+#: admin/class-lddfw-admin.php:829 admin/class-lddfw-admin.php:867
+#: admin/class-lddfw-admin.php:941
+msgid "Add New"
+msgstr "إضافة جديدة"
+
+#: admin/class-lddfw-admin.php:828
+msgid "Add New Custom Fields"
+msgstr "إضافة مواصفات معينة"
+
+#: includes/class-lddfw-reports.php:576
+msgid "Add new driver"
+msgstr "إضافة سائق جديد"
+
+#: admin/class-lddfw-admin.php:940
+msgid "Add New Item"
+msgstr "إضافة عنصر جديد"
+
+#: admin/class-lddfw-admin.php:866
+msgid "Add New section"
+msgstr "إضافة قسم جديد"
+
+#: includes/class-lddfw-reports.php:587 includes/class-lddfw-reports.php:673
+msgid "Address"
+msgstr "العنوان"
+
+#: includes/class-lddfw-driver.php:849
+msgid "Address 1 is empty."
+msgstr "بيانات العنوان 1 غير متوفرة."
+
+#: includes/class-lddfw-driver.php:664 includes/class-lddfw-driver.php:666
+msgid "Address line 1"
+msgstr "بيانات العنوان 1"
+
+#: includes/class-lddfw-driver.php:670 includes/class-lddfw-driver.php:672
+msgid "Address line 2"
+msgstr "بيانات العنوان 2"
+
+#: admin/class-lddfw-admin.php:826
+msgid "All Custom Fields"
+msgstr "جميع بيانات المواصفات"
+
+#: includes/class-lddfw-reports.php:579
+msgid "All drivers"
+msgstr "جميع السائقين"
+
+#: admin/class-lddfw-admin.php:938
+msgid "All Items"
+msgstr "جميع العناصر"
+
+#: admin/class-lddfw-admin.php:864
+msgid "All Sections"
+msgstr "جميع الاقسام"
+
+#: admin/class-lddfw-admin.php:2290
+msgid ""
+"Allow the customer to see the driver information on the tracking page, "
+"emails and on his account."
+msgstr ""
+"السماح للزبون بالإطلاع على معلومات السائق عبر صفحة المراقبة، وبإرسال بريد "
+"إلكتروني اليه."
+
+#: admin/class-lddfw-admin.php:2375
+msgid "Allow the driver to see features on the drivers panel."
+msgstr "السماح للسائق بالإطلاع على خصائص إعدادات السائقين."
+
+#: includes/class-lddfw-password.php:74
+msgid "An error occurred while sending mail."
+msgstr "وقع خلل اثناء إرسال البريد الإلكتروني."
+
+#: admin/class-lddfw-admin.php:130 admin/class-lddfw-admin.php:176
+#: admin/class-lddfw-admin.php:650
+msgid "An error occurred."
+msgstr "خلل تقني."
+
+#: includes/class-lddfw-route.php:615 includes/class-lddfw-route.php:738
+msgid "An unexpected error has occurred, please try again."
+msgstr "خلل تقني، الرجاء إعادة المحاولة."
+
+#: includes/class-lddfw-route.php:336
+msgid "An unexpected error has occurred."
+msgstr "لقد طرأ خلل تقني."
+
+#: admin/class-lddfw-admin.php:1497 admin/class-lddfw-admin.php:1555
+msgid "API AUTH TOKEN"
+msgstr "API AUTH TOKEN"
+
+#: admin/class-lddfw-admin.php:1489 admin/class-lddfw-admin.php:1547
+msgid "API SID"
+msgstr "API SID"
+
+#: admin/class-lddfw-admin.php:2240 includes/class-lddfw-driver.php:580
+msgid "Apple Maps"
+msgstr "خرائط آبل Apple Maps"
+
+#: index.php:238 includes/class-lddfw-order.php:1035
+msgid "Are you sure?"
+msgstr "هل انت متأكد؟"
+
+#: includes/lddfw-metaboxes.php:137
+msgid "Assign a driver"
+msgstr "تعيين سائق"
+
+#: admin/class-lddfw-admin.php:3709
+msgid "Assign a driver to orders"
+msgstr "تعيين سائق للطلبات"
+
+#: admin/class-lddfw-admin.php:1394
+msgid "Assign Drivers to Orders"
+msgstr ""
+
+#: includes/class-lddfw-screens.php:565
+msgid "Assign orders to you"
+msgstr "الحصول على الطلبيات"
+
+#: includes/class-lddfw-orders.php:481 includes/class-lddfw-orders.php:564
+msgid "Auto - Farthest / Last address on route."
+msgstr "اوتوماتيكيا - الابعد مسافة / المسار الأخير على الخريطة."
+
+#: admin/class-lddfw-admin.php:2444
+msgid "Auto-assign by pickup city."
+msgstr "خيار آلي: العرض حسب مدينة الإستلام."
+
+#: admin/class-lddfw-admin.php:2443
+msgid ""
+"Auto-assign by pickup zip code, city, state, country, and the number of "
+"orders each driver has."
+msgstr ""
+"خيار آلي: العرض حسب الترقيم البريدي للإستلام، المدينة، البلاد، الدولة، وحسب "
+"عدد الطلبيات لكل سائق."
+
+#: admin/class-lddfw-admin.php:2445
+msgid "Auto-assign by shipping city or pickup city."
+msgstr "خيار آلي: العرض حسب مدينة الشحن او الإستلام."
+
+#: admin/class-lddfw-admin.php:2442
+msgid "Auto-assign by shipping city."
+msgstr "خيار آلي: العرض حسب مدينة الشحن."
+
+#: admin/class-lddfw-admin.php:2441
+msgid ""
+"Auto-assign by shipping zip code, city, state, country, and the number of "
+"orders each driver has."
+msgstr ""
+"خيار آلي: العرض حسب الترقيم البريدي، المدينة، البلاد، الدولة، وحسب عدد "
+"الطلبيات لكل سائق."
+
+#: admin/class-lddfw-admin.php:2440
+msgid "Auto-assign by the number of orders each driver has."
+msgstr "خيار آلي: العرض حسب عدد الطلبيات لكل سائق."
+
+#: admin/class-lddfw-admin.php:1417
+msgid "Auto-assign delivery drivers"
+msgstr "تعيين السائقين بصفة آلية"
+
+#: admin/class-lddfw-admin.php:2470
+msgid "Auto-assign drivers action  happen on processing status orders."
+msgstr ""
+"خيار التعيين الآلي للسائقين يطبق على الطلبيات التي تكون في وضعية التجهيز."
+
+#: admin/class-lddfw-admin.php:1432
+msgid "Auto-assign drivers to suborders"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1424
+msgid "Auto-assign method"
+msgstr "خيار التعيين آلي"
+
+#: includes/class-lddfw-reports.php:588 includes/class-lddfw-reports.php:674
+msgid "Availability"
+msgstr "التوفر"
+
+#: includes/class-lddfw-driver.php:496 includes/class-lddfw-driver.php:505
+#: includes/class-lddfw-screens.php:334 includes/class-lddfw-screens.php:343
+msgid "Availability status"
+msgstr "وضعية التوفر"
+
+#: admin/class-lddfw-admin.php:3481 includes/class-lddfw-driver.php:493
+#: includes/class-lddfw-driver.php:502 includes/class-lddfw-screens.php:331
+#: includes/class-lddfw-screens.php:340 includes/lddfw-metaboxes.php:144
+msgid "Available"
+msgstr "متوفر"
+
+#: includes/class-lddfw-reports.php:692
+msgid "Availables"
+msgstr "المتوفرون"
+
+#: includes/class-lddfw-password.php:232 includes/class-lddfw-password.php:285
+msgid "Back to forgot password"
+msgstr "العودة إلى نسيت كلمة العبور"
+
+#: includes/class-lddfw-application.php:113
+#: includes/class-lddfw-application.php:159
+#: includes/class-lddfw-password.php:162
+msgid "Back to login"
+msgstr "العودة إلى الولوج"
+
+#: admin/class-lddfw-admin.php:3523 includes/class-lddfw-driver.php:563
+msgid "Bicycling"
+msgstr "ركوب الدراجة"
+
+#: includes/class-lddfw-order.php:543
+msgid "Billing Address"
+msgstr "عنوان الفوترة"
+
+#: admin/class-lddfw-admin.php:1875
+msgid "Billing Address 1"
+msgstr "عنوان الفوترة 1"
+
+#: admin/class-lddfw-admin.php:1876
+msgid "Billing Address 2"
+msgstr "عنوان الفوترة 2"
+
+#: admin/class-lddfw-admin.php:1877
+msgid "Billing City"
+msgstr "بيانات الفوترة: المدينة"
+
+#: admin/class-lddfw-admin.php:1874
+msgid "Billing Company"
+msgstr "بيانات الفوترة: الشركة"
+
+#: admin/class-lddfw-admin.php:1880
+msgid "Billing Country"
+msgstr "بيانات الفوترة: البلد"
+
+#: admin/class-lddfw-admin.php:1872
+msgid "Billing First Name"
+msgstr "الإسم الأول لبيانات الفوترة"
+
+#: admin/class-lddfw-admin.php:1873
+msgid "Billing Last Name"
+msgstr "الإسم العائلي لبيانات الفوترة"
+
+#: admin/class-lddfw-admin.php:1881
+msgid "Billing Phone"
+msgstr "بيانات الفوترة: الهاتف"
+
+#: admin/class-lddfw-admin.php:1879
+msgid "Billing Postcode"
+msgstr "بيانات الفوترة: العنوان البريدي"
+
+#: admin/class-lddfw-admin.php:1878
+msgid "Billing State"
+msgstr "بيانات الفوترة: الدولة"
+
+#: admin/class-lddfw-admin.php:3108 admin/class-lddfw-admin.php:3109
+msgid "Branding"
+msgstr "العلامة التجارية"
+
+#: admin/class-lddfw-admin.php:1642
+msgid "Button background"
+msgstr "زر الخلفية"
+
+#: admin/class-lddfw-admin.php:1635
+msgid "Button text color"
+msgstr "زر لون كتابة النص"
+
+#: includes/class-lddfw-driver.php:106
+#, php-format
+msgid "by %s"
+msgstr "عبر %s"
+
+#: includes/class-lddfw-order.php:391 includes/class-lddfw-order.php:425
+#: includes/class-lddfw-order.php:521
+msgid "Call"
+msgstr "الإتصال"
+
+#: includes/class-lddfw-order.php:259
+msgid "Call Dispatch"
+msgstr "الإتصال بمركز الإرسال"
+
+#: includes/class-lddfw-driver.php:1141 includes/class-lddfw-driver.php:1156
+msgid "Call driver"
+msgstr "الإتصال بالسائق"
+
+#: includes/class-lddfw-reports.php:693
+msgid "Can claim"
+msgstr "قابل للتحصيل"
+
+#: includes/class-lddfw-reports.php:693
+msgid "Can't claim"
+msgstr "غير قابل للتحصيل"
+
+#: includes/class-lddfw-driver.php:748 includes/class-lddfw-order.php:722
+#: includes/class-lddfw-order.php:740 includes/class-lddfw-order.php:776
+#: includes/class-lddfw-order.php:1037 includes/class-lddfw-order.php:1137
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: admin/class-lddfw-admin.php:3708
+msgid "Change status to"
+msgstr "تغيير الوضعية إلى"
+
+#: includes/class-lddfw-screens.php:566
+msgid "Choose orders and click on the Claim Orders button"
+msgstr "قم باختيار الطلبيات وانقر على رز الحصول على الطلبيات"
+
+#: includes/class-lddfw-screens.php:507
+msgid "Choose orders and click on the Out For Delivery button"
+msgstr "قم باختيار الطلبيات وانقر على رز الخروج للتسليم"
+
+#: admin/class-lddfw-admin.php:2010
+msgid "Choose which orders the drivers will be able to claim."
+msgstr "قم باختيار الطلبيات التي تسمح للسائقين بالحصول عليها."
+
+#: includes/class-lddfw-driver.php:676 includes/class-lddfw-driver.php:678
+msgid "City"
+msgstr "المدينة"
+
+#: includes/class-lddfw-driver.php:852
+msgid "City is empty."
+msgstr "بيانات المدينة غير متوفرة."
+
+#: includes/class-lddfw-order.php:770
+msgid "Claim more orders"
+msgstr "إضافة طلبيات جديدة"
+
+#: includes/class-lddfw-order.php:757
+msgid "Claim Order"
+msgstr "الحصول على الطلبية"
+
+#: includes/class-lddfw-screens.php:555 includes/class-lddfw-screens.php:590
+msgid "Claim Orders"
+msgstr "الحصول على الطلبيات"
+
+#: includes/class-lddfw-reports.php:589 includes/class-lddfw-reports.php:675
+#: includes/class-lddfw-screens.php:103 includes/class-lddfw-screens.php:419
+msgid "Claim orders"
+msgstr "الحصول على الطلبيات"
+
+#: admin/class-lddfw-admin.php:1409
+msgid "Claim orders limitation"
+msgstr "القيود المفروضة للحصول على الطلبيات"
+
+#: admin/class-lddfw-admin.php:2034
+msgid "Claim orders option available for processing status orders."
+msgstr "خيار الحصول على الطلبيات متوفر لتفعيل وضعية تجهيز الطلبيات."
+
+#: includes/class-lddfw-order.php:735
+msgid "Close"
+msgstr "إغلاق"
+
+#: includes/class-lddfw-reports.php:441 includes/class-lddfw-reports.php:508
+#: includes/class-lddfw-reports.php:529 includes/class-lddfw-screens.php:719
+msgid "Commission"
+msgstr "العمولة"
+
+#: admin/class-lddfw-admin.php:1456
+msgid "Commissions"
+msgstr ""
+
+#: includes/class-lddfw-driver.php:658 includes/class-lddfw-driver.php:660
+msgid "Company"
+msgstr "الشركة"
+
+#: includes/class-lddfw-password.php:273
+msgid "Confirm password"
+msgstr "تأكيد كلمة العبور"
+
+#: includes/class-lddfw-driver.php:611
+msgid "Contact Info"
+msgstr "بيانات الإتصال"
+
+#: includes/class-lddfw-order.php:275
+msgid "Coordinates:"
+msgstr "الإحداثيات:"
+
+#: includes/class-lddfw-driver.php:698
+msgid "Country / Region"
+msgstr "البلد / المنطقة"
+
+#: includes/class-lddfw-driver.php:855
+msgid "Country is empty."
+msgstr "بيانات البلد غير متوفرة."
+
+#: includes/class-lddfw-password.php:270
+msgid "Create a new password."
+msgstr "إنشاء كلمة عبور جديدة."
+
+#: includes/class-lddfw-reports.php:409
+msgid "Custom"
+msgstr "مواصفات"
+
+#: admin/class-lddfw-admin.php:824 admin/class-lddfw-admin.php:839
+#: admin/class-lddfw-admin.php:840 admin/class-lddfw-admin.php:3189
+msgid "Custom Fields"
+msgstr "مواصفات معينة"
+
+#: includes/class-lddfw-order.php:475
+msgid "Customer"
+msgstr "الزبون"
+
+#: includes/class-lddfw-order.php:838
+msgid "Customer and admin can view the photo at any time."
+msgstr "بإمكان الزبون والمدير رؤية الصورة في أي وقت."
+
+#: includes/class-lddfw-order.php:888
+msgid "Customer and admin can view the signature at any time."
+msgstr "بإمكان الزبون والمدير رؤية التوقيع في أي وقت."
+
+#: admin/class-lddfw-admin.php:1184
+msgid "Customer permissions"
+msgstr "اذون الزبون"
+
+#: admin/class-lddfw-admin.php:2218 admin/class-lddfw-admin.php:3501
+#: includes/class-lddfw-driver.php:549
+msgid "Dark Mode"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:3183 includes/class-lddfw-reports.php:542
+#: includes/class-lddfw-screens.php:96 includes/class-lddfw-screens.php:319
+msgid "Dashboard"
+msgstr "واجهة المتابعة"
+
+#: includes/class-lddfw-order.php:188
+msgid "Date"
+msgstr "التاريخ"
+
+#: includes/class-lddfw-reports.php:401
+msgid "Dates"
+msgstr "التواريخ"
+
+#: admin/class-lddfw-admin.php:1914 admin/class-lddfw-admin.php:1940
+#: admin/class-lddfw-admin.php:1977 admin/class-lddfw-admin.php:2517
+#: admin/class-lddfw-admin.php:2604 admin/class-lddfw-admin.php:2706
+#: admin/class-lddfw-admin.php:2732 admin/class-lddfw-admin.php:2769
+msgid "Default template"
+msgstr "نموذج تلقائي"
+
+#: admin/class-lddfw-admin.php:1765 admin/class-lddfw-admin.php:3571
+msgid "Delete image"
+msgstr "حذف صورة"
+
+#: includes/class-lddfw-order.php:679 includes/class-lddfw-screens.php:116
+#: includes/class-lddfw-screens.php:451 includes/class-lddfw-screens.php:625
+msgid "Delivered"
+msgstr "تم تسليم الطلبية"
+
+#: includes/class-lddfw-orders.php:1121 includes/lddfw-metaboxes.php:84
+msgid "Delivered Date"
+msgstr "تاريخ إتمام التسليم"
+
+#: includes/class-lddfw-order.php:202
+msgid "Delivered date"
+msgstr "تاريخ إتمام تسليم الطلبية"
+
+#: admin/class-lddfw-admin.php:1267
+msgid "Delivered status"
+msgstr "وضعية إتمام التسليم"
+
+#: includes/class-lddfw-activator.php:96
+msgid "Delivered to the customer."
+msgstr "تم تسليم الطلبية للزبون."
+
+#: includes/class-lddfw-reports.php:65 includes/class-lddfw-reports.php:118
+#: includes/class-lddfw-reports.php:144 includes/class-lddfw-reports.php:212
+msgid "Delivered today"
+msgstr "تم التسليم هذا اليوم"
+
+#: index.php:215 includes/lddfw-metaboxes.php:26
+msgid "Delivery Driver"
+msgstr "سائق التسليم"
+
+#: includes/class-lddfw-activator.php:67
+msgid "Delivery driver"
+msgstr "سائق التسليم"
+
+#: includes/class-lddfw-driver.php:109
+#, php-format
+msgid "Delivery driver %1$s has been assigned to order %2$s"
+msgstr "سائق التسليم %1$s وقع تعيينه على الطلبية %2$s"
+
+#: admin/class-lddfw-admin.php:3626
+msgid "Delivery driver address coordinates"
+msgstr "إحداثيات عنوان سائق التسليم"
+
+#: includes/class-lddfw-application.php:75
+msgid "Delivery Driver Application"
+msgstr "تطبيقة سائق التسليم"
+
+#: admin/class-lddfw-admin.php:1859
+msgid "Delivery Driver First Name"
+msgstr "الإسم الأول لسائق التسليم"
+
+#: includes/class-lddfw-driver.php:98
+msgid "Delivery driver has been assigned to order."
+msgstr "تم تعيين سائق للطلبية."
+
+#: admin/class-lddfw-admin.php:3462
+msgid "Delivery Driver Info"
+msgstr "بيانات سائق التسليم"
+
+#: admin/class-lddfw-admin.php:1860
+msgid "Delivery Driver Last Name"
+msgstr "الإسم العائلي لسائق التسليم"
+
+#: admin/class-lddfw-admin.php:1861
+msgid "Delivery Driver Page"
+msgstr "صفحة سائق التسليم"
+
+#: admin/class-lddfw-admin.php:3182
+msgid "Delivery Drivers"
+msgstr "سائقي التسليم"
+
+#: admin/class-lddfw-admin.php:1228
+msgid "Delivery drivers page"
+msgstr "صفحة سائقين التسليم"
+
+#: admin/class-lddfw-admin.php:3182
+msgid "Delivery Drivers Settings"
+msgstr "خيارات سائقي التسليم"
+
+#: includes/class-lddfw-driver.php:485
+msgid "Delivery Settings"
+msgstr "إعدادات تسليم الطلبيات"
+
+#: admin/class-lddfw-admin.php:1244
+msgid "Delivery statuses"
+msgstr "وضعيات التسليم"
+
+#: admin/class-lddfw-admin.php:2177
+msgid "Delivery total percentage"
+msgstr "مجموع النسبة المئوية من تسليم الطلبيات"
+
+#: admin/class-lddfw-admin.php:3202
+msgid "Developed by"
+msgstr "تم التطوير من"
+
+#: includes/class-lddfw-order.php:148
+msgid "Direction"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:4111
+msgid "Disable auto assign drivers for this method."
+msgstr "إلغاء خاصية تعيين السائقين بصفة آلية."
+
+#: admin/class-lddfw-admin.php:4116
+msgid "Disable claim orders for this method."
+msgstr ""
+
+#: includes/class-lddfw-order.php:1416
+msgid "Discount"
+msgstr "الخصم"
+
+#: admin/class-lddfw-admin.php:1314
+msgid "Dispatch phone number"
+msgstr "إرسال رقم الهاتف"
+
+#: admin/class-lddfw-admin.php:2179 includes/class-lddfw-orders.php:448
+#: includes/class-lddfw-orders.php:654 includes/class-lddfw-orders.php:1118
+msgid "Distance"
+msgstr "المسافة"
+
+#: admin/class-lddfw-admin.php:2181
+msgid "Distance + Time"
+msgstr ""
+
+#: includes/class-lddfw-route.php:382
+msgid "Distance service returned an error status."
+msgstr "خلل تقني أثناء إحتساب مسافة الخدمة."
+
+#: admin/class-lddfw-admin.php:3202
+msgid "Documents"
+msgstr "الوثائق"
+
+#: includes/class-lddfw-order.php:932 includes/class-lddfw-order.php:1136
+#: includes/class-lddfw-route.php:106
+msgid "Done"
+msgstr "تمَّ"
+
+#: includes/class-lddfw-order.php:926
+msgid "Draw signature"
+msgstr "قم بالتوقيع"
+
+#: includes/class-lddfw-route.php:272
+msgid "Drive to the next delivery"
+msgstr "استمر في القيادة بإتجاه تسليم الطلبية التالية"
+
+#: admin/class-lddfw-admin.php:3362 includes/class-lddfw-order.php:583
+#: includes/class-lddfw-reports.php:205 includes/class-lddfw-reports.php:225
+#: includes/class-lddfw-reports.php:486 includes/class-lddfw-reports.php:516
+#: includes/class-lddfw-reports.php:667 includes/class-lddfw-reports.php:686
+#: includes/class-lddfw-route.php:1264 includes/lddfw-metaboxes.php:47
+msgid "Driver"
+msgstr "سائق"
+
+#: admin/class-lddfw-admin.php:591
+#, php-format
+msgid "Driver %s changed the order status."
+msgstr "قام السائق %s السائقون بتحديث وضع الطلبيات."
+
+#: admin/class-lddfw-admin.php:600
+#, php-format
+msgid "Driver %s note"
+msgstr "ملاحظة السائق %s السائقين"
+
+#: admin/class-lddfw-admin.php:3465
+msgid "Driver account status"
+msgstr "وضعية حساب السائق"
+
+#: includes/class-lddfw-application.php:143
+msgid "Driver Application"
+msgstr "تطبيقة السائق"
+
+#: admin/class-lddfw-admin.php:986 admin/class-lddfw-admin.php:1028
+msgid "Driver Assigned"
+msgstr "تم تعيين السائق"
+
+#: index.php:87 includes/class-lddfw-reports.php:63
+#: includes/class-lddfw-reports.php:116 includes/class-lddfw-reports.php:142
+#: includes/class-lddfw-reports.php:210
+msgid "Driver assigned"
+msgstr "تم تعيين السائق"
+
+#: admin/class-lddfw-admin.php:1034
+#, php-format
+msgid "Driver Assigned <span class=\"count\">(%s)</span>"
+msgid_plural "Driver Assigned <span class=\"count\">(%s)</span>"
+msgstr[0] "تم تعيين السائق <span class=\"count\">(%s)</span>"
+msgstr[1] "تم تعييت السائق <span class=\"count\">(%s)</span>"
+msgstr[2] "تم تعيين السائقين <span class=\"count\">(%s)</span"
+msgstr[3] "تم تعيين السائقين <span class=\"count\">(%s)</span"
+msgstr[4] "تم تعيين السائقين <span class=\"count\">(%s)</span"
+msgstr[5] "تم تعيين السائقين <span class=\"count\">(%s)</span"
+
+#: admin/class-lddfw-admin.php:1251
+msgid "Driver assigned status"
+msgstr "وضعية السائق المعين"
+
+#: admin/class-lddfw-admin.php:3476
+msgid "Driver availability"
+msgstr "توفر السائق"
+
+#: admin/class-lddfw-admin.php:3534
+msgid "Driver can claim orders"
+msgstr "بإمكان السائق الحصول على الطلبيات"
+
+#: admin/class-lddfw-admin.php:587
+msgid "Driver changed the order status."
+msgstr "قام السائق % السائقون بتحديث وضع التسليم."
+
+#: includes/lddfw-metaboxes.php:56
+msgid "Driver Commission"
+msgstr "عمولة السائق"
+
+#: admin/class-lddfw-admin.php:1463
+msgid "Driver commissions"
+msgstr "عمولات السائق"
+
+#: includes/class-lddfw-driver.php:1112 includes/class-lddfw-driver.php:1114
+msgid "Driver details"
+msgstr "بيانات السائق"
+
+#: includes/lddfw-metaboxes.php:77
+msgid "Driver Note"
+msgstr "ملاحظة السائق"
+
+#: admin/class-lddfw-admin.php:596 admin/class-lddfw-admin.php:4033
+#: admin/class-lddfw-admin.php:4058 includes/class-lddfw-order.php:610
+#: public/class-lddfw-public.php:144
+#: woocommerce/emails/admin-delivered-order.php:43
+#: woocommerce/emails/customer-failed-delivery-order.php:47
+#: woocommerce/emails/plain/admin-delivered-order.php:41
+#: woocommerce/emails/plain/customer-failed-delivery-order.php:41
+msgid "Driver note"
+msgstr "ملاحظة السائق"
+
+#: includes/class-lddfw-driver.php:822
+msgid "Driver number is empty."
+msgstr "بيانات رقم السائق غير متوفرة."
+
+#: admin/class-lddfw-admin.php:936 admin/class-lddfw-admin.php:951
+#: admin/class-lddfw-admin.php:952 admin/class-lddfw-admin.php:3190
+msgid "Driver Pages"
+msgstr "صفحات السائق"
+
+#: admin/class-lddfw-admin.php:3487
+msgid "Driver panel theme"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1348
+msgid "Driver permissions"
+msgstr "اذون السائق"
+
+#: admin/class-lddfw-admin.php:3554
+msgid "Driver Photo"
+msgstr "صورة السائق"
+
+#: admin/class-lddfw-admin.php:1192
+msgid "Driver tracking"
+msgstr "مراقبة السائق"
+
+#: admin/class-lddfw-admin.php:1200
+msgid "Driver tracking interval"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:3990 includes/class-lddfw-reports.php:140
+#: includes/class-lddfw-reports.php:223 includes/class-lddfw-reports.php:427
+#: includes/class-lddfw-reports.php:516 includes/class-lddfw-reports.php:584
+#: includes/class-lddfw-reports.php:684
+msgid "Drivers"
+msgstr "سائقين"
+
+#: includes/lddfw-metaboxes.php:153
+msgid "drivers"
+msgstr "السائقين"
+
+#: admin/class-lddfw-admin.php:3888
+msgid "Drivers app"
+msgstr "تطبيقة السائقين"
+
+#: admin/class-lddfw-admin.php:2897
+msgid "Drivers can call this number if they have questions about orders."
+msgstr ""
+"بإمكان السائقين الإتصال بهذا الرقم إن كان لديهم أسئلة متعلقة بيانات الطلبيات."
+
+#: admin/class-lddfw-admin.php:1401
+msgid "Drivers can claim orders"
+msgstr "يمكن للسائقين الحصول على الطلبيات"
+
+#: includes/class-lddfw-reports.php:398
+msgid "Drivers commissions"
+msgstr "عمولات السائقين"
+
+#: admin/class-lddfw-admin.php:1590
+msgid "Drivers initial screen"
+msgstr "عرض الشاشة الأولية للسائقين"
+
+#: includes/class-lddfw-reports.php:136
+msgid "Drivers orders"
+msgstr "طلبيات السائقين"
+
+#: admin/class-lddfw-admin.php:1326
+msgid "Drivers Panel"
+msgstr ""
+
+#: includes/class-lddfw-route.php:991
+msgid "Drivers Routes"
+msgstr "مسارات السائقين"
+
+#: admin/class-lddfw-admin.php:3090 admin/class-lddfw-admin.php:3091
+msgid "Drivers settings"
+msgstr "خيارات السائقين"
+
+#: admin/class-lddfw-admin.php:3521 includes/class-lddfw-driver.php:561
+msgid "Driving"
+msgstr "القيادة"
+
+#: admin/class-lddfw-admin.php:1700 admin/class-lddfw-admin.php:3666
+msgid "e.g. -122.478611"
+msgstr "مثال: -122.478611"
+
+#: admin/class-lddfw-admin.php:1686 admin/class-lddfw-admin.php:3651
+msgid "e.g. 37.819722"
+msgstr "مثال: 37.819722"
+
+#: admin/class-lddfw-admin.php:942
+msgid "Edit"
+msgstr "تغيير"
+
+#: admin/class-lddfw-admin.php:830
+msgid "Edit Custom Fields"
+msgstr "تغيير مواصفات معينة"
+
+#: admin/class-lddfw-admin.php:868
+msgid "Edit section"
+msgstr "تغيير قسم"
+
+#: includes/class-lddfw-login.php:157 includes/class-lddfw-login.php:166
+msgid "Either the email or password you entered is invalid."
+msgstr "إما البريد الإلكتروني أو كلمة العبور التي أدخلتها غير صالحة."
+
+#: includes/class-lddfw-application.php:149 includes/class-lddfw-login.php:69
+#: includes/class-lddfw-password.php:153 includes/class-lddfw-reports.php:586
+#: includes/class-lddfw-reports.php:672
+msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#: includes/class-lddfw-driver.php:732
+msgid "Email address"
+msgstr "البريد الإلكتروني"
+
+#: includes/class-lddfw-driver.php:837
+msgid "Email exist for another user."
+msgstr "البريد الإلكتروني وقع استعماله من طرف مستخدم آخر."
+
+#: includes/class-lddfw-password.php:41
+msgid "Email field is empty."
+msgstr "بيانات البريد الإلكتروني غير متوفرة."
+
+#: includes/class-lddfw-application.php:73
+msgid "Email is invalid."
+msgstr "عنوان البريد الإلكتروني غير دقيق."
+
+#: admin/class-lddfw-admin.php:3947
+msgid ""
+"Email/SMS/WhatsApp sends the tracking URL. Please add the following "
+"[tracking_url] tag to the message."
+msgstr ""
+
+#: includes/class-lddfw-password.php:66
+#, php-format
+msgid "Email: %s"
+msgstr "البريد الإلكتروني: %s"
+
+#: admin/class-lddfw-admin.php:2005
+msgid "Enable all orders"
+msgstr "الموافقة على جميع الطلبيات"
+
+#: admin/class-lddfw-admin.php:2397
+msgid "Enable auto-assign drivers to suborders if they exist."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2490
+msgid ""
+"Enable auto-assigns and claim orders options for orders that contain virtual "
+"items."
+msgstr ""
+"الموافقة على خيار التعيين الآلي والحصول على قائمة اختيار الطلبيات التي تحتوي "
+"على عناصر إفتراضية."
+
+#: admin/class-lddfw-admin.php:2468
+msgid "Enable auto-assigns delivery drivers."
+msgstr "الموافقة على خيار التعيين الآلي للسائقين."
+
+#: admin/class-lddfw-admin.php:2071
+msgid "Enable driver tracking."
+msgstr "الموافقة على مراقبة السائق."
+
+#: admin/class-lddfw-admin.php:2032
+msgid "Enable drivers to claim orders"
+msgstr "الموافقة على حصول السائقين على الطلبيات"
+
+#: admin/class-lddfw-admin.php:2418
+msgid "Enable new drivers application form."
+msgstr "الموافقة على إحداث إستمارة خاصة بسائقين جدد."
+
+#: admin/class-lddfw-admin.php:2007
+msgid "Enable orders that pickup city is the same as driver city"
+msgstr "الموافقة على طلبات التسليم في مدينة السائق"
+
+#: admin/class-lddfw-admin.php:2008
+msgid ""
+"Enable orders that pickup city or shipping city is the same as driver city"
+msgstr "الموافقة على طلبات الشحن والتسليم في مدينة السائق"
+
+#: admin/class-lddfw-admin.php:2006
+msgid "Enable orders that shipping city is the same as driver city"
+msgstr "الموافقة على طلبات الشحن في مدينة السائق"
+
+#: includes/class-lddfw-driver.php:734
+msgid "Enter email"
+msgstr "ادخل عنوان البريد الإلكتروني"
+
+#: includes/class-lddfw-driver.php:745
+msgid "Enter password"
+msgstr "ادخل كلمة العبور"
+
+#: includes/class-lddfw-login.php:65
+msgid "Enter your details below to continue."
+msgstr "تفضل بإدراج بياناتك بالأسفل لتتمكن من المتابعة."
+
+#: includes/class-lddfw-password.php:150
+msgid "Enter your email, and we'll email you a link to change your password."
+msgstr "قم بإدخال بريدك الإلكتروني، وسنقوم بإرسال رابط لتغيير كلمة العبور."
+
+#: includes/functions.php:677
+msgid "Estimated time of arrival"
+msgstr "ساعة الوصول المتوقعة"
+
+#: woocommerce/emails/customer-start-delivery-order.php:53
+#: woocommerce/emails/plain/customer-start-delivery-order.php:44
+#, php-format
+msgid "Estimated time of arrival: %s"
+msgstr "ساعة الوصول المتوقعة %s"
+
+#: admin/class-lddfw-admin.php:1946 admin/class-lddfw-admin.php:2738
+msgid "ETA"
+msgstr "الوقت المتوقع للوصول ETA"
+
+#: admin/class-lddfw-admin.php:2105
+#, php-format
+msgid "Every %s seconds"
+msgstr "كل %s ثانية"
+
+#: includes/lddfw-metaboxes.php:91
+msgid "Failed Attempt Date"
+msgstr "تاريخ تعذر محاولة التسليم"
+
+#: includes/class-lddfw-orders.php:657
+msgid "Failed Date"
+msgstr "التاريخ غير متوفر"
+
+#: includes/class-lddfw-order.php:196
+msgid "Failed date"
+msgstr "التاريخ غير متوفر"
+
+#: index.php:89 admin/class-lddfw-admin.php:1378
+#: includes/class-lddfw-reports.php:66 includes/class-lddfw-reports.php:119
+#: includes/class-lddfw-reports.php:145 includes/class-lddfw-reports.php:213
+msgid "Failed delivery"
+msgstr "تعذر التسليم"
+
+#: index.php:101 admin/class-lddfw-admin.php:988
+#: admin/class-lddfw-admin.php:1016
+msgid "Failed Delivery Attempt"
+msgstr "تعذر محاولة التسليم"
+
+#: admin/class-lddfw-admin.php:1022
+#, php-format
+msgid "Failed Delivery Attempt <span class=\"count\">(%s)</span>"
+msgid_plural "Failed Delivery Attempt <span class=\"count\">(%s)</span>"
+msgstr[0] "فشل محاولة التسليم <span class=\"count\">(%s)</span>"
+msgstr[1] "فشل محاولة التسليم <span class=\"count\">(%s)</span>"
+msgstr[2] "فشل محاولات التسليم <span class=\"count\">(%s)</span>"
+msgstr[3] "فشل محاولات التسليم <span class=\"count\">(%s)</span>"
+msgstr[4] "فشل محاولات التسليم <span class=\"count\">(%s)</span>"
+msgstr[5] "فشل محاولات التسليم <span class=\"count\">(%s)</span>"
+
+#: admin/class-lddfw-admin.php:1275
+msgid "Failed delivery attempt status"
+msgstr "وضعية تعذُّر محاولة التسليم"
+
+#: includes/class-lddfw-activator.php:93
+msgid "Failed delivery attempt."
+msgstr "وضعية تعذُّر محاولة التسليم."
+
+#: includes/class-lddfw-sms.php:172
+#, php-format
+msgid "Failed to send SMS to %s "
+msgstr "تعذَّر إرسال SMS، إلى %s "
+
+#: includes/class-lddfw-sms.php:47
+msgid "Failed to send SMS, the auth token is missing."
+msgstr "تعذَّر إرسال SMS، تصريح المفتاح الوقتي غير متوفر."
+
+#: includes/class-lddfw-sms.php:56
+msgid "Failed to send SMS, the phone number is missing."
+msgstr "تعذَّر إرسال SMS، رقم الهاتف غير متوفر."
+
+#: includes/class-lddfw-sms.php:42
+msgid "Failed to send SMS, the SID is missing."
+msgstr "تعذَّر إرسال SMS، غير متوفر SID."
+
+#: includes/class-lddfw-sms.php:52
+msgid "Failed to send SMS, the SMS phone number is missing."
+msgstr "تعذَّر إرسال SMS، رقم الهاتف المرسل إليه SMS غير متوفر."
+
+#: includes/class-lddfw-sms.php:34
+msgid "Failed to send SMS, the SMS provider is missing."
+msgstr "تعذَّر إرسال SMS، مشغل خدمة SMS غير متوفر."
+
+#: includes/class-lddfw-sms.php:37
+msgid "Failed to send SMS, the SMS provider is not supported."
+msgstr "تعذَّر إرسال SMS، مشغل خدمة SMS غير مدعوم."
+
+#: includes/class-lddfw-sms.php:59
+msgid "Failed to send SMS, the SMS text is missing."
+msgstr "تعذَّر إرسال SMS، نص الإرسالية SMS غير متوفر."
+
+#: includes/class-lddfw-whatsapp.php:175
+#, fuzzy, php-format
+#| msgid "Failed to send WhatsApp to %s, status %s"
+msgid "Failed to send WhatsApp to %1$s, status %2$s"
+msgstr "تعذَّر إرسال WhatsApp إلى %s، الوضعية %s"
+
+#: includes/class-lddfw-whatsapp.php:47
+msgid "Failed to send WhatsApp, the auth token is missing."
+msgstr "تعذَّر إرسال WhatsApp، تصريح المفتاح الوقتي غير متوفر."
+
+#: includes/class-lddfw-whatsapp.php:56
+msgid "Failed to send WhatsApp, the phone number is missing."
+msgstr "تعذَّر إرسال WhatsApp، رقم الهاتف غير متوفر."
+
+#: includes/class-lddfw-whatsapp.php:42
+msgid "Failed to send WhatsApp, the SID is missing."
+msgstr "تعذَّر إرسال WhatsApp، غير متوفر SID."
+
+#: includes/class-lddfw-whatsapp.php:52
+msgid "Failed to send WhatsApp, the WhatsApp phone number is missing."
+msgstr "تعذَّر إرسال WhatsApp، رقم الهاتف المرسل إليه WhatsApp غير متوفر."
+
+#: includes/class-lddfw-whatsapp.php:34
+msgid "Failed to send WhatsApp, the WhatsApp provider is missing."
+msgstr "تعذَّر إرسال WhatsApp، مشغل خدمة WhatsApp غير متوفر."
+
+#: includes/class-lddfw-whatsapp.php:37
+msgid "Failed to send WhatsApp, the WhatsApp provider is not supported."
+msgstr "تعذَّر إرسال WhatsApp، مشغل خدمة WhatsApp غير مدعوم."
+
+#: includes/class-lddfw-whatsapp.php:59
+msgid "Failed to send WhatsApp, the WhatsApp text is missing."
+msgstr "تعذَّر إرسال WhatsApp، نص الإرسالية WhatsApp غير متوفر."
+
+#: admin/class-lddfw-admin.php:3982
+msgid "Filter By"
+msgstr "البحث حسب خيار معين"
+
+#: includes/class-lddfw-route.php:97
+msgid "Finish planning route"
+msgstr "اكمل تصميم مسارك"
+
+#: includes/class-lddfw-driver.php:646 includes/class-lddfw-driver.php:648
+msgid "First name"
+msgstr "الإسم الاول"
+
+#: includes/class-lddfw-driver.php:840
+msgid "First name is empty."
+msgstr "بيانات الإسم الأول غير متوفرة."
+
+#: admin/class-lddfw-admin.php:2176
+msgid "Fixed Price"
+msgstr "سعر ثابت"
+
+#: admin/class-lddfw-admin.php:2681
+#, php-format
+msgid ""
+"For more information about how to create a WhatsApp account %1$sclick "
+"here%2$s."
+msgstr "مزيد من المعلومات عن كيفية إنشاء حساب WhatsApp %1$s، انقر هنا %2$s ."
+
+#: admin/class-lddfw-admin.php:2578
+#, php-format
+msgid ""
+"For more information about how to create an SMS account %1$sclick here%2$s."
+msgstr ""
+"لمزيد من المعلومات عن كيفية إنشاء حساب إرساليات قصيرة SMS%1$s، انقر هنا %2$s."
+
+#: admin/class-lddfw-admin.php:2085
+#, php-format
+msgid ""
+"For more information about the tracking page, please %1$sclick here%2$s."
+msgstr ""
+"لمزيد من المعلومات المتعلقة بصفحة المراقبة، الرجاء %1$s النقر هنا %2$s."
+
+#: admin/class-lddfw-admin.php:3948
+#, fuzzy
+#| msgid ""
+#| "For the tracking map please enable Geocoding API on both google API keys."
+msgid ""
+"For the tracking map, please enable Geocoding API on both google API keys."
+msgstr ""
+"الرجاء تفعيل Geocoding API عبر جميع المفاتيح google API keys من اجل الحصول "
+"على صفحة مراقبة الخريطة."
+
+#: includes/class-lddfw-login.php:78
+msgid "Forgot password?"
+msgstr "نسيت كلمة العبور؟"
+
+#: includes/class-lddfw-password.php:149
+msgid "Forgot your password?"
+msgstr "نسيت كلمة العبور؟"
+
+#: includes/class-lddfw-reports.php:414 includes/class-lddfw-reports.php:419
+msgid "From"
+msgstr "من"
+
+#: includes/class-lddfw-driver.php:1003
+msgid "from pickup address."
+msgstr "من عنوان الإستلام."
+
+#: includes/class-lddfw-application.php:147
+msgid "Full name"
+msgstr "الإسم الكامل"
+
+#: admin/class-lddfw-admin.php:3072
+msgid "General Settings"
+msgstr "خيارات عامة"
+
+#: admin/class-lddfw-admin.php:3081 admin/class-lddfw-admin.php:3082
+msgid "General settings"
+msgstr "خيارات عامة"
+
+#: includes/class-lddfw-order.php:836 includes/class-lddfw-order.php:886
+msgid "Get proof of delivery."
+msgstr "تحصل على إثبات بالتسليم."
+
+#: includes/class-lddfw-screens.php:228
+msgid "Get started"
+msgstr "الإنطلاق"
+
+#: admin/class-lddfw-admin.php:3545
+msgid "Give the driver permission to claim orders."
+msgstr "منح الإذن للسائق بالحصول على الطلبيات."
+
+#: admin/class-lddfw-admin.php:1236
+msgid "Google API key"
+msgstr "Google API key"
+
+#: includes/class-lddfw-route.php:389
+msgid "Google API key not exists."
+msgstr "Google API key غير متوفر."
+
+#: admin/class-lddfw-admin.php:1664 admin/class-lddfw-admin.php:2241
+#: includes/class-lddfw-driver.php:581
+msgid "Google Maps"
+msgstr "خرائط جوجل Google Maps"
+
+#: includes/class-lddfw-route.php:1006
+msgid "Google maps not showing – missing key."
+msgstr "خرائط جوجل غير متوفرة - المفتاح غير متوفر."
+
+#: includes/class-lddfw-order.php:1064
+msgid "Got it"
+msgstr "فهمتك"
+
+#: woocommerce/emails/driver-assigned-order-admin.php:27
+#: woocommerce/emails/driver-assigned-order-vendor.php:37
+#: woocommerce/emails/plain/driver-assigned-order-admin.php:24
+#: woocommerce/emails/plain/driver-assigned-order-vendor.php:25
+msgid "Hello,"
+msgstr "مرحبا،"
+
+#: woocommerce/emails/customer-failed-delivery-order.php:28
+#: woocommerce/emails/customer-out-for-delivery-order.php:28
+#: woocommerce/emails/customer-start-delivery-order.php:28
+#: woocommerce/emails/driver-assigned-order.php:32
+#: woocommerce/emails/plain/customer-failed-delivery-order.php:25
+#: woocommerce/emails/plain/customer-out-for-delivery-order.php:25
+#: woocommerce/emails/plain/customer-start-delivery-order.php:25
+#: woocommerce/emails/plain/driver-assigned-order.php:28
+#, php-format
+msgid "Hi %s,"
+msgstr "مرحبا  %s،"
+
+#: includes/class-lddfw-orders.php:429
+msgid "Home"
+msgstr "البيت"
+
+#: index.php:240 includes/class-lddfw-route.php:1019 includes/functions.php:906
+msgid "hour"
+msgstr "ساعة"
+
+#: index.php:241 includes/class-lddfw-route.php:1020 includes/functions.php:903
+msgid "hours"
+msgstr "ساعات"
+
+#: includes/class-lddfw-driver.php:489 includes/class-lddfw-screens.php:327
+msgid "I am"
+msgstr "انا"
+
+#: includes/class-lddfw-password.php:67
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr "إن تم إرسال هذا الإشعار عن طريق الخطأ، فالرجاء تجاهل الرسالة."
+
+#: admin/class-lddfw-admin.php:2908
+#, php-format
+msgid ""
+"In order to use the Google Maps API, we need to create two keys for "
+"application restrictions purposes.%1$s For more information about how to "
+"create the Google API key %2$sclick here%3$s."
+msgstr ""
+"لإتاحة استعمال API خرائط جوجل Google Maps API ، يتوجب إنشاء زوج من المفاتيح "
+"لأغراض القيود المفروضة.%1$s ، لمزيد من المعلومات عن كيفية إنشاء مفتاح Google "
+"API key%2$s الرجاء النقر هنا %3$s."
+
+#: includes/class-lddfw-activator.php:92
+msgid "Incorrect address."
+msgstr "عنوان خاطئ."
+
+#: includes/class-lddfw-order.php:185
+msgid "Info"
+msgstr "البيانات"
+
+#: includes/class-lddfw-screens.php:141 includes/class-lddfw-screens.php:825
+msgid "Information"
+msgstr "الإرشادات"
+
+#: includes/class-lddfw-order.php:1269
+msgid "Item"
+msgstr "عنصر"
+
+#: includes/class-lddfw-activator.php:95
+msgid "Item damaged."
+msgstr "عنصر تالف."
+
+#: includes/class-lddfw-activator.php:94
+msgid "Item Lost."
+msgstr "عنصر مفقود."
+
+#: woocommerce/emails/customer-start-delivery-order.php:30
+#: woocommerce/emails/plain/customer-start-delivery-order.php:27
+#, php-format
+msgid ""
+"Just to let you know &mdash; the delivery for your order #%s has been "
+"started."
+msgstr "هذا إشعار لنعلمك &mdash; ان طلبيتك # %s تم الإنطلاق في تسليمها."
+
+#: woocommerce/emails/customer-failed-delivery-order.php:30
+#: woocommerce/emails/plain/customer-failed-delivery-order.php:27
+#, php-format
+msgid "Just to let you know &mdash; your order #%s delivery has failed:"
+msgstr "هذا إشعار لنعلمك &mdash; ان طلبيتك # %s قد تعذر تسليمها:"
+
+#: woocommerce/emails/driver-assigned-order-vendor.php:39
+#: woocommerce/emails/plain/driver-assigned-order-vendor.php:27
+#, php-format
+msgid ""
+"Just to let you know &mdash; your order #%s has been assigned to driver."
+msgstr "هذا إشعار لنعلمك &mdash; ان طلبيتك # %s وقع إحالتها إلى سائق تسليم."
+
+#: woocommerce/emails/driver-assigned-order-admin.php:29
+#: woocommerce/emails/plain/driver-assigned-order-admin.php:26
+#, php-format
+msgid ""
+"Just to let you know &mdash; your order #%s has been claimed by a driver."
+msgstr "هذا إشعار لنعلمك &mdash; ان طلبيتك # %s تم إسنادها إلى سائق تسليم."
+
+#: woocommerce/emails/customer-out-for-delivery-order.php:30
+#: woocommerce/emails/plain/customer-out-for-delivery-order.php:27
+#, php-format
+msgid "Just to let you know &mdash; your order #%s is out for delivery."
+msgstr "هذا إشعار لنعلمك &mdash; ان طلبيتك # %s في طريقها للتسليم."
+
+#: admin/class-lddfw-admin.php:2915
+msgid ""
+"Key for Maps Directions API, Distance Matrix API and Geocoding API. ( "
+"Application restrictions: IP addresses )"
+msgstr ""
+"مفتاح إرشادات خرائط API، Distance Matrix API and Geocoding API ، (ضوابط "
+"التطبيقة: IP addresses )"
+
+#: admin/class-lddfw-admin.php:2911
+msgid ""
+"Key for Maps Embed API, Maps JavaScript API, Directions API and Geocoding "
+"API. ( Application restrictions: HTTP referrers )"
+msgstr ""
+"مفتاح الخرائط المضمنة API، خرائط JavaScript API Maps، إرشادات API و "
+"Goecoding API. (ضوابط التطبيقة: مرجعية HTTP)"
+
+#: includes/class-lddfw-reports.php:408 includes/class-lddfw-screens.php:638
+msgid "Last month"
+msgstr "الشهر الفائت"
+
+#: includes/class-lddfw-driver.php:652 includes/class-lddfw-driver.php:654
+msgid "Last name"
+msgstr "الإسم العائلي"
+
+#: includes/class-lddfw-driver.php:843
+msgid "Last name is empty."
+msgstr "بيانات الإسم العائلي غير متوفرة."
+
+#: includes/class-lddfw-reports.php:406 includes/class-lddfw-screens.php:636
+msgid "Last week"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1298 admin/class-lddfw-admin.php:3644
+msgid "Latitude"
+msgstr "خط العرض"
+
+#: includes/class-lddfw-assigned-order-email-driver.php:47
+msgid "LDDFW - Assigned order - driver"
+msgstr "LDDFW - الطلبية المعينة - السائق"
+
+#: includes/class-lddfw-delivered-email-admin.php:34
+msgid "LDDFW - Delivered order"
+msgstr "LDDFW - تم تسليم الطلبية"
+
+#: includes/class-lddfw-assigned-order-email-vendor.php:32
+msgid "LDDFW - Driver has been Assigned to Order"
+msgstr "LDDFW - تم تعيين سائق للطلبية"
+
+#: includes/class-lddfw-failed-delivery-email.php:35
+msgid "LDDFW - Failed delivery order"
+msgstr "LDDFW - تعذر تسليم الطلبية"
+
+#: includes/class-lddfw-out-for-delivery-email.php:34
+msgid "LDDFW - Out for delivery order"
+msgstr "LDDFW - خروج لتسليم الطلبية"
+
+#: includes/class-lddfw-start-delivery-email.php:34
+msgid "LDDFW - The Delivery of Your Order has been Started"
+msgstr "LDDFW - الإنطلاق في عملية تسليم طلبيتك"
+
+#: includes/class-lddfw-assigned-order-email-admin.php:34
+msgid "LDDFW - The Driver has been Claimed an Order"
+msgstr "LDDFW - قام السائق باستلام طلب"
+
+#: admin/class-lddfw-admin.php:3638
+msgid "Leave blank for auto-filling."
+msgstr "ترك مساحة فارغة للملأ بصفة آلية."
+
+#: includes/class-lddfw-activator.php:97
+msgid "Left at the front door."
+msgstr "وقع تركه عند الباب."
+
+#: includes/class-lddfw-activator.php:98
+msgid "Left with the neighbor."
+msgstr "وقع تركه عند الجيران."
+
+#: admin/class-lddfw-admin.php:3594 admin/class-lddfw-admin.php:3601
+#: includes/class-lddfw-driver.php:600 includes/class-lddfw-driver.php:602
+msgid "License Plate"
+msgstr "رقم لوحة السيارة"
+
+#: admin/class-lddfw-admin.php:2217 admin/class-lddfw-admin.php:3500
+#: includes/class-lddfw-driver.php:548
+msgid "Light Mode"
+msgstr ""
+
+#: includes/class-lddfw-application.php:156 includes/class-lddfw-driver.php:769
+#: includes/class-lddfw-login.php:76 includes/class-lddfw-password.php:159
+#: includes/class-lddfw-screens.php:536 includes/class-lddfw-screens.php:592
+msgid "Loading"
+msgstr "يجري التحميل"
+
+#: includes/class-lddfw-order.php:811
+msgid "Loading next delivery"
+msgstr "يجري تحميل طلبية التسليم التالية"
+
+#: index.php:8 admin/class-lddfw-admin.php:3967
+msgid ""
+"Local delivery drivers for WooCommerce is a WooCommerce add-on, you must "
+"activate a WooCommerce on your site."
+msgstr ""
+"خدمة التسليم المتعلقة بـ WooCommerce هي خدمة إضافية خاصة بـ WooCommerce, "
+"الرجاء تفعيل الخدمة عبر الموقع."
+
+#: includes/class-lddfw-order.php:1427
+msgid "Local pickup"
+msgstr "الإستلام المحلي"
+
+#: includes/class-lddfw-screens.php:163 includes/class-lddfw-screens.php:164
+msgid "Log out"
+msgstr "خروج"
+
+#: includes/class-lddfw-login.php:64 includes/class-lddfw-login.php:72
+#: includes/class-lddfw-password.php:197
+msgid "Login"
+msgstr "الدخول"
+
+#: admin/class-lddfw-admin.php:1597
+msgid "Logo"
+msgstr "شعار"
+
+#: admin/class-lddfw-admin.php:1306 admin/class-lddfw-admin.php:3659
+msgid "Longitude"
+msgstr "خط الطول"
+
+#: includes/class-lddfw-order.php:309
+msgid "Map"
+msgstr "الخريطة"
+
+#: includes/class-lddfw-screens.php:506
+msgid "Mark orders as out for delivery"
+msgstr "تسجيل الطلبيات في وضعية خروج للتسليم"
+
+#: includes/class-lddfw-application.php:150
+msgid "Message"
+msgstr "رسالة نصية"
+
+#: admin/class-lddfw-admin.php:2179 admin/class-lddfw-admin.php:2181
+msgid "mile / km"
+msgstr ""
+
+#: index.php:242 includes/class-lddfw-route.php:1021 includes/functions.php:909
+msgid "mins"
+msgstr "دقائق"
+
+#: admin/class-lddfw-admin.php:2180 admin/class-lddfw-admin.php:2181
+msgid "minute"
+msgstr ""
+
+#: includes/class-lddfw-order.php:124 includes/class-lddfw-tracking.php:207
+msgid "Minutes"
+msgstr "دقائق"
+
+#: includes/class-lddfw-order.php:595 includes/class-lddfw-order.php:918
+msgid "Name"
+msgstr "الإسم"
+
+#: includes/class-lddfw-order.php:329 includes/class-lddfw-order.php:336
+#: includes/class-lddfw-order.php:343 includes/class-lddfw-order.php:396
+#: includes/class-lddfw-order.php:399 includes/class-lddfw-order.php:402
+#: includes/class-lddfw-order.php:454 includes/class-lddfw-order.php:457
+#: includes/class-lddfw-order.php:460
+msgid "Navigate"
+msgstr "التصفح"
+
+#: includes/class-lddfw-screens.php:275
+msgid "Navigate with Waze, Apple Maps, or Google Maps."
+msgstr "التصفح باستخدام Waze، او Apple Maps، او Google Maps."
+
+#: admin/class-lddfw-admin.php:1341 includes/class-lddfw-driver.php:576
+msgid "Navigation APP"
+msgstr "تطبيق التصفح APP"
+
+#: includes/class-lddfw-order.php:1481
+msgid "Net Total"
+msgstr "المجموع الصافي"
+
+#: includes/class-lddfw-application.php:76
+msgid "New Delivery Driver Application"
+msgstr "تطبيقة سائق التسليم الجديدة"
+
+#: includes/class-lddfw-login.php:85
+msgid "New Driver? Apply for Delivery Driver."
+msgstr "سائق جديد؟ تقدم بمطلب سائق جديد."
+
+#: admin/class-lddfw-admin.php:1440
+msgid "New drivers application form"
+msgstr "إستمارة مطلب سائق جديد"
+
+#: includes/class-lddfw-password.php:272
+msgid "New password"
+msgstr "كلمة عبور جديدة"
+
+#: includes/class-lddfw-password.php:112
+msgid "New password and confirm password do not match."
+msgstr "بيانات كلمة العبور الجديدة وتاكيد كلمة العبور غير متطابقة."
+
+#: admin/class-lddfw-admin.php:3542
+msgid "No"
+msgstr "لا"
+
+#: includes/class-lddfw-reports.php:598
+msgid "No drivers"
+msgstr "السائقون غير متوفرون"
+
+#: includes/class-lddfw-reports.php:88 includes/class-lddfw-reports.php:167
+#: includes/class-lddfw-reports.php:461
+msgid "No orders"
+msgstr "الطلبيات غير متوفرة"
+
+#: includes/class-lddfw-reports.php:392
+msgid "No payment"
+msgstr ""
+
+#: includes/class-lddfw-route.php:640
+msgid "no route could be found between the origin and address."
+msgstr "لا يتوفر مسار يربط نقطة الإنطلاق بالوجهة."
+
+#: admin/class-lddfw-admin.php:2135
+msgid "None"
+msgstr "لا أحد"
+
+#: admin/class-lddfw-admin.php:3468
+msgid "Not active"
+msgstr "غير مفعًّل"
+
+#: includes/class-lddfw-order.php:680
+msgid "Not Delivered"
+msgstr "لم يتم تسليم الطلبية"
+
+#: admin/class-lddfw-admin.php:833 admin/class-lddfw-admin.php:871
+#: admin/class-lddfw-admin.php:945
+msgid "Not Found"
+msgstr "غير متوفر"
+
+#: admin/class-lddfw-admin.php:834 admin/class-lddfw-admin.php:872
+#: admin/class-lddfw-admin.php:946
+msgid "Not found in Trash"
+msgstr "غير متوفر في ملف المحذوفات"
+
+#: includes/class-lddfw-order.php:537 includes/class-lddfw-order.php:979
+#: includes/class-lddfw-order.php:1085 includes/class-lddfw-order.php:1188
+msgid "Note"
+msgstr "ملاحظة"
+
+#: includes/lddfw-metaboxes.php:67
+msgid "Note to the driver"
+msgstr "ملاحظة إلى السائق"
+
+#: admin/class-lddfw-admin.php:3892 includes/class-lddfw-reports.php:712
+#, php-format
+msgid ""
+"Notice: If you want to be logged in as an administrator and to check the "
+"drivers' panel on the same device, %1$s %2$syou must work with two different "
+"browsers otherwise you will log out from the admin panel and the drivers' "
+"panel won't function correctly.%3$s"
+msgstr ""
+"تحذير: إذا اردت الولوج للتطبيقة بصفة مدير ورغبت في الإطلاع على واجهة إعدادات "
+"السائق باستخدام ذات الجهاز، %1$s %2$s يتعين عليك استخدام محركي بحث مختلفين، "
+"وخلافا لذلك سيتم فصل الإتصال عبر صفة المدير ولن تشتغل واجهة إعدادات السائق "
+"بصفة عادية. %3$s"
+
+#: admin/class-lddfw-admin.php:2177
+msgid "of delivery price"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2178
+msgid "of order total"
+msgstr ""
+
+#: includes/class-lddfw-order.php:1036
+msgid "Ok"
+msgstr "موافق"
+
+#: admin/class-lddfw-admin.php:3472
+msgid "Only drivers with active accounts can access the drivers' panel."
+msgstr "لا يمكن إلا للسائقين المتوفرين على حساب مفعَّل تغيير إعدادات السائق."
+
+#: includes/class-lddfw-route.php:99
+msgid "Optimize route"
+msgstr "المسار الأنسب"
+
+#: includes/class-lddfw-route.php:87
+msgid "Optimize route, please wait..."
+msgstr "اختيار المسار الأنسب، الرجاء الإنتظار قليلا..."
+
+#: includes/class-lddfw-orders.php:444 includes/class-lddfw-orders.php:650
+#: includes/class-lddfw-orders.php:729 includes/class-lddfw-orders.php:982
+#: includes/class-lddfw-orders.php:1115 includes/class-lddfw-route.php:640
+#: includes/class-lddfw-route.php:646 includes/class-lddfw-screens.php:775
+msgid "Order #"
+msgstr "الطلبية #"
+
+#: woocommerce/emails/driver-assigned-order.php:34
+#: woocommerce/emails/plain/driver-assigned-order.php:30
+#, php-format
+msgid "Order #%s has been assigned to you."
+msgstr "الطلبية # %s وقع إسنادها إليك."
+
+#: woocommerce/emails/admin-delivered-order.php:28
+#: woocommerce/emails/plain/admin-delivered-order.php:27
+#, php-format
+msgid "Order #%s has been delivered:"
+msgstr "الطلبية # %s وقع تسليمها:"
+
+#: includes/class-lddfw-assigned-order-email-admin.php:71
+#: includes/class-lddfw-assigned-order-email-vendor.php:68
+msgid "Order #{order_number}"
+msgstr "الطلبية # {order_number}"
+
+#: admin/class-lddfw-admin.php:921 includes/class-lddfw-order.php:559
+msgid "Order - Billing Address"
+msgstr "الطلبيات - عنوان الفواتير"
+
+#: admin/class-lddfw-admin.php:920 includes/class-lddfw-order.php:506
+msgid "Order - Customer"
+msgstr "الطلبيات - الزبون"
+
+#: admin/class-lddfw-admin.php:918 includes/class-lddfw-order.php:242
+msgid "Order - Info"
+msgstr "الطلبيات - البيانات"
+
+#: admin/class-lddfw-admin.php:922 includes/class-lddfw-order.php:440
+msgid "Order - Pickup"
+msgstr "الطلبيات - الشحن"
+
+#: admin/class-lddfw-admin.php:919 includes/class-lddfw-order.php:292
+msgid "Order - Shipping Address"
+msgstr "الطلبيات - عنوان الشحن"
+
+#: admin/class-lddfw-admin.php:1867
+msgid "Order Amount"
+msgstr "مبلغ الطلبية"
+
+#: includes/class-lddfw-assigned-order-email-driver.php:84
+msgid "Order Assigned"
+msgstr "الطلبية التي تمَّ إضافتها"
+
+#: admin/class-lddfw-admin.php:1865
+msgid "Order Create Date"
+msgstr "تاريخ إحداث الطلبية"
+
+#: admin/class-lddfw-admin.php:1868
+msgid "Order Currency"
+msgstr "عملة الطلبية"
+
+#: includes/class-lddfw-delivered-email-admin.php:71
+msgid "Order Delivered"
+msgstr "تم تسليم الطلبية"
+
+#: includes/class-lddfw-orders.php:443 includes/class-lddfw-orders.php:649
+#: includes/class-lddfw-orders.php:733 includes/class-lddfw-orders.php:981
+#: includes/class-lddfw-orders.php:1114
+msgid "Order details"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1864
+msgid "Order Id"
+msgstr "رقم الطلبية"
+
+#: admin/class-lddfw-admin.php:1283
+msgid "Order processing status"
+msgstr "وضعية تجهيز الطلبية"
+
+#: admin/class-lddfw-admin.php:1866
+msgid "Order Status"
+msgstr "وضعية الطلبية"
+
+#: admin/class-lddfw-admin.php:2178
+msgid "Order total percentage"
+msgstr "مجموع النسبة المئوية من الطلبيات"
+
+#: includes/class-lddfw-reports.php:428 includes/class-lddfw-reports.php:487
+#: includes/class-lddfw-reports.php:517 includes/class-lddfw-screens.php:689
+msgid "Orders"
+msgstr "طلبيات"
+
+#: admin/class-lddfw-admin.php:917 includes/class-lddfw-orders.php:954
+msgid "Orders - Claim Orders"
+msgstr "الطلبات - الحصول على الطلبات"
+
+#: admin/class-lddfw-admin.php:916 includes/class-lddfw-orders.php:1043
+msgid "Orders - Delivered"
+msgstr "الطلبيات - تم التسليم"
+
+#: admin/class-lddfw-admin.php:913 includes/class-lddfw-orders.php:708
+msgid "Orders - Driver Assigned"
+msgstr "الطلبيات - تم تعيين السائق"
+
+#: admin/class-lddfw-admin.php:915 includes/class-lddfw-orders.php:614
+msgid "Orders - Failed Delivery"
+msgstr "الطلبيات - تعذر التسليم"
+
+#: admin/class-lddfw-admin.php:914 includes/class-lddfw-orders.php:356
+msgid "Orders - Out for Delivery"
+msgstr "الطلبيات - خارج للتسليم"
+
+#: includes/class-lddfw-reports.php:506 includes/class-lddfw-reports.php:527
+msgid "Orders Price"
+msgstr "سعر الطلبية"
+
+#: admin/class-lddfw-admin.php:193
+msgid "Orders successfully assigned to you."
+msgstr "تم إحالة الطلبيات اليك بنجاح."
+
+#: admin/class-lddfw-admin.php:153
+msgid "Orders successfully marked as out for delivery."
+msgstr "تم تسجيل طلبات التسليم غير المتوفرة حاليا بنجاح."
+
+#: includes/class-lddfw-reports.php:439 includes/class-lddfw-screens.php:700
+msgid "Orders Total"
+msgstr "مجموع الطلبيات"
+
+#: includes/class-lddfw-reports.php:58
+msgid "Orders without drivers"
+msgstr "طلبيات بدون سائقين"
+
+#: includes/class-lddfw-route.php:646
+msgid "origin and/or address could not be geocoded."
+msgstr "نقطة الإنطلاق و/أو الوجهة لا يتوفر تشفيرها على الخريطة."
+
+#: includes/class-lddfw-order.php:1010
+msgid "Other"
+msgstr "بيانات اخرى"
+
+#: includes/class-lddfw-order.php:1233
+msgid "Other issues."
+msgstr "مشاكل أخرى."
+
+#: admin/class-lddfw-admin.php:987 admin/class-lddfw-admin.php:1004
+msgid "Out for Delivery"
+msgstr "خارج للتسليم"
+
+#: index.php:88 admin/class-lddfw-admin.php:3692
+#: includes/class-lddfw-order.php:702 includes/class-lddfw-reports.php:64
+#: includes/class-lddfw-reports.php:117 includes/class-lddfw-reports.php:143
+#: includes/class-lddfw-reports.php:211 includes/class-lddfw-screens.php:534
+msgid "Out for delivery"
+msgstr "خارج للتسليم"
+
+#: admin/class-lddfw-admin.php:1010
+#, php-format
+msgid "Out for Delivery <span class=\"count\">(%s)</span>"
+msgid_plural "Out for Delivery <span class=\"count\">(%s)</span>"
+msgstr[0] "خارج للتسليم <span class=\"count\">(%s)</span>"
+msgstr[1] "خارج للتسليم <span class=\"count\">(%s)</span>"
+msgstr[2] "خارجون للتسليم <span class=\"count\">(%s)</span>"
+msgstr[3] "خارجون للتسليم <span class=\"count\">(%s)</span>"
+msgstr[4] "خارجون للتسليم <span class=\"count\">(%s)</span>"
+msgstr[5] "خارجون للتسليم <span class=\"count\">(%s)</span>"
+
+#: admin/class-lddfw-admin.php:1259
+msgid "Out for delivery status"
+msgstr "وضعية الخروج للتسليم"
+
+#: admin/class-lddfw-admin.php:1620
+msgid "Page background"
+msgstr "خلفية الصفحة"
+
+#: includes/class-lddfw-driver.php:545
+msgid "Panel Theme"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:825 admin/class-lddfw-admin.php:937
+msgid "Parent Rule"
+msgstr "قاعدة تم ضبطها من طرف الولي"
+
+#: includes/class-lddfw-driver.php:740 includes/class-lddfw-login.php:70
+msgid "Password"
+msgstr "كلمة العبور"
+
+#: includes/class-lddfw-password.php:72
+msgid "Password reset"
+msgstr "إعادة ضبط كلمة العبور"
+
+#: admin/class-lddfw-admin.php:1870
+msgid "Payment Method"
+msgstr "طريقة الدفع"
+
+#: includes/class-lddfw-order.php:209
+msgid "Payment method"
+msgstr "طريقة الدفع"
+
+#: includes/class-lddfw-application.php:148 includes/class-lddfw-order.php:387
+#: includes/class-lddfw-order.php:420 includes/class-lddfw-order.php:481
+#: includes/class-lddfw-reports.php:141 includes/class-lddfw-reports.php:209
+#: includes/class-lddfw-reports.php:585 includes/class-lddfw-reports.php:671
+msgid "Phone"
+msgstr "رقم الهاتف"
+
+#: includes/class-lddfw-driver.php:846
+msgid "Phone is empty."
+msgstr "بيانات رقم الهاتف غير متوفرة."
+
+#: includes/class-lddfw-driver.php:719 includes/class-lddfw-driver.php:721
+msgid "Phone number"
+msgstr "رقم الهاتف"
+
+#: admin/class-lddfw-admin.php:2543
+msgid ""
+"Phone number to send SMS should be in the following format (+)(country code)"
+"(area code)(phone number) e.g +15024658206"
+msgstr ""
+"لتلقي إرسالية قصيرة SMS يجب ان يكون الرقم في الصيغة التالية (+) (رمز البلد) "
+"(رمز المنطقة) (رقم الهاتف). مثال 15024658206+"
+
+#: admin/class-lddfw-admin.php:2630
+msgid ""
+"Phone number to send WhatsApp should be in the following format (+)(country "
+"code)(area code)(phone number) e.g +15024658206"
+msgstr ""
+"لتلقي إرسالية عبر WhatsApp يجب ان يكون الرقم في الصيغة التالية (+) (رمز "
+"البلد) (رمز المنطقة) (رقم الهاتف). مثال 15024658206+"
+
+#: admin/class-lddfw-admin.php:4049 admin/class-lddfw-admin.php:4071
+#: includes/class-lddfw-driver.php:616 includes/class-lddfw-order.php:633
+#: includes/class-lddfw-order.php:848 includes/class-lddfw-order.php:1099
+#: includes/lddfw-metaboxes.php:112 public/class-lddfw-public.php:163
+#: woocommerce/emails/admin-delivered-order.php:59
+#: woocommerce/emails/customer-failed-delivery-order.php:63
+#: woocommerce/emails/plain/admin-delivered-order.php:54
+#: woocommerce/emails/plain/customer-failed-delivery-order.php:54
+msgid "Photo"
+msgstr "الصورة"
+
+#: includes/class-lddfw-orders.php:410 includes/class-lddfw-orders.php:424
+msgid "Pickup"
+msgstr "الإستلام"
+
+#: includes/class-lddfw-order.php:370
+msgid "Pickup Address"
+msgstr "عنوان الإستلام"
+
+#: admin/class-lddfw-admin.php:3626
+msgid "Pickup address coordinates"
+msgstr "إحداثيات عنوان التسليم"
+
+#: includes/class-lddfw-route.php:97 includes/class-lddfw-screens.php:272
+msgid "Plan your route"
+msgstr "قم بتصميم مسارك"
+
+#: includes/class-lddfw-screens.php:273
+msgid "Plan your Route by Distance or Manually."
+msgstr "قم بتصميم مسارك باستعمال المسافة او بصفة يدوية."
+
+#: admin/class-lddfw-admin.php:678
+msgid "Please choose an order."
+msgstr "الرجاء القيام باختيار الطلبية."
+
+#: admin/class-lddfw-admin.php:158 admin/class-lddfw-admin.php:195
+msgid "Please choose the orders."
+msgstr "الرجاء القيام باختيار الطلبات."
+
+#: includes/class-lddfw-password.php:195
+msgid "Please click on the login button to login with your new password"
+msgstr "الرجاء النقر على زر الدخول من أجل استعمال كلمة العبور الجديدة"
+
+#: includes/class-lddfw-application.php:144
+msgid "Please fill out the form below, and we will contact you shortly."
+msgstr "الرجاء القيام بتعمير الإستمارة التالية، سنقوم بالإتصال بك قريبا."
+
+#: admin/class-lddfw-admin.php:2112
+msgid ""
+"Please note that shorter tracking intervals will drain the driver battery "
+"far quicker and makes more requests to your server."
+msgstr ""
+
+#: includes/class-lddfw-order.php:1150
+msgid "Please take a photo as proof of delivery."
+msgstr "يرجى التقاط صورة كدليل على التسليم."
+
+#: includes/class-lddfw-order.php:1151
+msgid "Please take a photo or signature as proof of delivery."
+msgstr "يرجى التقاط صورة أو توقيع كدليل على التسليم."
+
+#: includes/class-lddfw-order.php:1149
+msgid "Please take the customer's signature as proof of delivery."
+msgstr "يرجى أخذ توقيع العميل كدليل على التسليم."
+
+#: includes/class-lddfw-route.php:90
+msgid "Please wait..."
+msgstr "الرجاء الإنتظار قليلا..."
+
+#: admin/class-lddfw-admin.php:822
+msgctxt "Post Type General Name"
+msgid "Custom Fields"
+msgstr "مواصفات معينة"
+
+#: admin/class-lddfw-admin.php:934
+msgctxt "Post Type General Name"
+msgid "Driver Pages"
+msgstr "صفحات السائق"
+
+#: admin/class-lddfw-admin.php:823
+msgctxt "Post Type Singular Name"
+msgid "Custom Fields"
+msgstr "مواصفات معينة"
+
+#: admin/class-lddfw-admin.php:935
+msgctxt "Post Type Singular Name"
+msgid "Driver Page"
+msgstr "صفحة السائق"
+
+#: includes/class-lddfw-driver.php:682 includes/class-lddfw-driver.php:684
+msgid "Postcode / ZIP"
+msgstr "الترقيم البريدي / ZIP"
+
+#: admin/class-lddfw-admin.php:3202
+msgid "Premium"
+msgstr "مميز"
+
+#: local-delivery-drivers-for-wooCommerce.php:189
+#: local-delivery-drivers-for-wooCommerce.php:229 includes/functions.php:555
+#: includes/functions.php:559
+msgid "Premium Feature"
+msgstr "خاصية إضافية مميزة"
+
+#: includes/class-lddfw-order.php:1265
+msgid "Products"
+msgstr "المنتجات"
+
+#: admin/class-lddfw-admin.php:1356
+msgid "Proof of delivery"
+msgstr ""
+
+#: includes/class-lddfw-reports.php:62 includes/class-lddfw-reports.php:112
+msgid "Ready for claim"
+msgstr "جاهز للإستلام"
+
+#: admin/class-lddfw-admin.php:1371
+msgid "Ready notes for the drivers"
+msgstr "ملاحظات جاهزة للسائقين"
+
+#: includes/class-lddfw-order.php:1480
+msgid "Refund"
+msgstr "إسترجاع الأموال"
+
+#: includes/class-lddfw-activator.php:91
+msgid "Refused by the recipient."
+msgstr "قام المتلقي برفض الإستلام."
+
+#: admin/class-lddfw-admin.php:3185 includes/class-lddfw-reports.php:559
+msgid "Reports"
+msgstr "التقارير"
+
+#: includes/class-lddfw-password.php:229
+msgid "Resend email"
+msgstr "إعادة إرسال البريد الإلكتروني"
+
+#: includes/class-lddfw-password.php:226
+msgid "Reset password"
+msgstr "إعادة ضبط كلمة العبور"
+
+#: includes/class-lddfw-route.php:840
+msgid "Route"
+msgstr "المسار"
+
+#: includes/class-lddfw-orders.php:558
+msgid "Route Destination"
+msgstr "مسار الوجهة"
+
+#: includes/class-lddfw-route.php:1079
+msgid "Route on map"
+msgstr "المسار على الخريطة"
+
+#: includes/class-lddfw-orders.php:544
+msgid "Route Origin"
+msgstr "نقطة إنطلاق المسار"
+
+#: admin/class-lddfw-admin.php:3184
+msgid "Routes"
+msgstr "المسارات"
+
+#: admin/class-lddfw-admin.php:944
+msgid "Search"
+msgstr "بحث"
+
+#: admin/class-lddfw-admin.php:832
+msgid "Search Custom Fields"
+msgstr "البحث عن مواصفات معينة"
+
+#: admin/class-lddfw-admin.php:870
+msgid "Search sections"
+msgstr "البحث في الأقسام"
+
+#: admin/class-lddfw-admin.php:885
+msgid "Sections"
+msgstr "الأقسام"
+
+#: admin/class-lddfw-admin.php:224
+msgid ""
+"Security Check Failure - This alert may occur when you are logged in as an "
+"administrator and as a delivery driver on the same browser and the same "
+"device. If you want to work on both panels please try to work with two "
+"different browsers."
+msgstr ""
+"فشل الفحص الأمني - يطرأ هذا التحذير عندما تقوم بالولوج بصفة مدير وبصفة سائق "
+"تسليم عبر ذات محرك البحث. الرجاء استعمال محركي بحث مختلفين اذا رغبت في العمل "
+"عبر الواجهتين في ذات الوقت."
+
+#: admin/class-lddfw-admin.php:2175
+msgid "Select"
+msgstr "اختيار"
+
+#: admin/class-lddfw-admin.php:1764 admin/class-lddfw-admin.php:3570
+msgid "Select a image"
+msgstr "إختيار صورة"
+
+#: includes/class-lddfw-driver.php:700
+msgid "Select Country / Region"
+msgstr "اختيار البلد / المنطقة"
+
+#: includes/class-lddfw-driver.php:710
+msgid "Select State / County"
+msgstr "إختيار الدولة / البلد"
+
+#: includes/class-lddfw-application.php:152
+#: includes/class-lddfw-password.php:155 includes/class-lddfw-password.php:277
+#: includes/class-lddfw-password.php:281 includes/class-lddfw-reports.php:417
+msgid "Send"
+msgstr "إرسال"
+
+#: includes/class-lddfw-driver.php:742
+msgid "Set New Password"
+msgstr "إنشاء كلمة سر جديدية"
+
+#: admin/class-lddfw-admin.php:3186 includes/class-lddfw-screens.php:120
+#: includes/class-lddfw-screens.php:121 includes/class-lddfw-screens.php:806
+msgid "Settings"
+msgstr "الإعدادات"
+
+#: includes/class-lddfw-order.php:1447
+msgid "Shipping"
+msgstr "الشحن"
+
+#: includes/class-lddfw-order.php:271
+msgid "Shipping Address"
+msgstr "عنوان الشحن"
+
+#: admin/class-lddfw-admin.php:1886
+msgid "Shipping Address 1"
+msgstr "عنوان الفوترة 1"
+
+#: admin/class-lddfw-admin.php:1887
+msgid "Shipping Address 2"
+msgstr "عنوان الفوترة 2"
+
+#: admin/class-lddfw-admin.php:1888
+msgid "Shipping City"
+msgstr "بيانات الفوترة: المدينة"
+
+#: admin/class-lddfw-admin.php:1885
+msgid "Shipping Company"
+msgstr "بيانات الفوترة: الشركة"
+
+#: admin/class-lddfw-admin.php:1891
+msgid "Shipping Country"
+msgstr "بيانات الفوترة: البلد"
+
+#: admin/class-lddfw-admin.php:1883
+msgid "Shipping First Name"
+msgstr "بيانات الفوترة: الإسم الاول"
+
+#: admin/class-lddfw-admin.php:1884
+msgid "Shipping Last Name"
+msgstr "بيانات الفوترة: الإسم العائلي"
+
+#: admin/class-lddfw-admin.php:1869
+msgid "Shipping Method"
+msgstr "طريقة الشحن"
+
+#: admin/class-lddfw-admin.php:1890
+msgid "Shipping Postcode"
+msgstr "بيانات الفوترة: العنوان البريدي"
+
+#: includes/class-lddfw-reports.php:507 includes/class-lddfw-reports.php:528
+msgid "Shipping Price"
+msgstr "سعر الشحن"
+
+#: admin/class-lddfw-admin.php:1889
+msgid "Shipping State"
+msgstr "بيانات الفوترة: الدولة"
+
+#: includes/class-lddfw-reports.php:440 includes/class-lddfw-screens.php:708
+msgid "Shipping Total"
+msgstr "مجموع الشحن"
+
+#: admin/class-lddfw-admin.php:4040 admin/class-lddfw-admin.php:4064
+#: includes/class-lddfw-order.php:622 includes/class-lddfw-order.php:899
+#: includes/class-lddfw-order.php:1092 includes/lddfw-metaboxes.php:102
+#: public/class-lddfw-public.php:154
+#: woocommerce/emails/admin-delivered-order.php:50
+#: woocommerce/emails/customer-failed-delivery-order.php:54
+#: woocommerce/emails/plain/admin-delivered-order.php:47
+#: woocommerce/emails/plain/customer-failed-delivery-order.php:47
+msgid "Signature"
+msgstr "التوقيع"
+
+#: admin/class-lddfw-admin.php:1363
+msgid "Signature & Photo"
+msgstr ""
+
+#: includes/class-lddfw-order.php:1357
+msgid "SKU:"
+msgstr "SKU:"
+
+#: includes/class-lddfw-sms.php:169
+#, php-format
+msgid "SMS has been sent successfully to %s"
+msgstr "تم إرسال SMS بنجاح إلى %s"
+
+#: admin/class-lddfw-admin.php:1563
+msgid "SMS phone number"
+msgstr "رقم الهاتف SMS"
+
+#: admin/class-lddfw-admin.php:1539
+msgid "SMS provider"
+msgstr "مشغِّل SMS"
+
+#: admin/class-lddfw-admin.php:1532
+msgid "SMS Settings"
+msgstr "خيارات SMS"
+
+#: admin/class-lddfw-admin.php:3096 admin/class-lddfw-admin.php:3097
+msgid "SMS settings"
+msgstr "خيارات الإرساليات القصيرة SMS"
+
+#: admin/class-lddfw-admin.php:1913 admin/class-lddfw-admin.php:1939
+#: admin/class-lddfw-admin.php:1976 admin/class-lddfw-admin.php:2516
+msgid "SMS template"
+msgstr "نموذج إرسالية قصيرة SMS"
+
+#: admin/class-lddfw-admin.php:1973
+msgid "SMS to customer when delivery has been started."
+msgstr "إرسالية قصيرة SMS عند خروج إنطلاق عملية تسليم الطلبيات."
+
+#: admin/class-lddfw-admin.php:1910
+msgid "SMS to customer when order is out for delivery."
+msgstr "إرسالية قصيرة SMS عند خروج الطلبية للتسليم."
+
+#: admin/class-lddfw-admin.php:1936
+msgid "SMS to customer when the driver started the delivery."
+msgstr "إرسالية قصيرة SMS عند خروج إنطلاق السائق في تسليم الطلبيات."
+
+#: admin/class-lddfw-admin.php:1579
+msgid "SMS to the customer"
+msgstr "إرسالية قصيرة SMS إلى الزبون"
+
+#: admin/class-lddfw-admin.php:2513
+msgid "SMS to the delivery driver when a new order is assigned."
+msgstr "إرسالية قصيرة SMS للسائق عند توفر طلبية جديد."
+
+#: admin/class-lddfw-admin.php:1571
+msgid "SMS to the driver"
+msgstr "إرسالية قصيرة SMS إلى السائق"
+
+#: includes/class-lddfw-password.php:64
+msgid "Someone requested that the password be reset for the following account:"
+msgstr "قام احد المستخدمين بطلب تغيير كلمة العبور للحساب التالي:"
+
+#: includes/class-lddfw-order.php:664
+msgid "Start Delivery"
+msgstr "الإنطلاق في تسليم الطلبية"
+
+#: includes/class-lddfw-driver.php:708 includes/class-lddfw-driver.php:715
+msgid "State / County"
+msgstr "الدولة / البلد"
+
+#: includes/class-lddfw-order.php:191
+msgid "Status"
+msgstr "الوضعية"
+
+#: admin/class-lddfw-admin.php:1291
+msgid "Store address coordinates"
+msgstr "حفظ إحداثيات العنوان"
+
+#: admin/class-lddfw-admin.php:1862
+msgid "Store Name"
+msgstr "اسم المتجر"
+
+#: includes/class-lddfw-order.php:174
+msgid "Store note:"
+msgstr "ملاحظة المتجر:"
+
+#: admin/class-lddfw-admin.php:1612
+msgid "Subtitle"
+msgstr "عنوان فرعي"
+
+#: admin/class-lddfw-admin.php:1386
+msgid "Successful delivery"
+msgstr "نجاح التسليم"
+
+#: includes/class-lddfw-driver.php:939
+msgid "Successfully updated."
+msgstr "تم التحديث بنجاح."
+
+#: admin/class-lddfw-admin.php:2816
+msgid "Taking a customer's signature for proof of delivery is mandatory."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2827
+msgid "Taking a photo for proof of delivery is mandatory."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2838
+msgid "Taking a photo or signature for proof of delivery is mandatory."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1628
+msgid "Text color"
+msgstr "لون نص الكتابة"
+
+#: includes/class-lddfw-failed-delivery-email.php:69
+#: includes/class-lddfw-out-for-delivery-email.php:68
+#: includes/class-lddfw-start-delivery-email.php:68
+msgid "Thank you for your order."
+msgstr "شكرا لقيامك بطلبية جديدة."
+
+#: includes/class-lddfw-order.php:805
+msgid "Thank you!"
+msgstr "شكرا لك!"
+
+#: includes/class-lddfw-assigned-order-email-driver.php:162
+#: includes/class-lddfw-assigned-order-email-vendor.php:146
+#: includes/class-lddfw-failed-delivery-email.php:144
+#: includes/class-lddfw-out-for-delivery-email.php:143
+#: includes/class-lddfw-start-delivery-email.php:143
+msgid "Thanks for using {site_address}!"
+msgstr "شكرا لك لإستخدام {site_address}!"
+
+#: admin/class-lddfw-admin.php:2448
+msgid ""
+"The auto-assign by address compares the address with the driver address."
+msgstr "خيار العرض الآلي حسب العنوان يعتمد على عنوان السائق."
+
+#: includes/class-lddfw-password.php:108
+msgid "The confirm password field is empty."
+msgstr "بيانات تأكيد كلمة العبور الجديدة غير متوفرة."
+
+#: admin/class-lddfw-admin.php:3946
+#, fuzzy
+#| msgid ""
+#| "The customers order tracking page is only active when the order status is "
+#| "out for delivery, on other statuses, its redirected to the homepage."
+msgid ""
+"The customer's order tracking page is only active when the order status is "
+"out for delivery. On other statuses, the tracking page redirects to the "
+"homepage."
+msgstr ""
+"لا تتوفر صفحة مراقبة طلبيات الزبائن إلاَّ حينما تكون وضعية الطلبيات خروج "
+"للتسليم، في الحالات الأخرى يتم إعادة التوجيه إلى الصفحة الرئيسية."
+
+#: includes/class-lddfw-application.php:35
+msgid "The delivery driver application is not enabled."
+msgstr "تطبيقة سائق التسليم غير مفعلة."
+
+#: admin/class-lddfw-admin.php:2970
+msgid "The delivery driver attempted to deliver but failed."
+msgstr "حاول السائق تسليم الطلبية ولكن تعذر ذلك."
+
+#: admin/class-lddfw-admin.php:3483
+msgid "The delivery driver availability for work today."
+msgstr "مدى توفر السائق للإشتغال هذا اليوم."
+
+#: admin/class-lddfw-admin.php:150
+msgid "The delivery driver changed the order status."
+msgstr "سائق التسليم قام بتغيير وضعية الطلبية."
+
+#: admin/class-lddfw-admin.php:3051
+msgid "The delivery driver is about to deliver the shipment."
+msgstr "سائق التسليم على وشك إتمام تسليم الطلبية."
+
+#: admin/class-lddfw-admin.php:3025
+msgid "The delivery driver was assigned to order."
+msgstr "تمت إحالة الطلبية لسائق التسليم."
+
+#: admin/class-lddfw-admin.php:669
+msgid "The delivery driver was unassigned from the order."
+msgstr "تم إزالة تعيين السائق المكلف بتسليم الطلبية."
+
+#: includes/class-lddfw-route.php:431
+#, php-format
+msgid "The driver %1$s started delivery on %2$s"
+msgstr "إنطلاق السائق %1$s في تسليم الطلبيات منذ %2$s"
+
+#: admin/class-lddfw-admin.php:2075
+msgid "The driver must enable tracking on his driver panel."
+msgstr "يتوجب على السائق تفعيل خيار المراقبة من خلال إعدادات السائق."
+
+#: includes/class-lddfw-application.php:65 includes/class-lddfw-driver.php:827
+#: includes/class-lddfw-login.php:142
+msgid "The email field is empty."
+msgstr "بيانات البريد الإلكتروني غير متوفرة."
+
+#: includes/class-lddfw-driver.php:831 includes/class-lddfw-login.php:150
+msgid "The email is invalid."
+msgstr "بيانات البريد الإلكتروني غير صالحة."
+
+#: includes/class-lddfw-password.php:45
+msgid "The email you entered is invalid."
+msgstr "البريد الإلكتروني الذي ادخلته غير صالح."
+
+#: includes/class-lddfw-password.php:51
+msgid "The email you entered was not found."
+msgstr "البريد الإلكتروني الذي ادخلته غير متوفر."
+
+#: includes/class-lddfw-application.php:61
+msgid "The full name field is empty."
+msgstr "بيانات الإسم الكامل غير متوفرة."
+
+#: admin/class-lddfw-admin.php:3891 includes/class-lddfw-reports.php:711
+#, php-format
+msgid ""
+"The link above is the delivery driver's Mobile-Friendly panel URL. %1$s The "
+"delivery drivers can access it from their mobile phones. %2$s"
+msgstr ""
+"الرابط المبيَّن أعلاه هو عنوان ويب خاص بإعدادات تطبيقة السائقين. %1$s بإمكان "
+"سائقي التسليم الولوج اليه باستخدام الهواتف المحمولة. %2$s"
+
+#: includes/class-lddfw-password.php:104
+msgid "The new password field is empty."
+msgstr "بيانات كلمة العبور الجديدة غير متوفرة."
+
+#: includes/class-lddfw-order.php:769
+msgid "The Order has been assigned to you."
+msgstr "تمت إضافة الطلبية الجديدة اليك."
+
+#: includes/class-lddfw-order.php:715
+msgid "The order was successfully marked as out for delivery."
+msgstr "تم تسجيل طلبية التسليم غير المتوفرة حاليا بنجاح."
+
+#: admin/class-lddfw-admin.php:673
+msgid "The order was successfully unassigned."
+msgstr "تمت إزالة تعيين الطلبية بنجاح."
+
+#: admin/class-lddfw-admin.php:2943
+msgid "The orders are ready for delivery and drivers are able to claim."
+msgstr "الطلبيات جاهزة للتسليم وجاهزة لحصول السائقين عليها."
+
+#: includes/class-lddfw-login.php:146
+msgid "The password field is empty."
+msgstr "بيانات كلمة العبور غير متوفرة."
+
+#: includes/class-lddfw-application.php:69
+msgid "The phone field is empty."
+msgstr "بيانات رقم الهاتف غير متوفرة."
+
+#: includes/class-lddfw-route.php:86
+msgid ""
+"The route has been optimized by distance, if you want to make changes you "
+"can drag and drop orders manually."
+msgstr ""
+"لقد تم اختيار المسار الأنسب تلقائيا، إذا اردت القيام بتغييرات فيمكنك وضع "
+"الطلبيات بصفة يدوية."
+
+#: includes/class-lddfw-route.php:89
+msgid ""
+"The route is ready for optimization, you can make changes by drag and drop "
+"orders manually."
+msgstr ""
+"المسار جاهز للإختيار الأنسب، إذا اردت القيام بتغييرات فيمكنك وضع الطلبيات "
+"بصفة يدوية."
+
+#: admin/class-lddfw-admin.php:2997
+msgid "The shipment was delivered successfully."
+msgstr "تم تسليم الطلبية بنجاح."
+
+#: admin/class-lddfw-admin.php:2076
+msgid ""
+"The tracking is enabled only in secure contexts (HTTPS), in some or all "
+"supporting browsers."
+msgstr ""
+"يتم تفعيل خيار المراقبة عبر المجال الآمن (HTTPS), عبر بعض محركات البحث او "
+"عبر جميع محركات البحث الملائمة."
+
+#: admin/class-lddfw-admin.php:2077
+msgid ""
+"The tracking works only when the driver uses the driver panel. When using "
+"other apps, the tracking doesn't work in the device's background. However, "
+"the driver can use pop-up view or split-screen on his mobile to keep "
+"tracking."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1333
+msgid "Theme"
+msgstr ""
+
+#: includes/class-lddfw-orders.php:579 includes/class-lddfw-orders.php:675
+#: includes/class-lddfw-orders.php:763 includes/class-lddfw-orders.php:1009
+#: includes/class-lddfw-orders.php:1152
+msgid "There are no orders."
+msgstr "الطلبيات غير متوفرة."
+
+#: includes/class-lddfw-route.php:994
+msgid "There are no routes for drivers."
+msgstr "لا تتوفر مسارات السائقين."
+
+#: admin/class-lddfw-admin.php:2795
+msgid ""
+"These are the driver ready notes for the delivery, to delete an option "
+"please leave blank."
+msgstr ""
+"هذه ملاحظات السائق الجاهزة والخاصة بتسليم الطلبيات، الرجاء ترك فراغ اذا رغبت "
+"في حذف التفاصيل."
+
+#: includes/class-lddfw-failed-delivery-email.php:36
+msgid ""
+"This is an order notification sent to customers containing order details "
+"after an order has been marked as Failed delivery."
+msgstr ""
+"هذا إشعار يتم إرساله للزبون ويحتوي على بيانات الطلبية إثر تغير وضعية الطلبية "
+"إلى تعذَّر التسليم."
+
+#: includes/class-lddfw-out-for-delivery-email.php:35
+msgid ""
+"This is an order notification sent to customers containing order details "
+"after an order has been marked as out for delivery."
+msgstr ""
+"هذا إشعار يتم إرساله للزبون ويحتوي على بيانات الطلبية إثر تغير وضعية الطلبية "
+"إلى خروج لتسليم الطلبية."
+
+#: includes/class-lddfw-start-delivery-email.php:35
+msgid ""
+"This is an order notification sent to customers containing order details "
+"when delivery has been started."
+msgstr ""
+"هذا إشعار يتم إرساله للزبون ويحتوي على بيانات الطلبية إثر إنطلاق عملية تسليم "
+"الطلبية."
+
+#: includes/class-lddfw-assigned-order-email-admin.php:35
+msgid ""
+"This is an order notification sent to the administrator containing order and "
+"driver details after a driver has been claimed an order."
+msgstr ""
+"هذا إشعار بطلبية تم إرساله للمدير، يحتوي على بيانات الطلبية و بيانات السائق "
+"بعد حصول السائق على طلبية."
+
+#: includes/class-lddfw-delivered-email-admin.php:35
+msgid ""
+"This is an order notification sent to the administrator containing order "
+"details after an order has been marked as Delivered."
+msgstr ""
+"هذا إشعار بطلبية تم إرساله للمدير، ويحتوي على بيانات الطلبية بعد إتمام تسلبم "
+"الطلبية."
+
+#: includes/class-lddfw-assigned-order-email-driver.php:48
+msgid ""
+"This is an order notification sent to the delivery driver containing that "
+"order has been assigned to him."
+msgstr ""
+"هذا إشعار بإحالة طلبية تم إرساله إلى سائق تسليم ويحتوي على بيانات الطلبية "
+"المحالة اليه."
+
+#: includes/class-lddfw-assigned-order-email-vendor.php:33
+msgid ""
+"This is an order notification sent to the vendor containing order and driver "
+"details when a new driver has been assigned to order."
+msgstr ""
+"هذا إشعار بطلبية تم إرساله إلى البائع ويحتوي على الطلبية وبيانات السائق عند "
+"القيام بتكليف سائق جديد."
+
+#: includes/class-lddfw-password.php:122
+msgid ""
+"This key is invalid or has already been used. Please reset your password "
+"again if needed."
+msgstr ""
+"هذا المفتاح غير مطابق او تم إستخدامه. الرجاء إعادة ضبط كلمة العبور مرة أخرى "
+"إذا تطلب الامر ذلك."
+
+#: includes/class-lddfw-reports.php:407 includes/class-lddfw-screens.php:637
+msgid "This month"
+msgstr "هذا الشهر"
+
+#: admin/class-lddfw-admin.php:3061
+msgid "This Section Description"
+msgstr "تفاصيل القسم"
+
+#: includes/class-lddfw-reports.php:405 includes/class-lddfw-screens.php:635
+msgid "This week"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2180
+msgid "Time"
+msgstr ""
+
+#: admin/class-lddfw-admin.php:1604
+msgid "Title"
+msgstr "عنوان"
+
+#: includes/class-lddfw-reports.php:415 includes/class-lddfw-reports.php:419
+msgid "To"
+msgstr "إلى"
+
+#: admin/class-lddfw-admin.php:1737 includes/class-lddfw-screens.php:193
+msgid "To delivery drivers manager"
+msgstr "إلى مدير قسم سائقي التسليم"
+
+#: admin/class-lddfw-admin.php:1669
+#, php-format
+msgid ""
+"To get the coordinates of a place, open %s, right-click the place on the map "
+"and copy the coordinates."
+msgstr ""
+"للإطلاع على إحداثيات معينة، انقر على %s، انقر على اليمين فوق المكان بالخريطة "
+"وقم بنسخ الإحداثيات."
+
+#: includes/class-lddfw-password.php:68
+msgid "To reset your password, visit the following address:"
+msgstr "لإعادة ضبط كلمة العبور، عليك زيارة العنوان التالي:"
+
+#: includes/class-lddfw-reports.php:403 includes/class-lddfw-screens.php:633
+msgid "Today"
+msgstr "اليوم"
+
+#: includes/class-lddfw-screens.php:402
+msgid "Today Earnings"
+msgstr "أرباح اليوم"
+
+#: includes/class-lddfw-order.php:223 includes/class-lddfw-order.php:1273
+#: includes/class-lddfw-order.php:1472 includes/class-lddfw-reports.php:67
+#: includes/class-lddfw-reports.php:120 includes/class-lddfw-reports.php:146
+#: includes/class-lddfw-reports.php:214
+msgid "Total"
+msgstr "المجموع"
+
+#: includes/class-lddfw-route.php:1062
+msgid "Track drivers"
+msgstr "مراقبة مسار السائقين"
+
+#: includes/class-lddfw-driver.php:518 includes/class-lddfw-screens.php:362
+msgid "Track Me"
+msgstr "قم بمراقبة مساري"
+
+#: public/class-lddfw-public.php:126
+#: woocommerce/emails/customer-start-delivery-order.php:41
+#: woocommerce/emails/plain/customer-start-delivery-order.php:34
+msgid "Track your order"
+msgstr "مراقبة مسار الطلبية"
+
+#: tracking.php:32 admin/class-lddfw-admin.php:3114
+#: admin/class-lddfw-admin.php:3115
+msgid "Tracking"
+msgstr "تتبُّع المسار"
+
+#: includes/class-lddfw-route.php:1359
+msgid "Tracking is off"
+msgstr "تتبع المسار غير مفعَّل"
+
+#: includes/class-lddfw-route.php:1355
+msgid "Tracking is on"
+msgstr "تتبع المسار مفعَّل"
+
+#: admin/class-lddfw-admin.php:1176
+msgid "Tracking page"
+msgstr "صفحة المراقبة"
+
+#: includes/class-lddfw-driver.php:522 includes/class-lddfw-screens.php:366
+msgid "Tracking status"
+msgstr "وضعية مراقية المسار"
+
+#: admin/class-lddfw-admin.php:1947 admin/class-lddfw-admin.php:2739
+msgid "Tracking URL"
+msgstr "متابعة رابط الواب URL"
+
+#: admin/class-lddfw-admin.php:3524 includes/class-lddfw-driver.php:564
+msgid "Transit"
+msgstr "العبور / ترانزيت"
+
+#: admin/class-lddfw-admin.php:3511 includes/class-lddfw-driver.php:558
+msgid "Transportation Mode"
+msgstr "وسيلة النقل"
+
+#: includes/class-lddfw-order.php:698
+msgid "Unassign"
+msgstr "إلغاء التعيين"
+
+#: admin/class-lddfw-admin.php:3479 includes/class-lddfw-driver.php:493
+#: includes/class-lddfw-driver.php:502 includes/class-lddfw-screens.php:331
+#: includes/class-lddfw-screens.php:340 includes/lddfw-metaboxes.php:144
+msgid "Unavailable"
+msgstr "غير متوفر"
+
+#: includes/class-lddfw-reports.php:692
+msgid "Unavailables"
+msgstr "غير المتوفرين"
+
+#: admin/class-lddfw-admin.php:3238 includes/functions.php:562
+msgid "UNLOCK PREMIUM"
+msgstr "إنتقال إلى النسخة المميزة"
+
+#: includes/class-lddfw-order.php:124 includes/class-lddfw-tracking.php:207
+msgid "until delivered"
+msgstr "الى حين التسليم"
+
+#: admin/class-lddfw-admin.php:943 includes/class-lddfw-driver.php:765
+msgid "Update"
+msgstr "تحديث"
+
+#: admin/class-lddfw-admin.php:831
+msgid "Update Custom Fields"
+msgstr "إضافة مواصفات معينة"
+
+#: admin/class-lddfw-admin.php:869
+msgid "Update section"
+msgstr "تحديث قسم"
+
+#: admin/class-lddfw-admin.php:3237 includes/functions.php:561
+msgid "Upgrading to Premium will unlock it."
+msgstr "عند الإنتقال للنسخة المميزة سيتوفر الخيار."
+
+#: admin/class-lddfw-admin.php:162 admin/class-lddfw-admin.php:682
+msgid "User is not a delivery driver"
+msgstr "المستخدم ليس بسائق تسليم"
+
+#: admin/class-lddfw-admin.php:199
+msgid "User is not a driver"
+msgstr "المستخدم ليس سائقا"
+
+#: includes/class-lddfw-driver.php:1079 includes/class-lddfw-driver.php:1083
+msgid "Vehicle"
+msgstr "العربة"
+
+#: admin/class-lddfw-admin.php:3579 includes/class-lddfw-driver.php:590
+#: includes/class-lddfw-driver.php:592
+msgid "Vehicle type"
+msgstr "صنف العربة"
+
+#: includes/class-lddfw-order.php:1447
+msgid "via"
+msgstr "عبر"
+
+#: admin/class-lddfw-admin.php:193
+msgid "View assigned orders"
+msgstr "الإطلاع على الطلبيات التي تم تعيينها"
+
+#: admin/class-lddfw-admin.php:2333
+msgid "View commission."
+msgstr "عرض العمولة."
+
+#: admin/class-lddfw-admin.php:827
+msgid "View Custom Fields"
+msgstr "عرض المواصفات المعينة"
+
+#: admin/class-lddfw-admin.php:2367
+msgid "View customer billing address."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2345
+msgid "View customer details."
+msgstr ""
+
+#: admin/class-lddfw-admin.php:2356
+msgid "View customer WhatsApp button."
+msgstr ""
+
+#: includes/class-lddfw-order.php:816
+msgid "View deliveries"
+msgstr "عرض طلبيات التسليم"
+
+#: admin/class-lddfw-admin.php:2275
+msgid "View driver name."
+msgstr "عرض اسم السائق."
+
+#: admin/class-lddfw-admin.php:2286
+msgid "View driver phone number."
+msgstr "عرض الرقم الهاتفي للسائق."
+
+#: admin/class-lddfw-admin.php:2265
+msgid "View driver photo."
+msgstr "عرض صورة السائق."
+
+#: admin/class-lddfw-admin.php:3234
+msgid "View drivers' routes on a map."
+msgstr "عرض مسارات السائقين على الخريطة."
+
+#: includes/class-lddfw-screens.php:404
+msgid "View how much money did you make today."
+msgstr "عرض الأرباح التي قمت بتحصيلها اليوم."
+
+#: includes/class-lddfw-screens.php:682
+msgid "View how much money did you make, orders total, and shipping total."
+msgstr "الإطلاع على مجموع الأرباح، مجموع الطلبيات، ومجموع الشحنات."
+
+#: admin/class-lddfw-admin.php:939
+msgid "View Items"
+msgstr "الإطلاع على العناصر"
+
+#: includes/class-lddfw-order.php:717 includes/class-lddfw-order.php:771
+msgid "View order"
+msgstr "عرض الطلبية"
+
+#: admin/class-lddfw-admin.php:2323
+msgid "View order products."
+msgstr "عرض طلب المنتجات."
+
+#: includes/class-lddfw-screens.php:510
+msgid "View orders details on this screen."
+msgstr "عرض بيانات الطلبيات من خلال النقر على هذا الزر."
+
+#: admin/class-lddfw-admin.php:153
+msgid "View out for delivery orders"
+msgstr "الإطلاع على قائمة طلبات التسليم"
+
+#: admin/class-lddfw-admin.php:2313
+msgid "View pricing."
+msgstr "عرض السعر."
+
+#: includes/class-lddfw-route.php:815
+msgid "View Route"
+msgstr "عرض المسار"
+
+#: admin/class-lddfw-admin.php:3235
+msgid "View routes' duration and distance."
+msgstr "عرض مدة ومسافة المسارات."
+
+#: admin/class-lddfw-admin.php:865
+msgid "View section"
+msgstr "الإطلاع على الأقسام"
+
+#: includes/class-lddfw-screens.php:274
+msgid "View your Route on Google Maps."
+msgstr "عرض مسارك على Google Maps."
+
+#: admin/class-lddfw-admin.php:1448
+msgid "Virtual items"
+msgstr "عناصر إفتراضية"
+
+#: admin/class-lddfw-admin.php:3522 includes/class-lddfw-driver.php:562
+msgid "Walking"
+msgstr "المشي"
+
+#: admin/class-lddfw-admin.php:2239 includes/class-lddfw-driver.php:579
+msgid "Waze"
+msgstr "Waze"
+
+#: includes/class-lddfw-application.php:111
+msgid "We will contact you shortly."
+msgstr "سنقوم بالإتصال بك قريبا."
+
+#: includes/class-lddfw-order.php:1411
+msgid "Weight"
+msgstr "الوزن"
+
+#: admin/class-lddfw-admin.php:1721 includes/class-lddfw-screens.php:192
+msgid "WELCOME"
+msgstr "مرحبا"
+
+#: includes/class-lddfw-order.php:525
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: includes/class-lddfw-whatsapp.php:172
+#, php-format
+msgid "WhatsApp has been sent successfully to %s"
+msgstr "تم إرسال Whatsapp بنجاح إلى %s"
+
+#: admin/class-lddfw-admin.php:1505
+msgid "WhatsApp phone number"
+msgstr "رقم الهاتف WhatsApp"
+
+#: admin/class-lddfw-admin.php:1481
+msgid "WhatsApp provider"
+msgstr "مشغِّل WhatsApp"
+
+#: admin/class-lddfw-admin.php:1474
+msgid "WhatsApp Settings"
+msgstr "خيارات WhatsApp"
+
+#: admin/class-lddfw-admin.php:3102 admin/class-lddfw-admin.php:3103
+msgid "WhatsApp settings"
+msgstr "خيارات WhatsApp"
+
+#: admin/class-lddfw-admin.php:2603 admin/class-lddfw-admin.php:2705
+#: admin/class-lddfw-admin.php:2731 admin/class-lddfw-admin.php:2768
+msgid "WhatsApp template"
+msgstr "نموذج إرسالية WhatsApp"
+
+#: admin/class-lddfw-admin.php:1521
+msgid "WhatsApp to the customer"
+msgstr "إرسال WhatsApp إلى الزبون"
+
+#: admin/class-lddfw-admin.php:2765
+msgid "WhatsApp to the customer when delivery has been started."
+msgstr "إرسالية عبر WhatsApp لإشعار الزبون بانطلاق عملية تسليم الطلبيات."
+
+#: admin/class-lddfw-admin.php:2728
+msgid "WhatsApp to the customer when the driver started the delivery."
+msgstr ""
+"إرسالية عبر WhatsApp لإشعار الزبون بأن السائق انطلق في عملية تسليم الطلبيات."
+
+#: admin/class-lddfw-admin.php:2702
+msgid "WhatsApp to the customer when the order is out for delivery."
+msgstr "إرسالية عبر WhatsApp لإشعار الزبون بأن الطلبية خرجت للتسليم."
+
+#: admin/class-lddfw-admin.php:2600
+msgid "WhatsApp to the delivery driver when a new order is assigned."
+msgstr "إرسالية عبر WhatsApp لإشعار سائق التسليم عند توفر طلبية جديدة."
+
+#: admin/class-lddfw-admin.php:1513
+msgid "WhatsApp to the driver"
+msgstr "إرسال WhatsApp إلى السائق"
+
+#: admin/class-lddfw-admin.php:3526 includes/class-lddfw-driver.php:566
+msgid ""
+"When you calculate directions, you may specify the transportation mode to "
+"use."
+msgstr "عند القيام باحتساب التوجيهات، بامكانك تحديد وسيلة النقل المستخدمة."
+
+#: admin/class-lddfw-admin.php:3985
+msgid "With drivers"
+msgstr "مع سائقين"
+
+#: local-delivery-drivers-for-wooCommerce.php:192
+msgid "With premium version you will be able to:"
+msgstr "بحصولك على النسخة المميزة ستكون قادرا على:"
+
+#: admin/class-lddfw-admin.php:3988
+msgid "Without drivers"
+msgstr "من دون سائقين"
+
+#: includes/class-lddfw-assigned-order-email-admin.php:146
+#: includes/class-lddfw-delivered-email-admin.php:146
+msgid "woocommerce"
+msgstr "woocommerce"
+
+#: admin/class-lddfw-admin.php:3586 includes/class-lddfw-driver.php:593
+msgid "Write the driver vehicle type / model."
+msgstr "قم بتدوين صنف / موديل عربة السائق."
+
+#: includes/class-lddfw-order.php:914
+msgid "Write the signer's name and add a signature."
+msgstr "قم بتدوين إسم صاحب التوقيع إلى جانب التوقيع."
+
+#: includes/class-lddfw-order.php:1013 includes/class-lddfw-order.php:1236
+msgid "Write your note"
+msgstr "قم بتدوين ملاحظتك"
+
+#: includes/class-lddfw-order.php:985 includes/class-lddfw-order.php:1194
+msgid "Write your note for the customer."
+msgstr "قم بتدوين ملاحظتك للزبون."
+
+#: admin/class-lddfw-admin.php:3543
+msgid "Yes"
+msgstr "نعم"
+
+#: includes/class-lddfw-reports.php:404 includes/class-lddfw-screens.php:634
+msgid "Yesterday"
+msgstr "بالأمس"
+
+#: includes/class-lddfw-login.php:169 includes/class-lddfw-password.php:58
+msgid "You are not a registered delivery driver."
+msgstr "المستخدم ليس بسائق تسليم طلبيات مسجل."
+
+#: local-delivery-drivers-for-wooCommerce.php:190 includes/functions.php:560
+msgid "You Discovered a Premium Feature!"
+msgstr "لقد تحصلت على خاصية إضافية مميزة!"
+
+#: includes/class-lddfw-login.php:173
+msgid "Your account is not active, please contact the dispatch center."
+msgstr "حسابك غير نشط، الرجاء الإتصال بمركز الإرسال."
+
+#: includes/class-lddfw-application.php:110
+msgid "Your application has been sent successfully."
+msgstr "تم إرسال مطلبك بنجاح."
+
+#: includes/class-lddfw-route.php:261
+msgid "Your delivery route is completed"
+msgstr "اكتمال مسار تسليم الطلبية"
+
+#: includes/class-lddfw-route.php:272
+msgid "Your next delivery"
+msgstr "الطلبية التالية"
+
+#: includes/class-lddfw-tracking.php:453
+msgid "Your order has been delivered"
+msgstr "لقد تم تسليم طلبيتك"
+
+#: includes/class-lddfw-tracking.php:449
+msgid "Your order is failed to deliver"
+msgstr "لقد تعذر تسليم طلبيتك"
+
+#: includes/class-lddfw-tracking.php:457
+msgid "Your order is now ready and being delivered"
+msgstr "لقد تم تجهيز طلبيتك وهي حاليا في اثناء التسليم"
+
+#: includes/class-lddfw-tracking.php:122 includes/class-lddfw-tracking.php:429
+msgid "Your order is on its way"
+msgstr "طلبيتك في طريقها للوصول اليك"
+
+#: includes/class-lddfw-tracking.php:120
+msgid "Your order is out for delivery"
+msgstr "تم إنطلاق تسليم طلبيتك"
+
+#: includes/class-lddfw-password.php:194
+msgid "Your password has been changed successfully."
+msgstr "تم تغيير كلمة العبور بنجاح."
+
+#: includes/class-lddfw-start-delivery-email.php:58
+msgid "Your {site_title} order delivery has been started!"
+msgstr "تم إنطلاق تسليم طلبيتك {site_title} !"
+
+#: includes/class-lddfw-failed-delivery-email.php:59
+msgid "Your {site_title} order delivery has failed!"
+msgstr "تعذَّر تسليم طلبك {site_title}!"
+
+#: includes/class-lddfw-assigned-order-email-vendor.php:58
+msgid "Your {site_title} order has been assigned to driver!"
+msgstr "تمت إحالة طلبك {site_title} إلى سائق معين!"
+
+#: includes/class-lddfw-assigned-order-email-admin.php:61
+msgid "Your {site_title} order has been claimed by a driver!"
+msgstr "تمت إحالة طلبك {site_title} إلى سائق معين!"
+
+#: includes/class-lddfw-delivered-email-admin.php:61
+msgid "Your {site_title} order has been delivered!"
+msgstr "وقع تسليم طلبك {site_title}!"
+
+#: includes/class-lddfw-out-for-delivery-email.php:58
+msgid "Your {site_title} order is out for delivery!"
+msgstr "تم خروج طلبيتك {site_title} للتسليم!"
