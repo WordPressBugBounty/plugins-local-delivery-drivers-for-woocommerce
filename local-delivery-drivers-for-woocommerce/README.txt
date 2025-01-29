@@ -5,7 +5,7 @@ Tags: delivery, courier, drivers, WooCommerce, shipping
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 6.6
-Stable tag: 1.9.6
+Stable tag: 1.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -663,9 +663,9 @@ This will assign the selected driver to the order.
 * Tweak: Improved handling of order unclaims and added unclaimed notes to the claim screen and order page.
 * Dev: Added a new filter lddfw_skip_order_item to allow skipping specific order items.
 
-
-
-
-
-
+= 1.9.7 =  
+* Tweak: Update Freemius SDK.
+* Fix verify nonce.
+* Tweak: Add App link to menu.
+ 
 == Upgrade Notice ==

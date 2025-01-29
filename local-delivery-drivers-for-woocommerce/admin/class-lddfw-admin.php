@@ -184,17 +184,14 @@ class LDDFW_Admin {
         /**
          * Security check.
          */
-        if ( isset( $_POST['lddfw_wpnonce'] ) ) {
-            $nonce = sanitize_text_field( wp_unslash( $_POST['lddfw_wpnonce'] ) );
-            if ( !wp_verify_nonce( $nonce, 'lddfw-nonce' ) ) {
-                $error = esc_js( __( 'Security Check Failure - This alert may occur when you are logged in as an administrator and as a delivery driver on the same browser and the same device. If you want to work on both panels please try to work with two different browsers.', 'lddfw' ) );
-                if ( 'json' === $lddfw_data_type ) {
-                    echo "{\"result\":\"{$result}\",\"error\":\"{$error}\"}";
-                } else {
-                    echo '<div class=\'alert alert-danger alert-dismissible fade show\'>' . $error . '<button type=\'button\' class=\'close\' data-dismiss=\'alert\' aria-label=\'Close\'><span aria-hidden=\'true\'>&times;</span></button></div>';
-                }
-                exit;
+        if ( empty( $_POST['lddfw_wpnonce'] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lddfw_wpnonce'] ) ), 'lddfw-nonce' ) ) {
+            $error = esc_js( __( 'Security Check Failure - This alert may occur when you are logged in as an administrator and as a delivery driver on the same browser and the same device. If you want to work on both panels please try to work with two different browsers.', 'lddfw' ) );
+            if ( 'json' === $lddfw_data_type ) {
+                echo "{\"result\":\"{$result}\",\"error\":\"{$error}\"}";
+            } else {
+                echo '<div class=\'alert alert-danger alert-dismissible fade show\'>' . $error . '<button type=\'button\' class=\'close\' data-dismiss=\'alert\' aria-label=\'Close\'><span aria-hidden=\'true\'>&times;</span></button></div>';
             }
+            exit;
         }
         /*
         	Edit driver service.
@@ -1701,6 +1698,14 @@ class LDDFW_Admin {
             'lddfw-settings',
             array(&$this, 'lddfw_settings')
         );
+        add_submenu_page(
+            'lddfw-dashboard',
+            esc_html( __( 'App', 'lddfw' ) ),
+            esc_html( __( 'App', 'lddfw' ) ),
+            'edit_pages',
+            'lddfw-app',
+            array(&$this, 'app')
+        );
     }
 
     /**
@@ -2106,6 +2111,26 @@ class LDDFW_Admin {
             return true;
         }
         return $protected;
+    }
+
+    /**
+     * Displays the app promotion banner or modified content if the add-on plugin is active.
+     *
+     * This function checks whether the "App for Delivery Drivers Premium" plugin is active.
+     * If the plugin is active and a filter `lddfw_app_settings_content` is available, it applies the filter 
+     * to allow modification of the content. Otherwise, it displays a default promotional banner linking to the app page.
+     *
+     * @since 1.9.7
+     * @return void Outputs the promotional content or modified content.
+     */
+    public function app() {
+        $addon_plugin_path = 'app-for-delivery-drivers-premium/app-for-delivery-drivers.php';
+        $content = '<br><a target="_blank" href="https://powerfulwp.com/app-for-delivery-drivers"><img style="max-width:100%" src="' . plugins_url() . '/' . LDDFW_FOLDER . '/public/images/app.gif?ver=' . LDDFW_VERSION . '"></a>';
+        if ( is_plugin_active( $addon_plugin_path ) && has_filter( 'lddfw_app_settings_content' ) ) {
+            echo apply_filters( 'lddfw_app_settings_content', $content );
+        } else {
+            echo $content;
+        }
     }
 
 }
