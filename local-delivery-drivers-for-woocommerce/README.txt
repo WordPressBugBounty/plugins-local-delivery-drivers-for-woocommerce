@@ -289,13 +289,15 @@ This feature helps to improve communication and coordination between the store a
 ## SUPPORTED ADD-ONS AND PLUGINS
 The supported add-ons and plugins for this plugin include:
 
+* [App for Delivery Drivers](https://powerfulwp.com/app-for-delivery-drivers/)
 * [Delivery Drivers Manager](https://powerfulwp.com/delivery-drivers-manager/)
 * [Delivery Drivers for Vendors](https://powerfulwp.com/delivery-drivers-for-woocommerce-multi-vendor-marketplace/)
 * [Pickup Locations for Delivery Drivers](https://powerfulwp.com/pickup-locations-for-delivery-drivers/)
+* [Scheduling Deliveries for Delivery Drivers](https://powerfulwp.com/scheduling-deliveries-for-delivery-drivers/)
+* [Payments for Delivery Drivers](https://powerfulwp.com/payments-for-delivery-drivers/)
 * [Pickup & Delivery from Customer Locations for WooCommerce](https://powerfulwp.com/pickup-and-delivery-from-customer-locations-for-woocommerce/)
 * [Autocomplete Address and Location Picker for WooCommerce](https://powerfulwp.com/autocomplete-address-and-location-picker-for-woocommerce-premium/)
 * [Distance Rate Shipping for WooCommerce](https://powerfulwp.com/distance-rate-shipping-for-woocommerce/)
-* [Payments for Delivery Drivers](https://powerfulwp.com/payments-for-delivery-drivers/)
 * [Order Picking for WooCommerce](https://powerfulwp.com/order-picking-for-woocommerce/)
 
 These add-ons and plugins provide additional functionality and customization options for the delivery process.
