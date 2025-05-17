@@ -57,60 +57,6 @@ if ( !is_user_logged_in() ) {
         $lddfw_user_is_driver = 1;
         $lddfw_driver_name = $lddfw_user->display_name;
         $lddfw_driver_availability = get_user_meta( $lddfw_driver_id, 'lddfw_driver_availability', true );
-        // Get the number of orders in each status.
-        $lddfw_orders = new LDDFW_Orders();
-        $lddfw_array = $lddfw_orders->lddfw_orders_count_query( $lddfw_driver_id );
-        $lddfw_out_for_delivery_counter = 0;
-        $lddfw_failed_attempt_counter = 0;
-        $lddfw_delivered_counter = 0;
-        $lddfw_assign_to_driver_counter = 0;
-        $lddfw_claim_orders_counter = 0;
-        /**
-         * Set current status names
-         */
-        $lddfw_driver_assigned_status_name = esc_html( __( 'Driver assigned', 'lddfw' ) );
-        $lddfw_out_for_delivery_status_name = esc_html( __( 'Out for delivery', 'lddfw' ) );
-        $lddfw_failed_attempt_status_name = esc_html( __( 'Failed delivery', 'lddfw' ) );
-        if ( function_exists( 'wc_get_order_statuses' ) ) {
-            $result = wc_get_order_statuses();
-            if ( !empty( $result ) ) {
-                foreach ( $result as $key => $status ) {
-                    switch ( $key ) {
-                        case get_option( 'lddfw_out_for_delivery_status' ):
-                            if ( $status !== $lddfw_out_for_delivery_status_name ) {
-                                $lddfw_out_for_delivery_status_name = $status;
-                            }
-                            break;
-                        case get_option( 'lddfw_failed_attempt_status' ):
-                            if ( $status !== esc_html( __( 'Failed Delivery Attempt', 'lddfw' ) ) ) {
-                                $lddfw_failed_attempt_status_name = $status;
-                            }
-                            break;
-                        case get_option( 'lddfw_driver_assigned_status' ):
-                            if ( $status !== $lddfw_driver_assigned_status_name ) {
-                                $lddfw_driver_assigned_status_name = $status;
-                            }
-                            break;
-                    }
-                }
-            }
-        }
-        foreach ( $lddfw_array as $row ) {
-            switch ( $row->post_status ) {
-                case get_option( 'lddfw_out_for_delivery_status' ):
-                    $lddfw_out_for_delivery_counter = $row->orders;
-                    break;
-                case get_option( 'lddfw_failed_attempt_status' ):
-                    $lddfw_failed_attempt_counter = $row->orders;
-                    break;
-                case get_option( 'lddfw_delivered_status' ):
-                    $lddfw_delivered_counter = $row->orders;
-                    break;
-                case get_option( 'lddfw_driver_assigned_status' ):
-                    $lddfw_assign_to_driver_counter = $row->orders;
-                    break;
-            }
-        }
         /**
          * Drivers screens.
          */
@@ -189,6 +135,22 @@ wp_register_style(
     LDDFW_VERSION,
     'all'
 );
+// Get the proof of delivery max images option
+$lddfw_proof_of_delivery_max_images = min( 10, max( 1, absint( get_option( 'lddfw_proof_of_delivery_max_images', 1 ) ) ) );
+// Localize script with translation strings for alerts.
+$lddfw_alert_texts = array(
+    'max_images'                => esc_js( sprintf( __( 'You cannot upload more than %d images', 'lddfw' ), $lddfw_proof_of_delivery_max_images ) ),
+    'max_images_total'          => esc_js( sprintf( __( 'You cannot upload more than %d images in total', 'lddfw' ), $lddfw_proof_of_delivery_max_images ) ),
+    'image_too_large'           => esc_js( __( 'Image data is too large', 'lddfw' ) ),
+    'error_saving'              => esc_js( __( 'Error saving images', 'lddfw' ) ),
+    'error_saving_single'       => esc_js( __( 'Error saving image', 'lddfw' ) ),
+    'error_saving_server'       => esc_js( __( 'Error saving image on server', 'lddfw' ) ),
+    'error_saving_ajax'         => esc_js( __( 'Failed to contact server to save image.', 'lddfw' ) ),
+    'error_deleting_server'     => esc_js( __( 'Error deleting image on server', 'lddfw' ) ),
+    'error_deleting_ajax'       => esc_js( __( 'Failed to contact server to delete image.', 'lddfw' ) ),
+    'directions_request_failed' => esc_js( __( 'Directions request failed due to', 'lddfw' ) ),
+);
+wp_localize_script( 'lddfw-public', 'lddfw_alert_texts', $lddfw_alert_texts );
 ?>
 <!DOCTYPE html>
 <html>
@@ -231,7 +193,8 @@ echo '<script>
 	var lddfw_dates = "' . esc_js( $lddfw_dates ) . '";
 	let lddfw_tracking_status = "' . esc_js( $lddfw_tracking_status ) . '";
 	const lddfw_map_language = "' . esc_js( lddfw_get_map_language() ) . '";
-	let lddfw_map_center = "' . esc_js( lddfw_get_map_center( '', '' ) ) . '";';
+	let lddfw_map_center = "' . esc_js( lddfw_get_map_center( '', '' ) ) . '";
+	var lddfw_proof_of_delivery_max_images = ' . esc_js( $lddfw_proof_of_delivery_max_images ) . ';';
 echo '
 </script>';
 ?>

@@ -1,7 +1,14 @@
+// Define SVG icons (assuming similar style to existing icons)
+var lddfw_loader_icon_svg  = '<svg class="lddfw_status_icon lddfw_loader_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" style="background: none; shape-rendering: auto;" width="20px" height="20px"><circle cx="50" cy="50" r="32" stroke-width="8" stroke="#fff" stroke-dasharray="50.26548245743669 50.26548245743669" fill="none" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="0 50 50;360 50 50"></animateTransform></circle></svg>';
+var lddfw_success_icon_svg = '<svg class="lddfw_status_icon lddfw_success_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="20px" height="20px"><circle cx="26" cy="26" r="25" fill="none"   stroke-width="4"/><path fill="none" stroke="#fff" stroke-width="4" d="M14 27l8 8 16-16"/></svg>';
+var lddfw_failure_icon_svg = '<svg class="lddfw_status_icon lddfw_failure_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" width="20px" height="20px"><circle cx="26" cy="26" r="25" fill="none"   stroke-width="4"/><path fill="none" stroke="#fff" stroke-width="4" d="M16 16 36 36 M36 16 16 36"/></svg>';
+var lddfw_trash_icon_svg   = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path></svg>';
+
 (function() {
     "use strict";
 
-   
+    
+ 
 
     jQuery(window).bind("pageshow", function(event) {
         lddfw_hide_loader();
@@ -212,45 +219,66 @@
         }
     );
 
+   
+
+    // Function to process the confirmation click (delivered or failed)
+    function lddfw_process_delivery_confirmation(status_attribute, reason_form_selector, reason_radio_name, reason_other_id, note_input_selector, confirmation_div_selector, error_context_message) {
+        // Get reason/note
+        var lddfw_reason = jQuery('input[name=' + reason_radio_name + ']:checked', reason_form_selector);
+        if (lddfw_reason.attr("id") != reason_other_id) {
+            jQuery(note_input_selector).val(lddfw_reason.val());
+        }
+
+        // Update UI
+        jQuery(confirmation_div_selector).hide();
+        jQuery("#lddfw_thankyou").show();
+
+        // Get common data
+        var lddfw_orderid = jQuery("#lddfw_driver_complete_btn").attr("order_id");
+        var lddfw_signature = '';
+        var lddfw_delivery_image = '';
+        
+
+        // Make the main status update AJAX call
+        jQuery.ajax({
+            type: "POST",
+            url: lddfw_ajax_url,
+            data: {
+                action: 'lddfw_ajax',
+                lddfw_service: 'lddfw_status',
+                lddfw_order_id: lddfw_orderid,
+                lddfw_order_status: jQuery("#lddfw_driver_complete_btn").attr(status_attribute),
+                lddfw_driver_id: lddfw_driver_id,
+                lddfw_note: jQuery(note_input_selector).val(),
+                lddfw_wpnonce: lddfw_nonce.nonce,
+                lddfw_signature: lddfw_signature,
+                lddfw_data_type: 'html' // Main status update doesn't need JSON response
+                // Proofs handled separately in success callback
+            },
+            success: function(data) {
+                
+            },
+            error: function(request, status, error) {
+                // Handle error for the main status update AJAX call
+                console.error('Error updating order status ' + error_context_message + ':', status, error);
+            }
+        });
+
+        return false; // Prevent default form submission/link behavior
+    }
+
     jQuery("#lddfw_delivered_confirmation .lddfw_ok").click(
         function() {
-
-            var lddfw_reason = jQuery('input[name=lddfw_delivery_dropoff_location]:checked', '#lddfw_delivered_form');
-            if (lddfw_reason.attr("id") != "lddfw_delivery_dropoff_other") {
-                jQuery("#lddfw_driver_delivered_note").val(lddfw_reason.val());
-            }
-            jQuery("#lddfw_delivered").hide();
-            jQuery("#lddfw_thankyou").show();
-
-            var lddfw_orderid = jQuery("#lddfw_driver_complete_btn").attr("order_id");
-            var lddfw_signature = '';
-            var lddfw_delivery_image = '';
-            
-
-            jQuery.ajax({
-                type: "POST",
-                url: lddfw_ajax_url,
-                data: {
-                    action: 'lddfw_ajax',
-                    lddfw_service: 'lddfw_status',
-                    lddfw_order_id: lddfw_orderid,
-                    lddfw_order_status: jQuery("#lddfw_driver_complete_btn").attr("delivered_status"),
-                    lddfw_driver_id: lddfw_driver_id,
-                    lddfw_note: jQuery("#lddfw_driver_delivered_note").val(),
-                    lddfw_wpnonce: lddfw_nonce.nonce,
-                    lddfw_data_type: 'html',
-                    lddfw_signature: lddfw_signature,
-                    lddfw_delivery_image: lddfw_delivery_image
-
-
-                },
-                success: function(data) {
-                    
-                },
-                error: function(request, status, error) {}
-            });
-
-            return false;
+            lddfw_process_delivery_confirmation(
+                'delivered_status',                 // status_attribute
+                '#lddfw_delivered_form',            // reason_form_selector
+                'lddfw_delivery_dropoff_location', // reason_radio_name
+                'lddfw_delivery_dropoff_other',     // reason_other_id
+                '#lddfw_driver_delivered_note',     // note_input_selector
+                '#lddfw_delivered',                 // confirmation_div_selector
+                '(delivered)'                       // error_context_message
+            );
+            return false; // Keep return false here as well
         }
     );
 
@@ -284,43 +312,16 @@
     );
     jQuery("#lddfw_failed_delivery_confirmation .lddfw_ok").click(
         function() {
-
-            var lddfw_reason = jQuery('input[name=lddfw_delivery_failed_reason]:checked', '#lddfw_failed_delivery_form');
-            if (lddfw_reason.attr("id") != "lddfw_delivery_failed_6") {
-                jQuery("#lddfw_driver_note").val(lddfw_reason.val());
-            }
-
-            jQuery("#lddfw_failed_delivery").hide();
-            jQuery("#lddfw_thankyou").show();
-
-            var lddfw_orderid = jQuery("#lddfw_driver_complete_btn").attr("order_id");
-
-            var lddfw_signature = '';
-            var lddfw_delivery_image = '';
-            
-
-            jQuery.ajax({
-                type: "POST",
-                url: lddfw_ajax_url,
-                data: {
-                    action: 'lddfw_ajax',
-                    lddfw_service: 'lddfw_status',
-                    lddfw_order_id: lddfw_orderid,
-                    lddfw_order_status: jQuery("#lddfw_driver_complete_btn").attr("failed_status"),
-                    lddfw_driver_id: lddfw_driver_id,
-                    lddfw_note: jQuery("#lddfw_driver_note").val(),
-                    lddfw_wpnonce: lddfw_nonce.nonce,
-                    lddfw_data_type: 'html',
-                    lddfw_signature: lddfw_signature,
-                    lddfw_delivery_image: lddfw_delivery_image
-                },
-                success: function(data) {
-                    
-                },
-                error: function(request, status, error) {}
-            });
-
-            return false;
+            lddfw_process_delivery_confirmation(
+                'failed_status',                    // status_attribute
+                '#lddfw_failed_delivery_form',      // reason_form_selector
+                'lddfw_delivery_failed_reason',    // reason_radio_name
+                'lddfw_delivery_failed_6',         // reason_other_id
+                '#lddfw_driver_note',              // note_input_selector
+                '#lddfw_failed_delivery',          // confirmation_div_selector
+                '(failed delivery)'                 // error_context_message
+            );
+            return false; // Keep return false here as well
         }
     );
 
@@ -565,7 +566,7 @@ function lddfw_show_loader(obj) {
 
     if (obj.hasClass("lddfw_loader_fixed")) {
         jQuery('#lddfw_loader').show();
-    } else {
+                                     } else {
         jQuery(".lddfw_back_link").hide();
         jQuery('#lddfw_loader').appendTo(".lddfw_back_column");
         jQuery('#lddfw_loader').show();
@@ -591,279 +592,232 @@ function lddfw_closeNav() {
 
 
 
-jQuery("#cancel_password_button").on("click", function() {
-    jQuery("#lddfw_password_holder").hide();
-    jQuery("#lddfw_password").val("");
-});
+    jQuery("#cancel_password_button").on("click", function() {
+        jQuery("#lddfw_password_holder").hide();
+        jQuery("#lddfw_password").val("");
+    });
 
-jQuery("#new_password_button").on("click", function() {
-    jQuery("#lddfw_password_holder").show();
-    jQuery("#lddfw_password").val(Math.random().toString(36).slice(2));
-});
+    jQuery("#new_password_button").on("click", function() {
+        jQuery("#lddfw_password_holder").show();
+        jQuery("#lddfw_password").val(Math.random().toString(36).slice(2));
+    });
 
-jQuery("#billing_state_select").on("change", function() {
-    jQuery("#billing_state_input").val(jQuery(this).val());
-});
-jQuery("#billing_country").on("change", function() {
-    if (jQuery(this).val() == "US") {
-        jQuery("#billing_state_select").show();
-        jQuery("#billing_state_input").hide();
-    } else {
-        jQuery("#billing_state_input").show();
-        jQuery("#billing_state_select").hide();
+    jQuery("#billing_state_select").on("change", function() {
+        jQuery("#billing_state_input").val(jQuery(this).val());
+    });
+    jQuery("#billing_country").on("change", function() {
+        if (jQuery(this).val() == "US") {
+            jQuery("#billing_state_select").show();
+            jQuery("#billing_state_input").hide();
+        } else {
+            jQuery("#billing_state_input").show();
+            jQuery("#billing_state_select").hide();
+        }
+    });
+    if (jQuery("#billing_country").length) {
+        jQuery("#billing_country").trigger("change");
     }
-});
-if (jQuery("#billing_country").length) {
-    jQuery("#billing_country").trigger("change");
-}
 
-function scrolltoelement(element) {
-    jQuery('html, body').animate({
-        scrollTop: element.offset().top - 100
-    }, 1000);
-}
+    function scrolltoelement(element) {
+        jQuery('html, body').animate({
+            scrollTop: element.offset().top - 100
+        }, 1000);
+    }
 
-jQuery(".lddfw_form").validate({
-    submitHandler: function(form) {
-        var lddfw_form = jQuery(form);
-        var lddfw_loading_btn = lddfw_form.find(".lddfw_loading_btn")
-        var lddfw_submit_btn = lddfw_form.find(".lddfw_submit_btn")
-        var lddfw_alert_wrap = lddfw_form.find(".lddfw_alert_wrap");
-        var lddfw_service = lddfw_form.attr("service");
-        lddfw_submit_btn.hide();
-        lddfw_loading_btn.show();
-        lddfw_alert_wrap.html("");
-        jQuery.ajax({
-            type: "POST",
-            url: lddfw_ajax_url,
-            data: lddfw_form.serialize() + '&action=lddfw_ajax&lddfw_service=' + lddfw_service + '&lddfw_data_type=json',
-            success: function(data) {
-                try {
-                    var lddfw_json = JSON.parse(data);
-                    if (lddfw_json["result"] == "0") {
-                        lddfw_alert_wrap.html("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">" + lddfw_json["error"] + "</div>");
+    jQuery(".lddfw_form").validate({
+        submitHandler: function(form) {
+            var lddfw_form = jQuery(form);
+            var lddfw_loading_btn = lddfw_form.find(".lddfw_loading_btn")
+            var lddfw_submit_btn = lddfw_form.find(".lddfw_submit_btn")
+            var lddfw_alert_wrap = lddfw_form.find(".lddfw_alert_wrap");
+            var lddfw_service = lddfw_form.attr("service");
+            lddfw_submit_btn.hide();
+            lddfw_loading_btn.show();
+            lddfw_alert_wrap.html("");
+            jQuery.ajax({
+                type: "POST",
+                url: lddfw_ajax_url,
+                data: lddfw_form.serialize() + '&action=lddfw_ajax&lddfw_service=' + lddfw_service + '&lddfw_data_type=json',
+                success: function(data) {
+                    try {
+                        var lddfw_json = JSON.parse(data);
+                        if (lddfw_json["result"] == "0") {
+                            lddfw_alert_wrap.html("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">" + lddfw_json["error"] + "</div>");
+                            lddfw_submit_btn.show();
+                            lddfw_loading_btn.hide();
+                            scrolltoelement(lddfw_alert_wrap);
+                        }
+                        if (lddfw_json["result"] == "1") {
+                            var lddfw_hide_on_success = lddfw_form.find(".lddfw_hide_on_success");
+                            if (lddfw_hide_on_success.length) {
+                                lddfw_hide_on_success.replaceWith("");
+                            }
+                            lddfw_alert_wrap.html("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">" + lddfw_json["error"] + "</div>");
+                            lddfw_submit_btn.show();
+                            lddfw_loading_btn.hide();
+                            if (lddfw_json["nonce"] != "") {
+                                lddfw_form.find("#lddfw_wpnonce").val(lddfw_json["nonce"]);
+                                lddfw_nonce = { "nonce": lddfw_json["nonce"] };
+                            }
+
+                            //Switch theme mode.
+                            if (jQuery("select[name='lddfw_driver_app_mode']").length) {
+                                jQuery("body").attr("class", jQuery("select[name='lddfw_driver_app_mode']").val());
+                            }
+
+                            scrolltoelement(lddfw_alert_wrap);
+                        }
+
+                    } catch (e) {
+                        lddfw_alert_wrap.html("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">" + e + "</div>");
                         lddfw_submit_btn.show();
                         lddfw_loading_btn.hide();
                         scrolltoelement(lddfw_alert_wrap);
                     }
-                    if (lddfw_json["result"] == "1") {
-                        var lddfw_hide_on_success = lddfw_form.find(".lddfw_hide_on_success");
-                        if (lddfw_hide_on_success.length) {
-                            lddfw_hide_on_success.replaceWith("");
-                        }
-                        lddfw_alert_wrap.html("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">" + lddfw_json["error"] + "</div>");
-                        lddfw_submit_btn.show();
-                        lddfw_loading_btn.hide();
-                        if (lddfw_json["nonce"] != "") {
-                            lddfw_form.find("#lddfw_wpnonce").val(lddfw_json["nonce"]);
-                            lddfw_nonce = { "nonce": lddfw_json["nonce"] };
-                        }
-
-                        //Switch theme mode.
-                        if (jQuery("select[name='lddfw_driver_app_mode']").length) {
-                            jQuery("body").attr("class", jQuery("select[name='lddfw_driver_app_mode']").val());
-                        }
-
-                        scrolltoelement(lddfw_alert_wrap);
-                    }
-
-                } catch (e) {
+                },
+                error: function(request, status, error) {
                     lddfw_alert_wrap.html("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">" + e + "</div>");
                     lddfw_submit_btn.show();
                     lddfw_loading_btn.hide();
                     scrolltoelement(lddfw_alert_wrap);
                 }
-            },
-            error: function(request, status, error) {
-                lddfw_alert_wrap.html("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">" + e + "</div>");
-                lddfw_submit_btn.show();
-                lddfw_loading_btn.hide();
-                scrolltoelement(lddfw_alert_wrap);
-            }
-        });
+            });
 
-        return false;
-    }
-});
-
-
-jQuery("#lddfw_driver_add_signature_btn").click(function() {
-
-    jQuery(".signature-wrapper").show();
-    
-});
-
-jQuery(".delivery_proof_bar a").click(function() {
-
-    var $lddfw_this = jQuery(this);
-    var $lddfw_screen_class = $lddfw_this.attr("href")
-    $lddfw_this.parents(".delivery_proof_bar").find("a").removeClass("active");
-    $lddfw_this.addClass("active");
-    $lddfw_this.parents(".lddfw_lightbox").find(".screen_wrap").hide();
-    $lddfw_this.parents(".lddfw_lightbox").find("." + $lddfw_screen_class).show();
-
-    
-    return false;
-});
-
-//switch lazyload
-jQuery("img.lazyload").each(function() {
-    var $lddfw_src = jQuery(this).attr("data-src");
-    jQuery(this).attr("src", $lddfw_src);
-});
-jQuery("iframe.lazyload").each(function() {
-    var $lddfw_src = jQuery(this).attr("data-src");
-    jQuery(this).attr("src", $lddfw_src);
-});
-
-
-
-
-function lddfw_order_map() {
-    const directionsService = new google.maps.DirectionsService();
-    const directionsRenderer = new google.maps.DirectionsRenderer();
-
-    var LatLng = { lat: 41.85, lng: -87.65 };
-
-    if (lddfw_map_center != "") {
-        var lddfw_map_center_array = lddfw_map_center.split(",");
-        LatLng = new google.maps.LatLng(parseFloat(lddfw_map_center_array[0]), parseFloat(lddfw_map_center_array[1]));
-    }
-
-    const map = new google.maps.Map(document.getElementById("google_map"), {
-        zoom: 7,
-        center: LatLng,
-        styles: lddfw_map_style(),
-        disableDefaultUI: true,
+            return false;
+        }
     });
 
-    directionsRenderer.setMap(map);
+
+    jQuery("#lddfw_driver_add_signature_btn").click(function() {
+
+        jQuery(".signature-wrapper").show();
+        
+    });
+
+    jQuery(".delivery_proof_bar a").click(function() {
+
+        var $lddfw_this = jQuery(this);
+        var $lddfw_screen_class = $lddfw_this.attr("href")
+        $lddfw_this.parents(".delivery_proof_bar").find("a").removeClass("active");
+        $lddfw_this.addClass("active");
+        $lddfw_this.parents(".lddfw_lightbox").find(".screen_wrap").hide();
+        $lddfw_this.parents(".lddfw_lightbox").find("." + $lddfw_screen_class).show();
+
+        
+        return false;
+    });
+
+    //switch lazyload
+    jQuery("img.lazyload").each(function() {
+        var $lddfw_src = jQuery(this).attr("data-src");
+        jQuery(this).attr("src", $lddfw_src);
+    });
+    jQuery("iframe.lazyload").each(function() {
+        var $lddfw_src = jQuery(this).attr("data-src");
+        jQuery(this).attr("src", $lddfw_src);
+    });
 
     
 
-    directionsService.route({
-            origin: driver_origin,
-            destination: driver_destination,
-            travelMode: driver_travel_mode,
-            optimizeWaypoints: true,
-            transitOptions: { modes: ['SUBWAY', 'RAIL', 'TRAM', 'BUS', 'TRAIN'], routingPreference: 'LESS_WALKING' },
-        })
-        .then((response) => {
-            directionsRenderer.setDirections(response);
 
-            
+    function lddfw_order_map() {
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
 
-        })
-        .catch((e) => console.log("Directions request failed due to " + e));
-}
+        var LatLng = { lat: 41.85, lng: -87.65 };
 
-
-
-function lddfw_computeTotalDistance(result) {
-    var lddfw_totalDist = 0;
-    var lddfw_totalTime = 0;
-    var lddfw_distance_text = '';
-    var lddfw_distance_array = '';
-    var lddfw_distance_type = '';
-
-    var lddfw_myroute = result.routes[0];
-    for (i = 0; i < lddfw_myroute.legs.length; i++) {
-        lddfw_totalTime += lddfw_myroute.legs[i].duration.value;
-        lddfw_distance_text = lddfw_myroute.legs[i].distance.text;
-        lddfw_distance_array = lddfw_distance_text.split(" ");
-        lddfw_totalDist += parseFloat(lddfw_distance_array[0]);
-        lddfw_distance_type = lddfw_distance_array[1];
-    }
-    lddfw_totalTime = (lddfw_totalTime / 60).toFixed(0);
-    lddfw_TotalTimeText = lddfw_timeConvert(lddfw_totalTime);
-    document.getElementById("lddfw_total_route").innerHTML = "<b>" + lddfw_TotalTimeText + "</b> <span>(" + (lddfw_totalDist).toFixed(1) + " " + lddfw_distance_type + ")</span> ";
-}
-
-
-function lddfw_timeConvert(n) {
-    var lddfw_num = n;
-    var lddfw_hours = (lddfw_num / 60);
-    var lddfw_rhours = Math.floor(lddfw_hours);
-    var lddfw_minutes = (lddfw_hours - lddfw_rhours) * 60;
-    var lddfw_rminutes = Math.round(lddfw_minutes);
-    var lddfw_result = '';
-    if (lddfw_rhours > 1) {
-        lddfw_result = lddfw_rhours + " " + lddfw_hours_text + " ";
-    }
-    if (lddfw_rhours == 1) {
-        lddfw_result = lddfw_rhours + " " + lddfw_hour_text + " ";
-    }
-    if (lddfw_rminutes > 0) {
-        lddfw_result += lddfw_rminutes + " " + lddfw_mins_text;
-    }
-    return lddfw_result;
-}
-
-
-
-
-
-function lddfw_numtoletter(lddfw_num) {
-    var lddfw_s = '',
-        lddfw_t;
-
-    while (lddfw_num > 0) {
-        lddfw_t = (lddfw_num - 1) % 26;
-        lddfw_s = String.fromCharCode(65 + lddfw_t) + lddfw_s;
-        lddfw_num = (lddfw_num - lddfw_t) / 26 | 0;
-    }
-    return lddfw_s || undefined;
-}
-
-function lddfw_map_style() {
-    let lddfw_dark_mode_style = [{
-            "featureType": "administrative",
-            "elementType": "geometry",
-            "stylers": [{
-                "visibility": "off"
-            }]
-        },
-        {
-            "featureType": "poi",
-            "stylers": [{
-                "visibility": "off"
-            }]
-        },
-        {
-            "featureType": "road",
-            "elementType": "labels.icon",
-            "stylers": [{
-                "visibility": "off"
-            }]
-        },
-        {
-            "featureType": "transit",
-            "stylers": [{
-                "visibility": "off"
-            }]
+        if (lddfw_map_center != "") {
+            var lddfw_map_center_array = lddfw_map_center.split(",");
+            LatLng = new google.maps.LatLng(parseFloat(lddfw_map_center_array[0]), parseFloat(lddfw_map_center_array[1]));
         }
-    ];
 
-    if (jQuery("body").hasClass("dark")) {
-        lddfw_dark_mode_style = [{
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#242f3e"
-                }]
-            },
-            {
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#746855"
-                }]
-            },
-            {
-                "elementType": "labels.text.stroke",
-                "stylers": [{
-                    "color": "#242f3e"
-                }]
-            },
-            {
+        const map = new google.maps.Map(document.getElementById("google_map"), {
+            zoom: 7,
+            center: LatLng,
+            styles: lddfw_map_style(),
+            disableDefaultUI: true,
+        });
+
+        directionsRenderer.setMap(map);
+
+        
+
+        directionsService.route({
+                origin: driver_origin,
+                destination: driver_destination,
+                travelMode: driver_travel_mode,
+                optimizeWaypoints: true,
+                transitOptions: { modes: ['SUBWAY', 'RAIL', 'TRAM', 'BUS', 'TRAIN'], routingPreference: 'LESS_WALKING' },
+            })
+            .then((response) => {
+                directionsRenderer.setDirections(response);
+
+                
+
+            })
+            .catch((e) => console.log("Directions request failed due to " + e));
+    }
+
+
+
+    function lddfw_computeTotalDistance(result) {
+        var lddfw_totalDist = 0;
+        var lddfw_totalTime = 0;
+        var lddfw_distance_text = '';
+        var lddfw_distance_array = '';
+        var lddfw_distance_type = '';
+
+        var lddfw_myroute = result.routes[0];
+        for (i = 0; i < lddfw_myroute.legs.length; i++) {
+            lddfw_totalTime += lddfw_myroute.legs[i].duration.value;
+            lddfw_distance_text = lddfw_myroute.legs[i].distance.text;
+            lddfw_distance_array = lddfw_distance_text.split(" ");
+            lddfw_totalDist += parseFloat(lddfw_distance_array[0]);
+            lddfw_distance_type = lddfw_distance_array[1];
+        }
+        lddfw_totalTime = (lddfw_totalTime / 60).toFixed(0);
+        lddfw_TotalTimeText = lddfw_timeConvert(lddfw_totalTime);
+        document.getElementById("lddfw_total_route").innerHTML = "<b>" + lddfw_TotalTimeText + "</b> <span>(" + (lddfw_totalDist).toFixed(1) + " " + lddfw_distance_type + ")</span> ";
+    }
+
+
+    function lddfw_timeConvert(n) {
+        var lddfw_num = n;
+        var lddfw_hours = (lddfw_num / 60);
+        var lddfw_rhours = Math.floor(lddfw_hours);
+        var lddfw_minutes = (lddfw_hours - lddfw_rhours) * 60;
+        var lddfw_rminutes = Math.round(lddfw_minutes);
+        var lddfw_result = '';
+        if (lddfw_rhours > 1) {
+            lddfw_result = lddfw_rhours + " " + lddfw_hours_text + " ";
+        }
+        if (lddfw_rhours == 1) {
+            lddfw_result = lddfw_rhours + " " + lddfw_hour_text + " ";
+        }
+        if (lddfw_rminutes > 0) {
+            lddfw_result += lddfw_rminutes + " " + lddfw_mins_text;
+        }
+        return lddfw_result;
+    }
+
+
+    
+
+
+    function lddfw_numtoletter(lddfw_num) {
+        var lddfw_s = '',
+            lddfw_t;
+
+        while (lddfw_num > 0) {
+            lddfw_t = (lddfw_num - 1) % 26;
+            lddfw_s = String.fromCharCode(65 + lddfw_t) + lddfw_s;
+            lddfw_num = (lddfw_num - lddfw_t) / 26 | 0;
+        }
+        return lddfw_s || undefined;
+    }
+
+    function lddfw_map_style() {
+        let lddfw_dark_mode_style = [{
                 "featureType": "administrative",
                 "elementType": "geometry",
                 "stylers": [{
@@ -871,51 +825,9 @@ function lddfw_map_style() {
                 }]
             },
             {
-                "featureType": "administrative.locality",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#d59563"
-                }]
-            },
-            {
                 "featureType": "poi",
                 "stylers": [{
                     "visibility": "off"
-                }]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#d59563"
-                }]
-            },
-            {
-                "featureType": "poi.park",
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#263c3f"
-                }]
-            },
-            {
-                "featureType": "poi.park",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#6b9a76"
-                }]
-            },
-            {
-                "featureType": "road",
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#38414e"
-                }]
-            },
-            {
-                "featureType": "road",
-                "elementType": "geometry.stroke",
-                "stylers": [{
-                    "color": "#212a37"
                 }]
             },
             {
@@ -926,92 +838,193 @@ function lddfw_map_style() {
                 }]
             },
             {
-                "featureType": "road",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#9ca5b3"
-                }]
-            },
-            {
-                "featureType": "road.highway",
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#746855"
-                }]
-            },
-            {
-                "featureType": "road.highway",
-                "elementType": "geometry.stroke",
-                "stylers": [{
-                    "color": "#1f2835"
-                }]
-            },
-            {
-                "featureType": "road.highway",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#f3d19c"
-                }]
-            },
-            {
                 "featureType": "transit",
                 "stylers": [{
                     "visibility": "off"
                 }]
-            },
-            {
-                "featureType": "transit",
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#2f3948"
-                }]
-            },
-            {
-                "featureType": "transit.station",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#d59563"
-                }]
-            },
-            {
-                "featureType": "water",
-                "elementType": "geometry",
-                "stylers": [{
-                    "color": "#17263c"
-                }]
-            },
-            {
-                "featureType": "water",
-                "elementType": "labels.text.fill",
-                "stylers": [{
-                    "color": "#515c6d"
-                }]
-            },
-            {
-                "featureType": "water",
-                "elementType": "labels.text.stroke",
-                "stylers": [{
-                    "color": "#17263c"
-                }]
             }
         ];
+
+        if (jQuery("body").hasClass("dark")) {
+            lddfw_dark_mode_style = [{
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#242f3e"
+                    }]
+                },
+                {
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#746855"
+                    }]
+                },
+                {
+                    "elementType": "labels.text.stroke",
+                    "stylers": [{
+                        "color": "#242f3e"
+                    }]
+                },
+                {
+                    "featureType": "administrative",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "administrative.locality",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#d59563"
+                    }]
+                },
+                {
+                    "featureType": "poi",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#d59563"
+                    }]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#263c3f"
+                    }]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#6b9a76"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#38414e"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "geometry.stroke",
+                    "stylers": [{
+                        "color": "#212a37"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#9ca5b3"
+                    }]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#746855"
+                    }]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": [{
+                        "color": "#1f2835"
+                    }]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#f3d19c"
+                    }]
+                },
+                {
+                    "featureType": "transit",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#2f3948"
+                    }]
+                },
+                {
+                    "featureType": "transit.station",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#d59563"
+                    }]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "color": "#17263c"
+                    }]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#515c6d"
+                    }]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [{
+                        "color": "#17263c"
+                    }]
+                }
+            ];
+        }
+        return lddfw_dark_mode_style;
     }
-    return lddfw_dark_mode_style;
-}
 
 
-function lddfw_delivery_timer() {
+    function lddfw_delivery_timer() {
+
+        
+
+    }
+
+
+
+    if ( jQuery("#lddfw_page").hasClass("order") ) {
+        if ( jQuery("#google_map").length ) {
+          jQuery("body").append(
+            "<script " +
+              "id='lddfw_google_map_script' " +
+              "async defer " +
+              "src='https://maps.googleapis.com/maps/api/js" +
+                "?key="   + lddfw_google_api_key   +
+                "&language=" + lddfw_map_language +
+                "&callback=lddfw_order_map"        +
+                "&loading=async"                   +  
+            "'></script>"
+          );
+        }
+        lddfw_delivery_timer();
+      }
+      
 
     
-
-}
-
-
-
-if (jQuery("#lddfw_page").hasClass("order")) {
-    if (jQuery("#google_map").length) {
-        jQuery("body").append("<script id='lddfw_google_map_script' async defer src='https://maps.googleapis.com/maps/api/js?key=" + lddfw_google_api_key + "&language=" + lddfw_map_language + "&callback=lddfw_order_map'></script>");
-    }
-    lddfw_delivery_timer();
-}
-

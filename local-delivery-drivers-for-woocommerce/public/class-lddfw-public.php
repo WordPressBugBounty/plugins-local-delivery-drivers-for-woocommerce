@@ -109,7 +109,7 @@ class LDDFW_Public {
                 /* driver note */
                 $lddfw_driver_note = $order->get_meta( 'lddfw_driver_note' );
                 if ( '' !== $lddfw_driver_note ) {
-                    echo '<p><b>' . esc_html( __( 'Driver note', 'lddfw' ) ) . ':</b><br> ' . $lddfw_driver_note . '</p>';
+                    echo '<p><b>' . esc_html( __( 'Driver note', 'lddfw' ) ) . ':</b><br> ' . esc_html( $lddfw_driver_note ) . '</p>';
                 }
             }
         }
@@ -131,6 +131,129 @@ class LDDFW_Public {
             }
         }
         return $page_template;
+    }
+
+    /**
+     * Initialize panel data globals.
+     *
+     * @since 1.0.0
+     */
+    public function lddfw_initialize_panel_data_globals() {
+        global $lddfw_driver_assigned_status_name;
+        global $lddfw_out_for_delivery_status_name;
+        global $lddfw_failed_attempt_status_name;
+        global $lddfw_driver_id;
+        global $lddfw_out_for_delivery_counter;
+        global $lddfw_failed_attempt_counter;
+        global $lddfw_delivered_counter;
+        global $lddfw_assign_to_driver_counter;
+        global $lddfw_claim_orders_counter;
+        global $lddfw_driver_name;
+        global $lddfw_driver_availability;
+        global $lddfw_drivers_tracking_timing;
+        global $lddfw_screen;
+        global $lddfw_order_id;
+        global $lddfw_reset_key;
+        global $lddfw_page;
+        global $lddfw_reset_login;
+        global $lddfw_dates;
+        global $lddfw_wpnonce;
+        global $lddfw_user;
+        $lddfw_driver_id = '';
+        $lddfw_wpnonce = wp_create_nonce( 'lddfw-nonce' );
+        $lddfw_drivers_tracking_timing = '';
+        /**
+         * Get WordPress query_var.
+         */
+        $lddfw_screen = ( '' !== get_query_var( 'lddfw_screen' ) ? get_query_var( 'lddfw_screen' ) : 'dashboard' );
+        $lddfw_order_id = get_query_var( 'lddfw_orderid' );
+        $lddfw_reset_key = get_query_var( 'lddfw_reset_key' );
+        $lddfw_page = get_query_var( 'lddfw_page' );
+        $lddfw_reset_login = get_query_var( 'lddfw_reset_login' );
+        $lddfw_dates = get_query_var( 'lddfw_dates' );
+        // Check if user is a delivery driver.
+        $lddfw_user = wp_get_current_user();
+        $lddfw_driver_id = $lddfw_user->ID;
+        $lddfw_driver_name = $lddfw_user->display_name;
+        $lddfw_driver_availability = get_user_meta( $lddfw_driver_id, 'lddfw_driver_availability', true );
+        /**
+         * Set current status names
+         */
+        $lddfw_driver_assigned_status_name = esc_html( __( 'Driver assigned', 'lddfw' ) );
+        $lddfw_out_for_delivery_status_name = esc_html( __( 'Out for delivery', 'lddfw' ) );
+        $lddfw_failed_attempt_status_name = esc_html( __( 'Failed delivery', 'lddfw' ) );
+        if ( function_exists( 'wc_get_order_statuses' ) ) {
+            $result = wc_get_order_statuses();
+            if ( !empty( $result ) ) {
+                foreach ( $result as $key => $status ) {
+                    switch ( $key ) {
+                        case get_option( 'lddfw_out_for_delivery_status' ):
+                            if ( $status !== $lddfw_out_for_delivery_status_name ) {
+                                $lddfw_out_for_delivery_status_name = $status;
+                            }
+                            break;
+                        case get_option( 'lddfw_failed_attempt_status' ):
+                            if ( $status !== esc_html( __( 'Failed Delivery Attempt', 'lddfw' ) ) ) {
+                                $lddfw_failed_attempt_status_name = $status;
+                            }
+                            break;
+                        case get_option( 'lddfw_driver_assigned_status' ):
+                            if ( $status !== $lddfw_driver_assigned_status_name ) {
+                                $lddfw_driver_assigned_status_name = $status;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        // Get the number of orders in each status.
+        $lddfw_orders = new LDDFW_Orders();
+        $lddfw_array = $lddfw_orders->lddfw_orders_count_query( $lddfw_driver_id );
+        $lddfw_out_for_delivery_counter = 0;
+        $lddfw_failed_attempt_counter = 0;
+        $lddfw_delivered_counter = 0;
+        $lddfw_assign_to_driver_counter = 0;
+        $lddfw_claim_orders_counter = 0;
+        foreach ( $lddfw_array as $row ) {
+            switch ( $row->post_status ) {
+                case get_option( 'lddfw_out_for_delivery_status' ):
+                    $lddfw_out_for_delivery_counter = $row->orders;
+                    break;
+                case get_option( 'lddfw_failed_attempt_status' ):
+                    $lddfw_failed_attempt_counter = $row->orders;
+                    break;
+                case get_option( 'lddfw_delivered_status' ):
+                    $lddfw_delivered_counter = $row->orders;
+                    break;
+                case get_option( 'lddfw_driver_assigned_status' ):
+                    $lddfw_assign_to_driver_counter = $row->orders;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Set the driver page or tracking page template using template_redirect.
+     *
+     * @since 1.0.0
+     */
+    public function lddfw_page_template_redirect() {
+        // Removed $page_template argument
+        global $post;
+        if ( !empty( $post ) ) {
+            $template_path = '';
+            if ( $post->ID === intval( get_option( 'lddfw_delivery_drivers_page', '' ) ) ) {
+                $this->lddfw_initialize_panel_data_globals();
+                $template_path = WP_PLUGIN_DIR . '/' . LDDFW_FOLDER . '/index.php';
+            } elseif ( $post->ID === intval( get_option( 'lddfw_tracking_page', '' ) ) ) {
+                $template_path = WP_PLUGIN_DIR . '/' . LDDFW_FOLDER . '/tracking.php';
+            }
+            if ( !empty( $template_path ) && file_exists( $template_path ) ) {
+                include $template_path;
+                exit;
+            }
+        }
+        // No return needed as we exit if a template is found and included.
     }
 
 }

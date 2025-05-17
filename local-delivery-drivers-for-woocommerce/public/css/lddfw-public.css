@@ -1267,6 +1267,14 @@ body {
   text-align: center;
   border-width: 1px;
   border-style: solid;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #driver_form .upload_image_wrap img {
@@ -1274,6 +1282,7 @@ body {
   max-height: 100%;
   width: auto;
   height: auto;
+  object-fit: cover;
 }
 
 #driver_form .custom-file-input {
@@ -1683,7 +1692,8 @@ span.driver_photo_wrap,
   border-color: #dee2e6;
 }
 
-.lddfw_box {
+.lddfw_box,
+.table {
   color: #4c4c4c;
 }
 
@@ -2220,3 +2230,175 @@ body.dark,
 }
 
 /* dark colors */
+
+/* New styles for delivery image wrap and image items */
+#delivery_image_wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 100px;
+  margin-bottom: 15px;
+}
+
+.lddfw_image_item {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.lddfw_image_item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+/* Corner Delete Button */
+.lddfw_delete_image {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: rgba(30, 30, 30, 0.7);
+  color: white;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  z-index: 10;
+  border-radius: 4px;
+  /* Button is always visible */
+}
+
+.lddfw_delete_image:hover {
+  background-color: rgba(220, 53, 69, 0.9); /* Red on hover */
+}
+
+/* Centered Status Indicator */
+.lddfw_image_status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px; /* Larger circle for status */
+  height: 44px;
+  background-color: rgba(30, 30, 30, 0.7); /* Semi-transparent background */
+  color: white;
+  border-radius: 50%; /* Make it round */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  z-index: 5;
+  opacity: 0.9; /* Slightly transparent */
+}
+
+.lddfw_image_item:hover .lddfw_image_status {
+  opacity: 1; /* Fully opaque on hover */
+}
+.lddfw_delete_image svg {
+  width: 16px;
+  height: 16px;
+}
+.lddfw_image_status svg {
+  width: 42px; /* Larger icon for status */
+  height: 42px;
+  color: white;
+}
+
+.lddfw_image_status svg.lddfw_loader_icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* Status-specific background colors using :has() */
+.lddfw_image_status:has(.lddfw_uploading_icon) {
+  background-color: rgba(90, 187, 241, 0.7); /* Blue for uploading */
+}
+
+.lddfw_image_status:has(.lddfw_success_icon) {
+  background-color: rgba(40, 167, 69, 0.7); /* Green for success */
+}
+
+.lddfw_image_status:has(.lddfw_failure_icon) {
+  background-color: rgba(255, 165, 0, 0.7); /* Orange for failure/error */
+}
+
+#lddfw_driver_add_photo_btn .custom-file-label:hover {
+  background-color: #5a6268;
+}
+
+/* Dark mode adjustments */
+.dark .lddfw_image_item {
+  border-color: #444;
+  background-color: #2d2d2d;
+}
+
+.dark .lddfw_delete_image {
+  background-color: rgba(220, 53, 69, 0.85);
+}
+
+.dark .lddfw_delete_image:hover {
+  background-color: rgba(220, 53, 69, 1);
+}
+
+/* dark colors */
+
+/* Additional mobile improvements */
+@media screen and (max-width: 576px) {
+  #delivery_image_wrap {
+    justify-content: center;
+  }
+
+  .lddfw_image_item {
+    width: 100px;
+    height: 100px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+
+  .lddfw_delete_image {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Animation for newly added images */
+.lddfw_image_item {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Fix for helper span to not interfere with image display */
+.lddfw_helper {
+  display: none;
+}
+
+/* Improve upload button styling - keeping original size */
+#upload_image {
+  cursor: pointer;
+}
+
+/* Make delete icon responsive to touch */
+.lddfw_delete_image {
+  touch-action: manipulation;
+}

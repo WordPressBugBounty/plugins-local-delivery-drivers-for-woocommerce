@@ -4,8 +4,8 @@ Donate link: https://powerfulwp.com
 Tags: delivery, courier, drivers, WooCommerce, shipping
 Requires at least: 4.5
 Requires PHP: 5.6
-Tested up to: 6.6
-Stable tag: 1.9.7
+Tested up to: 6.8
+Stable tag: 1.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -669,5 +669,22 @@ This will assign the selected driver to the order.
 * Tweak: Update Freemius SDK.
 * Fix verify nonce.
 * Tweak: Add App link to menu.
- 
+
+= 1.9.9 =
+* Tweak: The enhanced Proof of Delivery feature now supports multiple image uploads, allowing drivers to provide better delivery verification.
+* Tweak: Admins can now add multiple cities to a driver's delivery areas, which are used for auto-assign and order claiming.
+* Tweak: Added support for WCFM branch pickup address.
+* Tweak: New commission calculation option, fixed price + distance
+* Tweak: Improve commission notes.
+* Tweak: Update Freemius SDK.
+* Fix: The auto-assignment system now remembers if a driver has previously unassigned themselves from a specific order and will prevent re-assigning that same order back to them automatically.
+* Fix: Issue with the local pickup shipping method.
+* Fix: wcfm pickup coordinates.
+* Fix: Include address_2 in the one-line shipping address format.
+* Fix: Remove order details from the assigned order email sent to the driver.
+* Dev: Improved security.
+* Dev: Improved the claim orders count function.
+* Dev: Added Tagify script integration to the plugin.
+* Dev: Improve page template priority.
+
 == Upgrade Notice ==

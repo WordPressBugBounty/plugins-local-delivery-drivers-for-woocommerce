@@ -329,7 +329,13 @@ if ( !class_exists( 'LDDFW' ) ) {
         private function define_public_hooks() {
             $plugin_public = new LDDFW_Public($this->get_plugin_name(), $this->get_version());
             // Drivers page.
-            $this->loader->add_filter( 'page_template', $plugin_public, 'lddfw_page_template' );
+            $this->loader->add_action(
+                'template_redirect',
+                $plugin_public,
+                'lddfw_page_template_redirect',
+                99
+            );
+            //$this->loader->add_filter( 'page_template', $plugin_public, 'lddfw_page_template' , 99, 1 );
             // Scripts.
             $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
             $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );

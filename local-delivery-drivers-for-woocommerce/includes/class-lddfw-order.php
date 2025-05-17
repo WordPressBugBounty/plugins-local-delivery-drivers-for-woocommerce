@@ -339,6 +339,7 @@ class LDDFW_Order {
      * @return html
      */
     private function lddfw_order_picture_screen() {
+        global $lddfw_order_id;
         $html = '<div style="display:none;position:relative" id="lddfw_delivery_photo" class="lddfw_photo_wrap screen_wrap">';
         if ( lddfw_is_free() ) {
             $content = lddfw_premium_feature( '' ) . ' ' . esc_html( __( 'Get proof of delivery.', 'lddfw' ) ) . '
@@ -500,7 +501,7 @@ class LDDFW_Order {
 					<a href="lddfw_photo_wrap" btn="lddfw_driver_add_photo_btn" class="delivery_proof_photo">
 					<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="camera" class="svg-inline--fa fa-camera fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg>
 					<br>
-					' . esc_html( __( 'Photo', 'lddfw' ) ) . '
+					' . esc_html( __( 'Photos', 'lddfw' ) ) . '
 					</a>
 				</div>
 			</div>
@@ -763,7 +764,7 @@ class LDDFW_Order {
                 $shipping_total = $shipping_data['total'];
                 $shipping_method_id = $shipping_data['method_id'];
                 $shipping_meta_html = '';
-                $local_pick_up = ( 'local_pickup' === $shipping_method_id ? '( ' . esc_html( __( 'Local pickup', 'lddfw' ) ) . ' )' : '' );
+                $local_pick_up = ( 'local_pickup' === $shipping_method_id || 'pickup_location' === $shipping_method_id ? '( ' . esc_html( __( 'Local pickup', 'lddfw' ) ) . ' )' : '' );
                 foreach ( $shipping_meta as $meta_id => $meta_line_item ) {
                     // Hide item meta.
                     if ( in_array( $meta_line_item->key, $hidden_order_itemmeta, true ) ) {

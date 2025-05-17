@@ -66,7 +66,7 @@ class LDDFW_Password {
 							$message .= sprintf( __( 'Email: %s', 'lddfw' ), $email ) . "\r\n\r\n";
 							$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.', 'lddfw' ) . "\r\n\r\n";
 							$message .= __( 'To reset your password, visit the following address:', 'lddfw' ) . "\r\n\r\n";
-							$message .= '<' . $reset_url . ">\r\n";
+							$message .= $reset_url . "\r\n\r\n";
 
 							// send email.
 							$mail = wp_mail( $email, __( 'Password reset', 'lddfw' ), $message, '', '' );

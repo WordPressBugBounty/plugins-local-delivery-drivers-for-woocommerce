@@ -1,6 +1,13 @@
 jQuery(document).ready(
     function($) {
 
+        // Check if elements with the class 'lddfw_tagify' exist
+        if ($('.lddfw_tagify').length > 0) {
+            // Iterate over each element and initialize Tagify
+            $('.lddfw_tagify').each(function() {
+                new Tagify(this); // 'this' refers to the current DOM element in the loop
+            });
+        }
 
         $("body").on("click", "#lddfw_check_google_keys", function() {
 

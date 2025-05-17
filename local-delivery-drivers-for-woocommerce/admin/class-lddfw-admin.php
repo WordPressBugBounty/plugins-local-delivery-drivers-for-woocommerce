@@ -184,7 +184,7 @@ class LDDFW_Admin {
         /**
          * Security check.
          */
-        if ( empty( $_POST['lddfw_wpnonce'] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lddfw_wpnonce'] ) ), 'lddfw-nonce' ) ) {
+        if ( !isset( $_POST['lddfw_wpnonce'] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lddfw_wpnonce'] ) ), 'lddfw-nonce' ) ) {
             $error = esc_js( __( 'Security Check Failure - This alert may occur when you are logged in as an administrator and as a delivery driver on the same browser and the same device. If you want to work on both panels please try to work with two different browsers.', 'lddfw' ) );
             if ( 'json' === $lddfw_data_type ) {
                 echo "{\"result\":\"{$result}\",\"error\":\"{$error}\"}";
@@ -301,7 +301,6 @@ class LDDFW_Admin {
                 $driver_id = ( isset( $_POST['lddfw_driver_id'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_driver_id'] ) ) : '' );
                 $note = ( isset( $_POST['lddfw_note'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_note'] ) ) : '' );
                 $signature = ( isset( $_POST['lddfw_signature'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_signature'] ) ) : '' );
-                $delivery_image = ( isset( $_POST['lddfw_delivery_image'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_delivery_image'] ) ) : '' );
                 /* Check if the variables are not empty */
                 if ( '' !== $order_id && '' !== $order_status && '' !== $driver_id ) {
                     $order = wc_get_order( $order_id );
@@ -320,6 +319,7 @@ class LDDFW_Admin {
                             $order->add_order_note( $driver_note );
                         }
                         $order->save();
+                        $order = wc_get_order( $order_id );
                         $order->update_status( $order_status, $status_note );
                         $result = 1;
                     }
@@ -439,6 +439,10 @@ class LDDFW_Admin {
     }
 
     function lddfw_sanitize_variables( $input ) {
+        $new_input = array();
+        if ( isset( $input['lddfw_proof_of_delivery_max_images'] ) ) {
+            $new_input['lddfw_proof_of_delivery_max_images'] = absint( $input['lddfw_proof_of_delivery_max_images'] );
+        }
         // Ensure the input is an array
         if ( !is_array( $input ) ) {
             return [];
@@ -655,6 +659,13 @@ class LDDFW_Admin {
                 'lddfw_proof_of_delivery_signature_photo',
                 __( 'Signature & Photo', 'lddfw' ),
                 array($this, 'lddfw_proof_of_delivery_signature_photo'),
+                'lddfw-drivers-settings',
+                'lddfw_proof_of_delivery'
+            );
+            add_settings_field(
+                'lddfw_proof_of_delivery_max_images',
+                __( 'Maximum Images', 'lddfw' ),
+                array($this, 'lddfw_proof_of_delivery_max_images'),
                 'lddfw-drivers-settings',
                 'lddfw_proof_of_delivery'
             );
@@ -1856,20 +1867,43 @@ class LDDFW_Admin {
      * @param int $user_id user id.
      */
     public function lddfw_user_fields_save( $user_id ) {
+        // Capability Check: Ensure the current user can edit the target user.
         if ( !current_user_can( 'edit_user', $user_id ) ) {
-            return false;
+            return;
+            // Use return; for action hooks.
         }
-        $nonce_key = 'lddfw_nonce_user';
-        if ( isset( $_REQUEST[$nonce_key] ) ) {
-            $retrieved_nonce = sanitize_text_field( wp_unslash( $_REQUEST[$nonce_key] ) );
-            if ( !wp_verify_nonce( $retrieved_nonce, basename( __FILE__ ) ) ) {
-                die( 'Failed security check' );
-            }
-        }
+        // Verify User Existence: Ensure the user being edited actually exists.
         $user_meta = get_userdata( $user_id );
-        $user_roles = $user_meta->roles;
+        if ( !$user_meta ) {
+            // User doesn't exist, nothing to do.
+            return;
+        }
+        $user_roles = (array) $user_meta->roles;
+        // Determine Relevant Roles: Check if the user is a Driver or a configured Vendor.
+        $is_driver = in_array( 'driver', $user_roles, true );
+        $is_vendor = false;
+        // Check if relevant roles exist. If not, no fields managed by this function need saving.
+        if ( !$is_driver && !$is_vendor ) {
+            return;
+        }
+        // Nonce Verification: Protect against CSRF attacks.
+        // IMPORTANT: This assumes the nonce field 'lddfw_nonce_user' is added in lddfw_user_fields()
+        // if the user being edited has *either* the 'driver' or 'vendor' role.
+        // If the nonce is only added for 'driver', this check will incorrectly fail for vendor-only edits.
+        $nonce_key = 'lddfw_nonce_user';
+        if ( !isset( $_REQUEST[$nonce_key] ) ) {
+            // Nonce field is missing. This could indicate an issue with the form generation
+            // or an attempt to bypass security. Consider logging or adding an admin notice.
+            return;
+        }
+        $retrieved_nonce = sanitize_text_field( wp_unslash( $_REQUEST[$nonce_key] ) );
+        if ( !wp_verify_nonce( $retrieved_nonce, basename( __FILE__ ) ) ) {
+            // Invalid nonce. This could be a CSRF attempt or an expired form.
+            // Consider logging or adding an admin notice.
+            return;
+        }
         // Save driver settings.
-        if ( in_array( 'driver', (array) $user_roles, true ) ) {
+        if ( $is_driver ) {
             $lddfw_driver_account = ( isset( $_POST['lddfw_driver_account'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_driver_account'] ) ) : '' );
             $lddfw_driver_availability = ( isset( $_POST['lddfw_driver_availability'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_driver_availability'] ) ) : '' );
             update_user_meta( $user_id, 'lddfw_driver_account', $lddfw_driver_account );
@@ -1959,6 +1993,7 @@ class LDDFW_Admin {
             ?>
 				</td>
 			</tr>
+			 
 			<tr>
 					<th><label for="lddfw_driver_claim"><?php 
             echo esc_html( __( 'Driver can claim orders', 'lddfw' ) );
@@ -2000,6 +2035,18 @@ class LDDFW_Admin {
 				<td>
 				<?php 
             $html = '';
+            echo lddfw_admin_premium_feature( $html );
+            ?>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="lddfw_driver_cities"><?php 
+            echo esc_html( __( 'Driver Cities', 'lddfw' ) );
+            ?></label></th>
+				<td>
+					<?php 
+            $html = '';
+            // Use the premium feature output function
             echo lddfw_admin_premium_feature( $html );
             ?>
 				</td>
@@ -2131,6 +2178,15 @@ class LDDFW_Admin {
         } else {
             echo $content;
         }
+    }
+
+    /**
+     * Plugin settings.
+     *
+     * @since 1.0.0
+     */
+    public function lddfw_proof_of_delivery_max_images() {
+        echo lddfw_admin_premium_feature( '' );
     }
 
 }
