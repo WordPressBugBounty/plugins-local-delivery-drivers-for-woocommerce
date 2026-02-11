@@ -230,7 +230,7 @@ The third-party plugins support - custom fields feature allows you to add custom
 This feature provides flexibility and customization options for your business, allowing you to include additional information as needed.
 
 ## MULTIVENDOR MARKETPLACE PLUGINS SUPPORT.
-The multivendor marketplace plugins support feature allows the plugin to work with multivendor plugins such as Dokan, WCfM, and WCMP. 
+The multivendor marketplace plugins support feature allows the plugin to work with multivendor plugins such as Dokan, WCfM, and WCMP/MultiVendorX. 
 
 With this feature, drivers can view the vendor's pickup addresses and use the call and navigation functions to reach their location.
 
