@@ -16,7 +16,7 @@
  * Plugin Name:       Local Delivery Drivers for WooCommerce
  * Plugin URI:        https://powerfulwp.com/local-delivery-drivers-for-woocommerce-premium/
  * Description:       Improve the way you deliver, manage drivers, assign drivers to orders, and with premium version much more, send SMS and email notifications, routes planning, navigation & more!
- * Version:           1.9.9
+ * Version:           2.0.0
  * Author:            powerfulwp
  * Author URI:        http://www.powerfulwp.com
  * License:           GPL-2.0+
@@ -45,24 +45,25 @@ if ( !function_exists( 'lddfw_fs' ) ) {
             // Include Freemius SDK.
             require_once dirname( __FILE__ ) . '/freemius/start.php';
             $lddfw_fs = fs_dynamic_init( array(
-                'id'              => '6995',
-                'slug'            => 'local-delivery-drivers-for-woocommerce',
-                'type'            => 'plugin',
-                'public_key'      => 'pk_5ae065da4addc985fe67f63c46a51',
-                'is_premium'      => false,
-                'premium_suffix'  => 'Premium',
-                'has_addons'      => true,
-                'has_paid_plans'  => true,
-                'trial'           => array(
+                'id'               => '6995',
+                'slug'             => 'local-delivery-drivers-for-woocommerce',
+                'type'             => 'plugin',
+                'public_key'       => 'pk_5ae065da4addc985fe67f63c46a51',
+                'is_premium'       => false,
+                'premium_suffix'   => 'Premium',
+                'has_addons'       => true,
+                'has_paid_plans'   => true,
+                'trial'            => array(
                     'days'               => 14,
                     'is_require_payment' => true,
                 ),
-                'has_affiliation' => 'selected',
-                'menu'            => array(
+                'has_affiliation'  => 'selected',
+                'menu'             => array(
                     'slug'    => 'lddfw-dashboard',
                     'support' => false,
                 ),
-                'is_live'         => true,
+                'is_live'          => true,
+                'is_org_compliant' => true,
             ) );
         }
         return $lddfw_fs;
@@ -82,7 +83,7 @@ if ( !function_exists( 'lddfw_activate' ) ) {
      * Currently plugin version.
      * Start at version 1.0.0 and use SemVer - https://semver.org
      */
-    define( 'LDDFW_VERSION', '1.9.9' );
+    define( 'LDDFW_VERSION', '2.0.0' );
     /**
      * Define delivery driver page id.
      */

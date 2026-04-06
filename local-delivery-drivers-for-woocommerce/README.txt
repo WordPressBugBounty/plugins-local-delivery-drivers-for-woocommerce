@@ -5,7 +5,7 @@ Tags: delivery, courier, drivers, WooCommerce, shipping
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 6.8
-Stable tag: 1.9.9
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -299,6 +299,7 @@ The supported add-ons and plugins for this plugin include:
 * [Autocomplete Address and Location Picker for WooCommerce](https://powerfulwp.com/autocomplete-address-and-location-picker-for-woocommerce-premium/)
 * [Distance Rate Shipping for WooCommerce](https://powerfulwp.com/distance-rate-shipping-for-woocommerce/)
 * [Order Picking for WooCommerce](https://powerfulwp.com/order-picking-for-woocommerce/)
+* [Order Delivery Scheduler for WooCommerce](https://powerfulwp.com/powerfulwp-order-delivery-scheduler-for-woocommerce/)
 
 These add-ons and plugins provide additional functionality and customization options for the delivery process.
 
@@ -686,5 +687,10 @@ This will assign the selected driver to the order.
 * Dev: Improved the claim orders count function.
 * Dev: Added Tagify script integration to the plugin.
 * Dev: Improve page template priority.
+
+= 2.0.0 =
+* New: SMS provider - PowerfulWP.
+* Updated: Freemius SDK.
+
 
 == Upgrade Notice ==

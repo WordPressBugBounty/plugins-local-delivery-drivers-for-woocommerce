@@ -158,6 +158,10 @@ if ( !class_exists( 'LDDFW' ) ) {
              * The file responsible for reports in admin panel
              */
             include_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lddfw-reports.php';
+            /**
+             * The file responsible for the sms (available for all users).
+             */
+            include_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lddfw-sms.php';
             $this->loader = new LDDFW_Loader();
         }
 
@@ -255,6 +259,7 @@ if ( !class_exists( 'LDDFW' ) ) {
              */
             $this->loader->add_action( 'wp_ajax_lddfw_ajax', $plugin_admin, 'lddfw_ajax' );
             $this->loader->add_action( 'wp_ajax_nopriv_lddfw_ajax', $plugin_admin, 'lddfw_ajax' );
+            $this->loader->add_action( 'wp_ajax_lddfw_dismiss_banner', $plugin_admin, 'lddfw_dismiss_banner' );
             /**
              * Add menu
              */

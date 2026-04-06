@@ -496,6 +496,8 @@ class LDDFW_Reports {
 		<h1 class="wp-heading-inline">' . esc_html( __( 'Dashboard', 'lddfw' ) ) . '</h1>
 		  ' . LDDFW_Admin::lddfw_admin_plugin_bar() . '
 		  <hr class="wp-header-end">';
+        echo LDDFW_Admin::lddfw_sms_cta_banner();
+        echo LDDFW_Admin::lddfw_powerfulwp_cta_banner();
         echo $this->drivers_orders_dashboard_report();
         echo $this->claim_orders_dashboard_report();
         echo $this->drivers_dashboard_report();

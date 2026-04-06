@@ -303,12 +303,12 @@ function lddfw_create_sync_table() {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
     dbDelta( $sql );
     // Add order payment method column.
-    $row = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\r\n\tWHERE table_name = '" . $wpdb->prefix . "lddfw_orders' AND column_name = 'order_payment_method'" );
+    $row = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\n\tWHERE table_name = '" . $wpdb->prefix . "lddfw_orders' AND column_name = 'order_payment_method'" );
     if ( empty( $row ) ) {
         $wpdb->query( 'ALTER TABLE ' . $wpdb->prefix . 'lddfw_orders ADD order_payment_method varchar(200) DEFAULT NULL' );
     }
     // Add order delivery_date column.
-    $row = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\r\n\tWHERE table_name = '" . $wpdb->prefix . "lddfw_orders' AND column_name = 'delivery_date'" );
+    $row = $wpdb->get_results( "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS\n\tWHERE table_name = '" . $wpdb->prefix . "lddfw_orders' AND column_name = 'delivery_date'" );
     if ( empty( $row ) ) {
         $wpdb->query( 'ALTER TABLE ' . $wpdb->prefix . 'lddfw_orders ADD delivery_date varchar(50) DEFAULT NULL' );
     }
@@ -593,6 +593,164 @@ function lddfw_get_international_phone_number(  $country_code, $phone  ) {
         }
     }
     return $phone;
+}
+
+/**
+ * Replace_tags
+ *
+ * @param string $content tags.
+ * @param int    $order_id the order number.
+ * @param object $order Order object.
+ * @param int    $driver_id user id number.
+ * @return array
+ */
+function lddfw_replace_tags(
+    $content,
+    $order_id,
+    $order,
+    $driver_id
+) {
+    $date_format = lddfw_date_format( 'date' );
+    $time_format = lddfw_date_format( 'time' );
+    $store = new LDDFW_Store();
+    $seller_id = $store->lddfw_order_seller( $order );
+    $store_name = ( method_exists( $store, 'lddfw_store_name__premium_only' ) ? $store->lddfw_store_name__premium_only( $order, $seller_id ) : get_bloginfo( 'name' ) );
+    $delivery_driver_first_name = get_user_meta( $driver_id, 'first_name', true );
+    $delivery_driver_last_name = get_user_meta( $driver_id, 'last_name', true );
+    $delivery_driver_page = lddfw_drivers_page_url( '' );
+    $order_status = wc_get_order_status_name( $order->get_status() );
+    $date_created = $order->get_date_created()->format( $date_format );
+    $total = $order->get_total();
+    $currency = get_woocommerce_currency();
+    $billing_first_name = $order->get_billing_first_name();
+    $billing_last_name = $order->get_billing_last_name();
+    $billing_company = $order->get_billing_company();
+    $billing_address_1 = $order->get_billing_address_1();
+    $billing_address_2 = $order->get_billing_address_2();
+    $billing_city = $order->get_billing_city();
+    $billing_country = $order->get_billing_country();
+    $billing_state = LDDFW_Order::lddfw_states( $billing_country, $order->get_billing_state() );
+    if ( '' !== $billing_country ) {
+        $billing_country = WC()->countries->countries[$billing_country];
+    }
+    $billing_postcode = $order->get_billing_postcode();
+    $billing_phone = $order->get_billing_phone();
+    $shipping_first_name = $order->get_shipping_first_name();
+    $shipping_last_name = $order->get_shipping_last_name();
+    $shipping_company = $order->get_shipping_company();
+    $shipping_address_1 = $order->get_shipping_address_1();
+    $shipping_address_2 = $order->get_shipping_address_2();
+    $shipping_city = $order->get_shipping_city();
+    $shipping_postcode = $order->get_shipping_postcode();
+    $shipping_country = $order->get_shipping_country();
+    $shipping_state = LDDFW_Order::lddfw_states( $shipping_country, $order->get_shipping_state() );
+    if ( '' !== $shipping_country ) {
+        $shipping_country = WC()->countries->countries[$shipping_country];
+    }
+    if ( in_array( 'woocommerce-extra-checkout-fields-for-brazil', LDDFW_PLUGINS, true ) ) {
+        // Add shipping number to address.
+        $shipping_number = $order->get_meta( '_shipping_number' );
+        if ( '' !== $shipping_number && false !== $shipping_number ) {
+            $shipping_address_1 .= ' ' . $shipping_number;
+        }
+        // Add shipping number to address.
+        $billing_number = $order->get_meta( '_billing_number' );
+        if ( '' !== $billing_number && false !== $billing_number ) {
+            $billing_address_1 .= ' ' . $billing_number;
+        }
+    }
+    if ( '' === $shipping_address_1 ) {
+        $shipping_address_1 = $billing_address_1;
+        $shipping_address_2 = $billing_address_2;
+        $shipping_city = $billing_city;
+        $shipping_state = $billing_state;
+        $shipping_postcode = $billing_postcode;
+        $shipping_country = $billing_country;
+    }
+    $payment_method = $order->get_payment_method();
+    $shipping_method = $order->get_shipping_method();
+    // ETA.
+    $estimated_time_of_arrival = '';
+    $route = $order->get_meta( 'lddfw_order_route' );
+    if ( !empty( $route ) ) {
+        if ( isset( $route['distance_text'] ) ) {
+            $duration_text = $route['distance_text'];
+            if ( '' !== $duration_text ) {
+                $estimated_time_of_arrival = esc_html( __( 'Estimated time of arrival', 'lddfw' ) ) . ': ' . esc_html( $route['duration_text'] );
+            }
+        }
+    }
+    $tracking_url = ( !lddfw_is_free() ? lddfw_tracking_page_url__premium_only( $order_id ) : '' );
+    $find = array(
+        '[tracking_url]',
+        '[estimated_time_of_arrival]',
+        '[delivery_driver_first_name]',
+        '[delivery_driver_last_name]',
+        '[delivery_driver_page]',
+        '[store_name]',
+        '[order_id]',
+        '[order_create_date]',
+        '[order_status]',
+        '[order_amount]',
+        '[order_currency]',
+        '[shipping_method]',
+        '[payment_method]',
+        '[billing_first_name]',
+        '[billing_last_name]',
+        '[billing_company]',
+        '[billing_address_1]',
+        '[billing_address_2]',
+        '[billing_city]',
+        '[billing_state]',
+        '[billing_postcode]',
+        '[billing_country]',
+        '[billing_phone]',
+        '[shipping_first_name]',
+        '[shipping_last_name]',
+        '[shipping_company]',
+        '[shipping_address_1]',
+        '[shipping_address_2]',
+        '[shipping_city]',
+        '[shipping_state]',
+        '[shipping_postcode]',
+        '[shipping_country]'
+    );
+    $replace = array(
+        $tracking_url,
+        $estimated_time_of_arrival,
+        $delivery_driver_first_name,
+        $delivery_driver_last_name,
+        $delivery_driver_page,
+        $store_name,
+        $order->get_order_number(),
+        $date_created,
+        $order_status,
+        $total,
+        $currency,
+        $shipping_method,
+        $payment_method,
+        $billing_first_name,
+        $billing_last_name,
+        $billing_company,
+        $billing_address_1,
+        $billing_address_2,
+        $billing_city,
+        $billing_state,
+        $billing_postcode,
+        $billing_country,
+        $billing_phone,
+        $shipping_first_name,
+        $shipping_last_name,
+        $shipping_company,
+        $shipping_address_1,
+        $shipping_address_2,
+        $shipping_city,
+        $shipping_state,
+        $shipping_postcode,
+        $shipping_country
+    );
+    $content = str_replace( $find, $replace, $content );
+    return $content;
 }
 
 /**

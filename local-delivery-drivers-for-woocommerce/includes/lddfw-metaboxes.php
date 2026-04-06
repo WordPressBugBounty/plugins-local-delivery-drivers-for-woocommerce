@@ -109,21 +109,33 @@ class LDDFW_MetaBoxes {
     /**
      * Save the Metabox Data
      *
-     * @param int    $post_id post number.
-     * @param object $post post object.
+     * @param int    $post_id post number or order ID.
+     * @param object $post post object or order object (when HPOS is enabled).
      */
-    public function save_metaboxes( $post_id, $post ) {
+    public function save_metaboxes( $post_id, $post = null ) {
         if ( !self::$allow_save_meta || self::$saved_meta_boxes ) {
             return;
         }
         self::$saved_meta_boxes = true;
         $post_id = absint( $post_id );
-        // $post_id and $post are required
-        if ( empty( $post_id ) || empty( $post ) ) {
+        // $post_id is required
+        if ( empty( $post_id ) ) {
             return;
         }
-        // Dont' save meta boxes for revisions or autosaves.
-        if ( is_int( wp_is_post_revision( $post ) ) || is_int( wp_is_post_autosave( $post ) ) ) {
+        // Get order object - handle both HPOS and legacy modes
+        $order = null;
+        if ( $post instanceof WC_Order ) {
+            // HPOS mode: $post is actually the order object
+            $order = $post;
+        } else {
+            // Legacy mode: $post is a post object
+            // Don't save meta boxes for revisions or autosaves.
+            if ( !empty( $post ) && (is_int( wp_is_post_revision( $post ) ) || is_int( wp_is_post_autosave( $post ) )) ) {
+                return;
+            }
+            $order = wc_get_order( $post_id );
+        }
+        if ( !$order ) {
             return;
         }
         // Check the nonce.
@@ -138,8 +150,8 @@ class LDDFW_MetaBoxes {
         if ( !current_user_can( 'edit_post', $post_id ) ) {
             return;
         }
-        $order = wc_get_order( $post_id );
         $driver = new LDDFW_Driver();
+        $lddfw_driver_order_meta = array();
         if ( isset( $_POST['lddfw_driverid'] ) ) {
             $lddfw_driverid = sanitize_text_field( wp_unslash( $_POST['lddfw_driverid'] ) );
             $lddfw_driver_order_meta['lddfw_driverid'] = $lddfw_driverid;
@@ -148,7 +160,7 @@ class LDDFW_MetaBoxes {
             /**
              * Cycle through the $thccbd_meta array!
              */
-            if ( 'revision' === $post->post_type ) {
+            if ( 'revision' === $order->get_type() ) {
                 /**
                  * Don't store custom data twice
                  */

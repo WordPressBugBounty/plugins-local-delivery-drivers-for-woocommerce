@@ -52,7 +52,6 @@ class LDDFW_Activator {
         add_option( 'lddfw_processing_status', 'wc-processing' );
         add_option( 'lddfw_sms_assign_to_driver_template', 'Hello [delivery_driver_first_name], order #[order_id] with [store_name] has been assigned to you. [delivery_driver_page]' );
         add_option( 'lddfw_sms_out_for_delivery_template', 'Hello [billing_first_name], status of your order #[order_id] with [store_name] has been changed to [order_status].' );
-        add_option( 'lddfw_sms_start_delivery_template', 'Hello [billing_first_name], the delivery for order #[order_id] with [store_name] has been started. [estimated_time_of_arrival] [tracking_url]' );
         add_option( 'lddfw_sms_delivered_template', 'Hello [billing_first_name], your order #[order_id] from [store_name] has been successfully delivered.' );
         add_option( 'lddfw_sms_not_delivered_template', 'Hello [billing_first_name], we apologize, but your order #[order_id] from [store_name] could not be delivered as scheduled.' );
         // Remove unused settings during plugin activation from version 1.9.6

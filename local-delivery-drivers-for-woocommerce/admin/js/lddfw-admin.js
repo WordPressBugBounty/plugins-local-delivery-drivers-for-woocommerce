@@ -1,6 +1,18 @@
 jQuery(document).ready(
     function($) {
 
+        $("body").on("click", ".lddfw_banner_dismiss", function() {
+            var $banner = $(this).closest(".lddfw_sms_cta_banner");
+            var bannerType = $banner.data("banner");
+            if (!bannerType) return;
+            $banner.fadeOut(300, function() { $(this).remove(); });
+            $.post(lddfw_ajax.ajaxurl, {
+                action: "lddfw_dismiss_banner",
+                banner: bannerType,
+                nonce: lddfw_nonce.nonce
+            });
+        });
+
         // Check if elements with the class 'lddfw_tagify' exist
         if ($('.lddfw_tagify').length > 0) {
             // Iterate over each element and initialize Tagify
@@ -129,6 +141,70 @@ jQuery(document).ready(
 
         
 
+        // SMS provider field toggle
+        function lddfw_toggle_sms_provider_fields() {
+            var provider = $('#lddfw_sms_provider').val();
+            $('.lddfw-provider-powerfulwp').closest('tr').toggle(provider === 'powerfulwp');
+            $('.lddfw-provider-twilio').closest('tr').toggle(provider === 'twilio');
+        }
+
+        if ($('#lddfw_sms_provider').length) {
+            lddfw_toggle_sms_provider_fields();
+            $('#lddfw_sms_provider').on('change', lddfw_toggle_sms_provider_fields);
+        }
+
+        var $senderInput = $('#lddfw_sms_api_sender_id');
+        if ($senderInput.length) {
+            var $counter = $('#lddfw-sender-id-counter');
+            var $error = $('#lddfw-sender-id-error');
+
+            function isPowerfulWP() {
+                return $('#lddfw_sms_provider').val() === 'powerfulwp';
+            }
+
+            function validateSenderId() {
+                var val = $senderInput.val();
+                var clean = val.replace(/[^A-Za-z0-9]/g, '');
+                var errors = [];
+
+                $counter.text(clean.length + '/11');
+
+                if (clean.length === 0 && isPowerfulWP()) {
+                    errors.push('Sender ID is required for the PowerfulWP provider.');
+                }
+                if (val.length > 0 && val !== clean) {
+                    errors.push('Only letters (A-Z) and numbers (0-9) are allowed. No spaces or special characters.');
+                }
+                if (clean.length > 11) {
+                    errors.push('Maximum 11 characters allowed.');
+                }
+
+                if (errors.length > 0) {
+                    $error.html(errors.join('<br>')).show();
+                    $senderInput.css('border-color', '#d63638');
+                    $counter.css('color', '#d63638');
+                } else {
+                    $error.hide();
+                    $senderInput.css('border-color', '');
+                    $counter.css('color', '#666');
+                }
+            }
+
+            $senderInput.on('input keyup', function() {
+                var val = $(this).val();
+                var clean = val.replace(/[^A-Za-z0-9]/g, '');
+                if (val !== clean) {
+                    $(this).val(clean);
+                }
+                if (clean.length > 11) {
+                    $(this).val(clean.substring(0, 11));
+                }
+                validateSenderId();
+            });
+
+            $('#lddfw_sms_provider').on('change', validateSenderId);
+            validateSenderId();
+        }
 
         $("body").on("click",".lddf_button_toggle",
             function() {

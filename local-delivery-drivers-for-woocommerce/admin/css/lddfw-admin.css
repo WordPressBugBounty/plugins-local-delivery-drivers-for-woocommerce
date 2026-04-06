@@ -430,3 +430,72 @@ div#driver-panel {
   object-fit: contain;
   display: block;
 }
+
+/* SMS CTA Banner */
+.lddfw_sms_cta_banner {
+  position: relative;
+  background: #fff;
+  border: 1px solid #c3c4c7;
+  border-left: 4px solid #28a745;
+  padding: 20px 24px;
+  margin: 16px 0;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.lddfw_sms_cta_banner h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #1d2327;
+}
+
+.lddfw_sms_cta_banner p {
+  margin: 0 0 14px;
+  color: #50575e;
+  font-size: 13px;
+  max-width: 600px;
+}
+
+.lddfw_sms_cta_button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  padding: 6px 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 3px;
+  color: #fff !important;
+  background-color: #28a745;
+  border-color: #28a745;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.lddfw_sms_cta_button:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+  color: #fff !important;
+}
+
+.lddfw_banner_dismiss {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #787c82;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.lddfw_banner_dismiss:hover {
+  color: #1d2327;
+}
+
+.lddfw_premium_cta_banner {
+  border-left-color: #2271b1;
+}

@@ -331,6 +331,27 @@ class LDDFW_Admin {
     }
 
     /**
+     * AJAX handler to dismiss CTA banners.
+     *
+     * @since 2.2.0
+     * @return void
+     */
+    public function lddfw_dismiss_banner() {
+        check_ajax_referer( 'lddfw-nonce', 'nonce' );
+        if ( !current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Unauthorized' );
+        }
+        $banner = ( isset( $_POST['banner'] ) ? sanitize_text_field( wp_unslash( $_POST['banner'] ) ) : '' );
+        $allowed = array('free_sms_cta', 'premium_sms_cta');
+        if ( !in_array( $banner, $allowed, true ) ) {
+            wp_send_json_error( 'Invalid banner' );
+        }
+        $user_id = get_current_user_id();
+        update_user_meta( $user_id, 'lddfw_dismissed_' . $banner, 1 );
+        wp_send_json_success();
+    }
+
+    /**
      * Changed status hook.
      *
      * @since 1.0.0
@@ -361,6 +382,16 @@ class LDDFW_Admin {
         if ( get_option( 'lddfw_processing_status', true ) === 'wc-' . $status_to ) {
         }
         if ( get_option( 'lddfw_out_for_delivery_status', '' ) === 'wc-' . $status_to ) {
+            $lddfw_sms_out_for_delivery = get_option( 'lddfw_sms_out_for_delivery', '' );
+            if ( '1' === $lddfw_sms_out_for_delivery ) {
+                // Send sms to cusomer.
+                $sms = new LDDFW_SMS();
+                $result = $sms->lddfw_send_sms_to_customer( $order_id, $order, $status_to );
+                $order->add_order_note( $result[1] );
+            }
+            // Delete existing start delivery order meta.
+            $order->delete_meta_data( '_lddfw_order_delivery_start' );
+            $order->save();
         }
         if ( get_option( 'lddfw_delivered_status', '' ) === 'wc-' . $status_to ) {
             // Update delivered date.
@@ -371,6 +402,13 @@ class LDDFW_Admin {
                 $order->delete_meta_data( 'lddfw_order_origin' );
                 $order->delete_meta_data( 'lddfw_order_sort' );
                 lddfw_update_sync_order( $order_id, 'lddfw_order_sort', '0' );
+                $lddfw_sms_delivered = get_option( 'lddfw_sms_delivered', '' );
+                if ( '1' === $lddfw_sms_delivered ) {
+                    // Send sms to cusomer.
+                    $sms = new LDDFW_SMS();
+                    $result = $sms->lddfw_send_sms_to_customer( $order_id, $order, $status_to );
+                    $order->add_order_note( $result[1] );
+                }
             }
             $order->save();
         }
@@ -382,6 +420,13 @@ class LDDFW_Admin {
             $order->delete_meta_data( 'lddfw_order_sort' );
             lddfw_update_sync_order( $order_id, 'lddfw_order_sort', '0' );
             $order->save();
+            $lddfw_sms_not_delivered = get_option( 'lddfw_sms_not_delivered', '' );
+            if ( '1' === $lddfw_sms_not_delivered ) {
+                // Send sms to cusomer.
+                $sms = new LDDFW_SMS();
+                $result = $sms->lddfw_send_sms_to_customer( $order_id, $order, $status_to );
+                $order->add_order_note( $result[1] );
+            }
         }
     }
 
@@ -472,7 +517,23 @@ class LDDFW_Admin {
         register_setting( 'lddfw', 'lddfw_processing_status' );
         register_setting( 'lddfw', 'lddfw_delivery_drivers_page' );
         register_setting( 'lddfw-drivers-settings', 'lddfw_failed_delivery_reason_1' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_provider' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_key' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_secret' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_sender_id', array(
+            'sanitize_callback' => array($this, 'lddfw_sanitize_sender_id'),
+        ) );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_sid' );
         register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_auth_token' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_api_phone' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_assign_to_driver' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_assign_to_driver_template' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_out_for_delivery' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_out_for_delivery_template' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_delivered' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_delivered_template' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_not_delivered' );
+        register_setting( 'lddfw-sms-settings', 'lddfw_sms_not_delivered_template' );
         register_setting( 'lddfw-whatsapp-settings', 'lddfw_whatsapp_api_auth_token' );
         register_setting( 'lddfw-branding', 'lddfw_branding_logo' );
         register_setting( 'lddfw-tracking', 'lddfw_tracking_page' );
@@ -823,26 +884,49 @@ class LDDFW_Admin {
                 'lddfw_sms_settings'
             );
             add_settings_field(
-                'lddfw_sms_api_sid',
-                __( 'API SID', 'lddfw' ),
-                array($this, 'lddfw_sms_api_sid'),
+                'lddfw_sms_api_key',
+                __( 'API Key', 'lddfw' ),
+                array($this, 'lddfw_sms_api_key'),
                 'lddfw-sms-settings',
                 'lddfw_sms_settings'
             );
             add_settings_field(
-                'lddfw_sms_api_auth_token',
-                __( 'API AUTH TOKEN', 'lddfw' ),
-                array($this, 'lddfw_sms_api_auth_token'),
+                'lddfw_sms_api_secret',
+                __( 'API Secret', 'lddfw' ),
+                array($this, 'lddfw_sms_api_secret'),
                 'lddfw-sms-settings',
                 'lddfw_sms_settings'
             );
             add_settings_field(
-                'lddfw_sms_api_phone',
-                __( 'SMS phone number', 'lddfw' ),
-                array($this, 'lddfw_sms_api_phone'),
+                'lddfw_sms_api_sender_id',
+                __( 'Sender ID', 'lddfw' ),
+                array($this, 'lddfw_sms_api_sender_id'),
                 'lddfw-sms-settings',
                 'lddfw_sms_settings'
             );
+            if ( !lddfw_is_free() ) {
+                add_settings_field(
+                    'lddfw_sms_api_sid',
+                    __( 'Twilio API SID', 'lddfw' ),
+                    array($this, 'lddfw_sms_api_sid'),
+                    'lddfw-sms-settings',
+                    'lddfw_sms_settings'
+                );
+                add_settings_field(
+                    'lddfw_sms_api_auth_token',
+                    __( 'Twilio Auth Token', 'lddfw' ),
+                    array($this, 'lddfw_sms_api_auth_token'),
+                    'lddfw-sms-settings',
+                    'lddfw_sms_settings'
+                );
+                add_settings_field(
+                    'lddfw_sms_api_phone',
+                    __( 'Twilio Phone Number', 'lddfw' ),
+                    array($this, 'lddfw_sms_api_phone'),
+                    'lddfw-sms-settings',
+                    'lddfw_sms_settings'
+                );
+            }
             add_settings_field(
                 'lddfw_sms_assign_to_driver',
                 __( 'SMS to the driver', 'lddfw' ),
@@ -1031,7 +1115,54 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_api_sid() {
-        echo lddfw_admin_premium_feature( '' );
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-twilio">
+			<input type='text' class='regular-text' name='lddfw_sms_api_sid' value='<?php 
+        echo esc_attr( get_option( 'lddfw_sms_api_sid', '' ) );
+        ?>'>
+		</div>
+		<?php 
+    }
+
+    /**
+     * Plugin template tags.
+     *
+     * @since 1.0.0
+     */
+    public function lddfw_template_tags() {
+        $tags = [
+            '<a href="#" data="[delivery_driver_first_name]">' . esc_html( __( 'Delivery Driver First Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[delivery_driver_last_name]">' . esc_html( __( 'Delivery Driver Last Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[delivery_driver_page]">' . esc_html( __( 'Delivery Driver Page', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[store_name]">' . esc_html( __( 'Store Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_id]">' . esc_html( __( 'Order Id', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_create_date]">' . esc_html( __( 'Order Create Date', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_status]">' . esc_html( __( 'Order Status', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_amount]">' . esc_html( __( 'Order Amount', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_currency]">' . esc_html( __( 'Order Currency', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_method]">' . esc_html( __( 'Shipping Method', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[payment_method]">' . esc_html( __( 'Payment Method', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_first_name]">' . esc_html( __( 'Billing First Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_last_name]">' . esc_html( __( 'Billing Last Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_company]">' . esc_html( __( 'Billing Company', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_address_1]">' . esc_html( __( 'Billing Address 1', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_address_2]">' . esc_html( __( 'Billing Address 2', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_city]">' . esc_html( __( 'Billing City', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_state]">' . esc_html( __( 'Billing State', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_postcode]">' . esc_html( __( 'Billing Postcode', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_country]">' . esc_html( __( 'Billing Country', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[billing_phone]">' . esc_html( __( 'Billing Phone', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_first_name]">' . esc_html( __( 'Shipping First Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_last_name]">' . esc_html( __( 'Shipping Last Name', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_company]">' . esc_html( __( 'Shipping Company', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_address_1]">' . esc_html( __( 'Shipping Address 1', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_address_2]">' . esc_html( __( 'Shipping Address 2', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_city]">' . esc_html( __( 'Shipping City', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_state]">' . esc_html( __( 'Shipping State', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_postcode]">' . esc_html( __( 'Shipping Postcode', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[shipping_country]">' . esc_html( __( 'Shipping Country', 'lddfw' ) ) . '</a>'
+        ];
+        return implode( ' | ', $tags );
     }
 
     /**
@@ -1045,7 +1176,9 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_customer_sms() {
-        echo lddfw_admin_premium_feature( '' );
+        $this->lddfw_generate_sms_settings( 'sms_out_for_delivery', __( 'SMS to customer when order is out for delivery.', 'lddfw' ), __( 'Hello [billing_first_name], status of your order #[order_id] with [store_name] has been changed to [order_status].', 'lddfw' ) );
+        $this->lddfw_generate_sms_settings( '', __( 'SMS to Customer upon driver confirmation of delivery.', 'lddfw' ), __( 'Hello [billing_first_name], your order #[order_id] from [store_name] has been successfully delivered.', 'lddfw' ) );
+        $this->lddfw_generate_sms_settings( 'sms_not_delivered', __( 'SMS to Customer upon driver notification of non-delivery.', 'lddfw' ), __( 'Hello [billing_first_name], we apologize, but your order #[order_id] from [store_name] could not be delivered as scheduled.', 'lddfw' ) );
     }
 
     /**
@@ -1075,7 +1208,10 @@ class LDDFW_Admin {
         echo lddfw_admin_premium_feature( '' );
         ?>
 		<p><?php 
-        echo sprintf( esc_html( __( 'For more information about the tracking page, please %1$sclick here%2$s.', 'lddfw' ) ), '<a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/getting-started/tracking/" target="_blank">', '</a>' );
+        echo sprintf( esc_html( 
+            /* translators: 1: opening link tag, 2: closing link tag */
+            __( 'For more information about the tracking page, please %1$sclick here%2$s.', 'lddfw' )
+         ), '<a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/getting-started/tracking/" target="_blank">', '</a>' );
         ?></p>
 		<?php 
     }
@@ -1192,7 +1328,8 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_assign_to_driver() {
-        echo lddfw_admin_premium_feature( '' );
+        $default_template = __( 'Hello [delivery_driver_first_name], order #[order_id] with [store_name] has been assigned to you. [delivery_driver_page]', 'lddfw' );
+        $this->lddfw_generate_sms_settings( 'sms_assign_to_driver', __( 'SMS to the delivery driver when a new order is assigned.', 'lddfw' ), $default_template );
     }
 
     /**
@@ -1201,7 +1338,16 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_api_phone() {
-        echo lddfw_admin_premium_feature( '' );
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-twilio">
+			<input type='text' class='regular-text' name='lddfw_sms_api_phone' value='<?php 
+        echo esc_attr( get_option( 'lddfw_sms_api_phone', '' ) );
+        ?>'>
+			<p class="lddfw_description"><?php 
+        echo esc_html( __( 'Phone number to send SMS should be in the following format (+)(country code)(area code)(phone number) e.g +15024658206', 'lddfw' ) );
+        ?></p>
+		</div>
+		<?php 
     }
 
     /**
@@ -1210,7 +1356,13 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_api_auth_token() {
-        echo lddfw_admin_premium_feature( '' );
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-twilio">
+			<input type='text' class='regular-text' name='lddfw_sms_api_auth_token' value='<?php 
+        echo esc_attr( get_option( 'lddfw_sms_api_auth_token', '' ) );
+        ?>'>
+		</div>
+		<?php 
     }
 
     /**
@@ -1219,7 +1371,228 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_provider() {
-        echo lddfw_admin_premium_feature( '' );
+        $current = get_option( 'lddfw_sms_provider', '' );
+        ?>
+		<select name='lddfw_sms_provider' id='lddfw_sms_provider'>
+			<option value=""><?php 
+        echo esc_html( __( 'Select provider', 'lddfw' ) );
+        ?></option>
+			<option value="powerfulwp" <?php 
+        selected( $current, 'powerfulwp' );
+        ?>>PowerfulWP</option>
+			<?php 
+        if ( !lddfw_is_free() ) {
+            ?>
+				<option value="twilio" <?php 
+            selected( $current, 'twilio' );
+            ?>>Twilio</option>
+			<?php 
+        }
+        ?>
+		</select>
+		<p class="description" id="lddfw_sms_provider-description"><?php 
+        echo sprintf( esc_html( 
+            /* translators: 1: opening link tag, 2: closing link tag */
+            __( 'For more information about how to create an SMS account %1$sclick here%2$s.', 'lddfw' )
+         ), '<a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/getting-started/sms-settings/" target="_blank">', '</a>' );
+        ?></p>
+		<?php 
+    }
+
+    /**
+     * PowerfulWP API Key field.
+     */
+    public function lddfw_sms_api_key() {
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-powerfulwp">
+			<input type='text' class='regular-text' name='lddfw_sms_api_key' value='<?php 
+        echo esc_attr( get_option( 'lddfw_sms_api_key', '' ) );
+        ?>'>
+			<p class="description"><?php 
+        echo esc_html( __( 'Enter your PowerfulWP API public key.', 'lddfw' ) );
+        ?></p>
+		</div>
+		<?php 
+    }
+
+    /**
+     * PowerfulWP API Secret field.
+     */
+    public function lddfw_sms_api_secret() {
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-powerfulwp">
+			<input type='password' class='regular-text' name='lddfw_sms_api_secret' value='<?php 
+        echo esc_attr( get_option( 'lddfw_sms_api_secret', '' ) );
+        ?>'>
+			<p class="description"><?php 
+        echo esc_html( __( 'Enter your PowerfulWP API secret key.', 'lddfw' ) );
+        ?></p>
+		</div>
+		<?php 
+    }
+
+    /**
+     * PowerfulWP Sender ID field.
+     */
+    public function lddfw_sms_api_sender_id() {
+        $value = get_option( 'lddfw_sms_api_sender_id', '' );
+        ?>
+		<div class="lddfw-provider-field lddfw-provider-powerfulwp">
+			<input type='text' class='regular-text' id='lddfw_sms_api_sender_id' name='lddfw_sms_api_sender_id'
+				value='<?php 
+        echo esc_attr( $value );
+        ?>'
+				maxlength='11' pattern='[A-Za-z0-9]+' placeholder='<?php 
+        echo esc_attr( __( 'e.g. MyBrand', 'lddfw' ) );
+        ?>'>
+			<span id="lddfw-sender-id-counter" style="margin-left:8px;color:#666;"></span>
+			<p class="description">
+				<?php 
+        echo esc_html( __( 'Enter your brand or business name as it will appear to SMS recipients (e.g. "MyBrand", "PizzaKing").', 'lddfw' ) );
+        ?><br>
+				<?php 
+        echo esc_html( __( 'Only letters and numbers are allowed, up to 11 characters. No spaces or special characters.', 'lddfw' ) );
+        ?>
+			</p>
+			<p id="lddfw-sender-id-error" style="color:#d63638;display:none;"></p>
+		</div>
+		<?php 
+    }
+
+    /**
+     * Sanitize the Sender ID value on save.
+     *
+     * @param string $value Raw value from the form.
+     * @return string Sanitized sender ID.
+     */
+    public function lddfw_sanitize_sender_id( $value ) {
+        $provider = ( isset( $_POST['lddfw_sms_provider'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_sms_provider'] ) ) : get_option( 'lddfw_sms_provider', '' ) );
+        if ( empty( $value ) ) {
+            if ( 'powerfulwp' === $provider ) {
+                add_settings_error(
+                    'lddfw_sms_api_sender_id',
+                    'lddfw_sender_id_empty',
+                    __( 'Sender ID is required when using the PowerfulWP provider. Please enter your brand name (e.g. "MyBrand").', 'lddfw' ),
+                    'error'
+                );
+                return get_option( 'lddfw_sms_api_sender_id', '' );
+            }
+            return '';
+        }
+        $sanitized = preg_replace( '/[^A-Za-z0-9]/', '', $value );
+        $sanitized = substr( $sanitized, 0, 11 );
+        if ( empty( $sanitized ) ) {
+            add_settings_error(
+                'lddfw_sms_api_sender_id',
+                'lddfw_sender_id_invalid',
+                __( 'Sender ID must contain at least one letter or number (A-Z, 0-9). Special characters are not allowed.', 'lddfw' ),
+                'error'
+            );
+            return get_option( 'lddfw_sms_api_sender_id', '' );
+        }
+        if ( $sanitized !== trim( $value ) ) {
+            add_settings_error(
+                'lddfw_sms_api_sender_id',
+                'lddfw_sender_id_sanitized',
+                sprintf( 
+                    /* translators: 1: original value 2: sanitized value */
+                    __( 'Sender ID was adjusted from "%1$s" to "%2$s" (only letters and numbers allowed, max 11 characters).', 'lddfw' ),
+                    esc_html( $value ),
+                    esc_html( $sanitized )
+                 ),
+                'updated'
+            );
+        }
+        return $sanitized;
+    }
+
+    /**
+     * Generate SMS settings form section.
+     *
+     * This function generates the settings form section for a specific SMS message type.
+     * It outputs HTML for the settings page, allowing users to configure the SMS template
+     * used when sending SMS notifications.
+     *
+     * @param string $key             The key identifying the SMS message type (e.g., 'sms_assign_to_driver').
+     * @param string $label           The label for the message type section.
+     * @param string $default_template Optional. The default template text. Default empty string.
+     * @param array  $additional_tags Optional. Additional tags available for use in the template. Default empty array.
+     */
+    public function lddfw_generate_sms_settings(
+        $key,
+        $label,
+        $default_template = '',
+        $additional_tags = []
+    ) {
+        // Retrieve the enabled status for this message type.
+        $enabled = get_option( "lddfw_{$key}", '' );
+        // Retrieve the SMS template for this message type.
+        $template = get_option( "lddfw_{$key}_template", '' );
+        // Determine if the checkbox should be checked based on the enabled status.
+        $checked = ( $enabled === '1' ? 'checked' : '' );
+        ?>
+		<div class="card" style="margin-top:0px; margin-bottom:20px;">
+			<!-- Toggle to enable/disable sending SMS messages for this message type -->
+			<label for="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>" class='checkbox_toggle'>
+				<input <?php 
+        echo esc_attr( $checked );
+        ?> type='checkbox' class='regular-text' name="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>" id="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>" value="1">
+				<?php 
+        echo esc_html( $label );
+        ?>
+			</label>
+			<div class='lddfw_toggle_area' style='margin-top: 20px; <?php 
+        echo ( $checked ? '' : 'display:none;' );
+        ?>'>
+				<!-- Input for the SMS template -->
+				<p style='margin-top:10px;margin-bottom:5px;'>
+					<?php 
+        echo esc_html( __( 'SMS Template', 'lddfw' ) );
+        ?>
+					<?php 
+        if ( $default_template ) {
+            ?>
+						<?php 
+            echo '<a href="#" class="lddfw_copy_template_to_textarea" data="' . esc_attr( $default_template ) . '" ><b>' . esc_html( __( 'Default template', 'lddfw' ) ) . '</b></a>';
+            ?>
+					<?php 
+        }
+        ?>
+				</p>
+				<textarea class='large-text' name="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>_template" id="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>_template" style='min-width: 50%; height: 75px;'><?php 
+        echo esc_textarea( $template );
+        ?></textarea>
+				<!-- Display available tags for use in the template -->
+				<a href="#" class="lddf_button_toggle" style="margin-top: 10px;">
+                            <?php 
+        echo esc_js( __( 'Show/Hide Tags', 'lddfw' ) );
+        ?>
+							</a>
+				<p style="display:none" class="lddfw_description lddfw_copy_tags_to_textarea" data-textarea="lddfw_<?php 
+        echo esc_attr( $key );
+        ?>_template">
+					<?php 
+        echo $this->lddfw_template_tags();
+        if ( !empty( $additional_tags ) ) {
+            foreach ( $additional_tags as $tag => $description ) {
+                echo ' | <a href="#" data="' . esc_attr( $tag ) . '">' . esc_html( $description ) . '</a>';
+            }
+        }
+        ?>
+				</p>
+			</div>
+		</div>
+		<?php 
     }
 
     /**
@@ -1345,7 +1718,10 @@ class LDDFW_Admin {
         ?>
 		<p class="description" id="lddfw-gooogle-api-key-description"><?php 
         echo sprintf(
-            esc_html( __( 'In order to use the Google Maps API, we need to create two keys for application restrictions purposes.%1$s For more information about how to create the Google API key %2$sclick here%3$s.', 'lddfw' ) ),
+            esc_html( 
+                /* translators: 1: line break, 2: opening link tag, 3: closing link tag */
+                __( 'In order to use the Google Maps API, we need to create two keys for application restrictions purposes.%1$s For more information about how to create the Google API key %2$sclick here%3$s.', 'lddfw' )
+             ),
             '<br>',
             '<a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/getting-started/how-to-generate-and-set-google-maps-api-keys/" target="_blank">',
             '</a>'
@@ -1642,6 +2018,8 @@ class LDDFW_Admin {
 						<?php 
         }
         echo '<hr class="wp-header-end">';
+        echo self::lddfw_sms_cta_banner();
+        echo self::lddfw_powerfulwp_cta_banner();
         foreach ( $tabs as $tab ) {
             if ( '' === $current_tab ) {
                 settings_fields( 'lddfw' );
@@ -1727,6 +2105,66 @@ class LDDFW_Admin {
      */
     public static function lddfw_admin_plugin_bar() {
         return '<div class="lddfw_admin_bar">' . esc_html( __( 'Developed by', 'lddfw' ) ) . ' <a href="https://powerfulwp.com/" target="_blank">PowerfulWP</a> | <a href="https://powerfulwp.com/local-delivery-drivers-for-woocommerce-premium/" target="_blank" >' . esc_html( __( 'Premium', 'lddfw' ) ) . '</a> | <a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/" target="_blank" >' . esc_html( __( 'Documents', 'lddfw' ) ) . '</a></div>';
+    }
+
+    /**
+     * SMS call-to-action banner for free users without a configured SMS provider.
+     *
+     * @since 2.2.0
+     * @return string HTML markup or empty string.
+     */
+    public static function lddfw_sms_cta_banner() {
+        if ( !lddfw_is_free() || !empty( get_option( 'lddfw_sms_provider', '' ) ) ) {
+            return '';
+        }
+        $current_tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        if ( 'lddfw-sms-settings' === $current_tab ) {
+            return '';
+        }
+        if ( get_user_meta( get_current_user_id(), 'lddfw_dismissed_free_sms_cta', true ) ) {
+            return '';
+        }
+        $settings_url = admin_url( 'admin.php?page=lddfw-settings&tab=lddfw-sms-settings' );
+        return '<div class="lddfw_sms_cta_banner" data-banner="free_sms_cta">
+			<button type="button" class="lddfw_banner_dismiss" title="' . esc_attr__( 'Dismiss', 'lddfw' ) . '">&times;</button>
+			<div class="lddfw_sms_cta_banner_content">
+				<h3>' . esc_html__( 'Send SMS Notifications to Your Customers', 'lddfw' ) . '</h3>
+				<p>' . esc_html__( 'Keep your customers informed with real-time SMS delivery updates. Notify them when an order is assigned to a driver, out for delivery, and delivered.', 'lddfw' ) . '</p>
+				<a href="' . esc_url( $settings_url ) . '" class="lddfw_sms_cta_button">' . esc_html__( 'Set Up SMS Notifications', 'lddfw' ) . '</a>
+			</div>
+		</div>';
+    }
+
+    /**
+     * PowerfulWP SMS CTA banner for premium users using Twilio or no provider.
+     *
+     * @since 2.2.0
+     * @return string HTML markup or empty string.
+     */
+    public static function lddfw_powerfulwp_cta_banner() {
+        if ( lddfw_is_free() ) {
+            return '';
+        }
+        $provider = get_option( 'lddfw_sms_provider', '' );
+        if ( 'powerfulwp' === $provider ) {
+            return '';
+        }
+        $current_tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        if ( 'lddfw-sms-settings' === $current_tab ) {
+            return '';
+        }
+        if ( get_user_meta( get_current_user_id(), 'lddfw_dismissed_premium_sms_cta', true ) ) {
+            return '';
+        }
+        $settings_url = admin_url( 'admin.php?page=lddfw-settings&tab=lddfw-sms-settings' );
+        return '<div class="lddfw_sms_cta_banner lddfw_premium_cta_banner" data-banner="premium_sms_cta">
+			<button type="button" class="lddfw_banner_dismiss" title="' . esc_attr__( 'Dismiss', 'lddfw' ) . '">&times;</button>
+			<div class="lddfw_sms_cta_banner_content">
+				<h3>' . esc_html__( 'Try PowerfulWP SMS Provider', 'lddfw' ) . '</h3>
+				<p>' . esc_html__( 'Send SMS notifications using the PowerfulWP SMS service. Easy setup, competitive pricing, and no external accounts needed. Get started in minutes.', 'lddfw' ) . '</p>
+				<a href="' . esc_url( $settings_url ) . '" class="lddfw_sms_cta_button">' . esc_html__( 'Get Started', 'lddfw' ) . '</a>
+			</div>
+		</div>';
     }
 
     /**
@@ -2110,8 +2548,14 @@ class LDDFW_Admin {
         echo '<div class="driver_app">
 				<img alt="' . esc_attr__( 'Drivers app', 'lddfw' ) . '" title="' . esc_attr__( 'Drivers app', 'lddfw' ) . '" src="' . esc_attr( plugins_url() . '/' . LDDFW_FOLDER . '/public/images/drivers_app.png?ver=' . LDDFW_VERSION ) . '">
 				<p>
-					<b><a target="_blank" href="' . lddfw_drivers_page_url( '' ) . '">' . lddfw_drivers_page_url( '' ) . '</a></b><br>' . sprintf( esc_html( __( 'The link above is the delivery driver\'s Mobile-Friendly panel URL. %1$s The delivery drivers can access it from their mobile phones. %2$s', 'lddfw' ) ), '<br>', '<br>' ) . sprintf(
-            esc_html( __( 'Notice: If you want to be logged in as an administrator and to check the drivers\' panel on the same device, %1$s %2$syou must work with two different browsers otherwise you will log out from the admin panel and the drivers\' panel won\'t function correctly.%3$s', 'lddfw' ) ),
+					<b><a target="_blank" href="' . lddfw_drivers_page_url( '' ) . '">' . lddfw_drivers_page_url( '' ) . '</a></b><br>' . sprintf( esc_html( 
+            /* translators: 1: line break, 2: line break */
+            __( 'The link above is the delivery driver\'s Mobile-Friendly panel URL. %1$s The delivery drivers can access it from their mobile phones. %2$s', 'lddfw' )
+         ), '<br>', '<br>' ) . sprintf(
+            esc_html( 
+                /* translators: 1: line break, 2: opening bold tag, 3: closing bold tag */
+                __( 'Notice: If you want to be logged in as an administrator and to check the drivers\' panel on the same device, %1$s %2$syou must work with two different browsers otherwise you will log out from the admin panel and the drivers\' panel won\'t function correctly.%3$s', 'lddfw' )
+             ),
             '<br>',
             '<b>',
             '</b>'

@@ -116,6 +116,13 @@ class LDDFW_Driver {
                     $operator,
                     $driver_id
                 );
+                /* Send sms to driver */
+                $lddfw_sms_assign_to_driver = get_option( 'lddfw_sms_assign_to_driver', '' );
+                if ( '1' === $lddfw_sms_assign_to_driver && 'store' === $operator ) {
+                    $sms = new LDDFW_SMS();
+                    $result = $sms->lddfw_send_sms_to_driver( $order_id, $order, $driver_id );
+                    $note .= ', ' . $result[1];
+                }
                 $order->add_order_note( $note );
             }
         }
