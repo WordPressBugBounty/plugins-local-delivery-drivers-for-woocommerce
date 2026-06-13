@@ -31,7 +31,7 @@ class LDDFW_Activator {
         // Create sync table.
         lddfw_create_sync_table();
         if ( !get_option( 'lddfw_delivery_drivers_page' ) ) {
-            update_option( 'lddfw_sync_table', '4' );
+            update_option( 'lddfw_sync_table', '5' );
         } else {
             // Sync data to table.
             lddfw_sync_table();
@@ -51,9 +51,9 @@ class LDDFW_Activator {
         add_option( 'lddfw_driver_assigned_status', 'wc-driver-assigned' );
         add_option( 'lddfw_processing_status', 'wc-processing' );
         add_option( 'lddfw_sms_assign_to_driver_template', 'Hello [delivery_driver_first_name], order #[order_id] with [store_name] has been assigned to you. [delivery_driver_page]' );
-        add_option( 'lddfw_sms_out_for_delivery_template', 'Hello [billing_first_name], status of your order #[order_id] with [store_name] has been changed to [order_status].' );
+        add_option( 'lddfw_sms_out_for_delivery_template', 'Hello [billing_first_name], the status of your order #[order_id] with [store_name] has been updated to [order_status].' );
         add_option( 'lddfw_sms_delivered_template', 'Hello [billing_first_name], your order #[order_id] from [store_name] has been successfully delivered.' );
-        add_option( 'lddfw_sms_not_delivered_template', 'Hello [billing_first_name], we apologize, but your order #[order_id] from [store_name] could not be delivered as scheduled.' );
+        add_option( 'lddfw_sms_not_delivered_template', 'Hi [billing_first_name], we\'re sorry, but your order #[order_id] from [store_name] could not be delivered as scheduled.' );
         // Remove unused settings during plugin activation from version 1.9.6
         delete_option( 'lddfw_whatsapp_assign_to_driver_template' );
         delete_option( 'lddfw_whatsapp_out_for_delivery_template' );
@@ -63,7 +63,7 @@ class LDDFW_Activator {
         add_option( 'lddfw_failed_delivery_reason_1', __( 'Refused by the recipient.', 'lddfw' ) );
         add_option( 'lddfw_failed_delivery_reason_2', __( 'Incorrect address.', 'lddfw' ) );
         add_option( 'lddfw_failed_delivery_reason_3', __( 'Failed delivery attempt.', 'lddfw' ) );
-        add_option( 'lddfw_failed_delivery_reason_4', __( 'Item Lost.', 'lddfw' ) );
+        add_option( 'lddfw_failed_delivery_reason_4', __( 'Item lost.', 'lddfw' ) );
         add_option( 'lddfw_failed_delivery_reason_5', __( 'Item damaged.', 'lddfw' ) );
         add_option( 'lddfw_delivery_dropoff_1', __( 'Delivered to the customer.', 'lddfw' ) );
         add_option( 'lddfw_delivery_dropoff_2', __( 'Left at the front door.', 'lddfw' ) );

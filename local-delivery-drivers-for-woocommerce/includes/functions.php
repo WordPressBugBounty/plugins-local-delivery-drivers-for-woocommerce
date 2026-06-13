@@ -71,9 +71,8 @@ function lddfw_update_sync_order(  $order_id, $key, $value  ) {
             lddfw_insert_orderid_to_sync_order( $order_id );
         }
         $table_name = $wpdb->prefix . 'lddfw_orders';
-        $wpdb->query( $wpdb->prepare( 'UPDATE ' . $table_name . '
-			SET ' . $column . ' = %s
-			WHERE order_id = %s', $value, $order_id ) );
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table_name/$column are $wpdb->prefix.'lddfw_orders' and a hardcoded switch value; safe identifiers, never user input.
+        $wpdb->query( $wpdb->prepare( "UPDATE {$table_name} SET {$column} = %s WHERE order_id = %s", $value, $order_id ) );
     }
 }
 
@@ -90,21 +89,9 @@ function lddfw_update_all_sync_order(  $order  ) {
     $seller_id = $store->lddfw_order_seller( $order );
     $city = ( !empty( $order->get_shipping_city() ) ? $order->get_shipping_city() : $order->get_billing_city() );
     $refund = $order->get_total_refunded();
+    // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- $table_name is $wpdb->prefix.'lddfw_orders'; safe identifier, never user input.
     $wpdb->query( $wpdb->prepare(
-        'UPDATE ' . $table_name . '
-	 SET
-			driver_id   = %d,
-			seller_id   = %d,
-			order_total = %f,
-			driver_commission = %f,
-			delivered_date = %s,
-			order_sort = %d,
-			order_refund_amount = %f,
-			order_shipping_amount = %f,
-			order_shipping_city = %s,
-			order_payment_method = %s,
-			delivery_date = %s
-	 WHERE order_id = %s',
+        "UPDATE {$table_name} SET\n\t\t\t\tdriver_id             = %d,\n\t\t\t\tseller_id             = %d,\n\t\t\t\torder_total           = %f,\n\t\t\t\tdriver_commission     = %f,\n\t\t\t\tdelivered_date        = %s,\n\t\t\t\torder_sort            = %d,\n\t\t\t\torder_refund_amount   = %f,\n\t\t\t\torder_shipping_amount = %f,\n\t\t\t\torder_shipping_city   = %s,\n\t\t\t\torder_payment_method  = %s,\n\t\t\t\tdelivery_date         = %s\n\t\t\tWHERE order_id = %s",
         $order->get_meta( 'lddfw_driverid' ),
         $seller_id,
         $order->get_total(),
@@ -118,6 +105,7 @@ function lddfw_update_all_sync_order(  $order  ) {
         $order->get_meta( '_lddfw_delivery_date' ),
         $order->get_id()
     ) );
+    // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
 }
 
 /**
@@ -320,10 +308,54 @@ function lddfw_create_sync_table() {
  * @return void
  */
 function lddfw_update_db_check() {
-    if ( '3' === get_option( 'lddfw_sync_table', '' ) || '2' === get_option( 'lddfw_sync_table', '' ) || '' === get_option( 'lddfw_sync_table', '' ) ) {
+    if ( '4' === get_option( 'lddfw_sync_table', '' ) || '3' === get_option( 'lddfw_sync_table', '' ) || '2' === get_option( 'lddfw_sync_table', '' ) || '' === get_option( 'lddfw_sync_table', '' ) ) {
         lddfw_create_sync_table();
         lddfw_sync_table();
     }
+}
+
+if ( !function_exists( 'lddfw_create_application_form_tables__premium_only' ) ) {
+}
+if ( !function_exists( 'lddfw_ensure_application_uploads_dir__premium_only' ) ) {
+}
+if ( !function_exists( 'lddfw_seed_application_fields__premium_only' ) ) {
+}
+if ( !function_exists( 'lddfw_get_application_dynamic_fields_summary__premium_only' ) ) {
+}
+/**
+ * Default email subject per application event.
+ *
+ * @param string $event Event key.
+ * @return string
+ */
+function lddfw_default_application_email_subject(  $event  ) {
+    switch ( $event ) {
+        case 'application_received':
+            return __( 'New Delivery Driver Application', 'lddfw' );
+        case 'application_approved':
+            return __( 'Your driver application has been approved', 'lddfw' );
+        case 'application_rejected':
+            return __( 'Update on your driver application', 'lddfw' );
+    }
+    return '';
+}
+
+/**
+ * Default email body per application event.
+ *
+ * @param string $event Event key.
+ * @return string
+ */
+function lddfw_default_application_email_body(  $event  ) {
+    switch ( $event ) {
+        case 'application_received':
+            return __( "A new driver application has been submitted at [store_name].\n\nName: [application_full_name]\nEmail: [application_email]\nPhone: [application_phone]\n\nMessage:\n[application_message]\n\nReview it here: [admin_url]", 'lddfw' );
+        case 'application_approved':
+            return __( "Hello [application_full_name],\n\nWelcome to the [store_name] team! Your driver application has been approved.\n\nPlease set your password to activate your account:\n[set_password_url]\n\nSee you on the road!", 'lddfw' );
+        case 'application_rejected':
+            return __( "Hello [application_full_name],\n\nThank you for applying to join [store_name] as a driver.\n\nUnfortunately, we are unable to move forward with your application at this time.\n\n[rejection_reason]\n\nWe appreciate your interest.", 'lddfw' );
+    }
+    return '';
 }
 
 /**
@@ -539,7 +571,7 @@ function lddfw_woocommerce_order_refunded(  $order_id, $refund_id  ) {
 }
 
 /**
- * Premium feature.
+ * Premium Feature.
  *
  * @param string $value text.
  * @return html
@@ -554,8 +586,8 @@ function lddfw_admin_premium_feature(  $value  ) {
 						  <svg aria-hidden="true"  width=10 focusable="false" data-prefix="fas" data-icon="times" class="svg-inline--fa fa-times fa-w-11" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path fill="currentColor" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg></a>
 						  <h2>' . esc_html( __( 'Premium Feature', 'lddfw' ) ) . '</h2>
 						  <p>' . esc_html( __( 'You Discovered a Premium Feature!', 'lddfw' ) ) . '</p>
-						  <p>' . esc_html( __( 'Upgrading to Premium will unlock it.', 'lddfw' ) ) . '</p>
-						  <a target="_blank" href="https://powerfulwp.com/local-delivery-drivers-for-woocommerce-premium#pricing" class="lddfw_premium_buynow">' . esc_html( __( 'UNLOCK PREMIUM', 'lddfw' ) ) . '</a>
+						  <p>' . esc_html( __( 'Upgrade to Premium to unlock this feature.', 'lddfw' ) ) . '</p>
+						  <a target="_blank" href="' . esc_url( lddfw_fs()->checkout_url() ) . '" class="lddfw_premium_buynow">' . esc_html( __( 'UNLOCK PREMIUM', 'lddfw' ) ) . '</a>
 						  </div>
 					  </div>';
     }
@@ -593,6 +625,63 @@ function lddfw_get_international_phone_number(  $country_code, $phone  ) {
         }
     }
     return $phone;
+}
+
+/**
+ * Replace broadcast template tags in a driver-context message.
+ *
+ * Supports the limited tag set used by the Dashboard Broadcast widget:
+ *   [driver_name], [driver_first_name], [driver_last_name],
+ *   [store_name], [date], [time]
+ *
+ * @param string $text      Raw message text containing tags.
+ * @param int    $driver_id Driver user id to resolve name tags against.
+ * @since 2.3.0
+ * @return string
+ */
+function lddfw_replace_broadcast_tags(  $text, $driver_id  ) {
+    $text = (string) $text;
+    $driver_id = (int) $driver_id;
+    $first_name = ( $driver_id ? (string) get_user_meta( $driver_id, 'first_name', true ) : '' );
+    $last_name = ( $driver_id ? (string) get_user_meta( $driver_id, 'last_name', true ) : '' );
+    $full_name = trim( $first_name . ' ' . $last_name );
+    if ( '' === $full_name && $driver_id ) {
+        $u = get_userdata( $driver_id );
+        $full_name = ( $u && isset( $u->display_name ) ? (string) $u->display_name : '' );
+    }
+    $store_name = get_bloginfo( 'name' );
+    $date_fmt = ( function_exists( 'lddfw_date_format' ) ? lddfw_date_format( 'date' ) : 'Y-m-d' );
+    $time_fmt = ( function_exists( 'lddfw_date_format' ) ? lddfw_date_format( 'time' ) : 'H:i' );
+    $map = array(
+        '[driver_name]'       => $full_name,
+        '[driver_first_name]' => $first_name,
+        '[driver_last_name]'  => $last_name,
+        '[store_name]'        => $store_name,
+        '[date]'              => date_i18n( $date_fmt ),
+        '[time]'              => date_i18n( $time_fmt ),
+    );
+    return strtr( $text, $map );
+}
+
+/**
+ * Render an inline QR-code placeholder rendered client-side.
+ *
+ * Prints a data-attribute div that the bundled `admin/js/vendor/qrcode.min.js`
+ * library paints into an actual QR on page load. Returning instead of echoing
+ * lets callers compose it into larger strings.
+ *
+ * @param string $text URL or text to encode.
+ * @param int    $size Pixel dimensions.
+ * @since 2.3.0
+ * @return string
+ */
+function lddfw_generate_qr_svg(  $text, $size = 180  ) {
+    $text = (string) $text;
+    $size = max( 80, (int) $size );
+    if ( '' === $text ) {
+        return '';
+    }
+    return '<div class="lddfw-qr-placeholder" data-lddfw-qr="' . esc_attr( $text ) . '" data-size="' . esc_attr( (string) $size ) . '"></div>';
 }
 
 /**
@@ -681,6 +770,27 @@ function lddfw_replace_tags(
         }
     }
     $tracking_url = ( !lddfw_is_free() ? lddfw_tracking_page_url__premium_only( $order_id ) : '' );
+    // Review merge tags (premium review module).
+    $driver_rating = '';
+    $driver_rating_label = '';
+    $driver_rating_stars = '';
+    $review_comment = '';
+    $review_date = '';
+    if ( class_exists( 'LDDFW_Review' ) && method_exists( 'LDDFW_Review', 'get_review_by_order__premium_only' ) ) {
+        $review_row = LDDFW_Review::get_review_by_order__premium_only( $order_id );
+        if ( null !== $review_row && !empty( $review_row->driver_rating ) ) {
+            $rating_int = intval( $review_row->driver_rating );
+            $driver_rating = (string) $rating_int;
+            $driver_rating_label = ( method_exists( 'LDDFW_Review', 'get_rating_label' ) ? LDDFW_Review::get_rating_label( $rating_int ) : '' );
+            // Text-only star variant for SMS/WhatsApp (filled and empty stars).
+            $driver_rating_stars = str_repeat( "★", $rating_int ) . str_repeat( "☆", max( 0, 5 - $rating_int ) );
+            $review_comment = ( isset( $review_row->review_comment ) ? (string) $review_row->review_comment : '' );
+            if ( !empty( $review_row->review_date ) ) {
+                $review_ts = strtotime( $review_row->review_date );
+                $review_date = ( $review_ts ? date_i18n( $date_format, $review_ts ) : '' );
+            }
+        }
+    }
     $find = array(
         '[tracking_url]',
         '[estimated_time_of_arrival]',
@@ -713,7 +823,12 @@ function lddfw_replace_tags(
         '[shipping_city]',
         '[shipping_state]',
         '[shipping_postcode]',
-        '[shipping_country]'
+        '[shipping_country]',
+        '[driver_rating]',
+        '[driver_rating_label]',
+        '[driver_rating_stars]',
+        '[review_comment]',
+        '[review_date]'
     );
     $replace = array(
         $tracking_url,
@@ -747,7 +862,12 @@ function lddfw_replace_tags(
         $shipping_city,
         $shipping_state,
         $shipping_postcode,
-        $shipping_country
+        $shipping_country,
+        $driver_rating,
+        $driver_rating_label,
+        $driver_rating_stars,
+        $review_comment,
+        $review_date
     );
     $content = str_replace( $find, $replace, $content );
     return $content;
@@ -912,14 +1032,11 @@ function lddfw_check_server_google_keys(  $lddfw_google_api_key_server  ) {
     echo '<p>Distance Matrix API: ' . esc_html( $result ) . '</p>';
     // Check Geocoding API.
     $url = 'https://maps.google.com/maps/api/geocode/json?sensor=false&language=en&key=' . $lddfw_google_api_key_server . '&address=Universal+Studios+Hollywood';
-    $ch = curl_init();
-    curl_setopt( $ch, CURLOPT_URL, $url );
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-    curl_setopt( $ch, CURLOPT_PROXYPORT, 3128 );
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, 0 );
-    $response = curl_exec( $ch );
-    curl_close( $ch );
+    $wp_response = wp_remote_get( $url, array(
+        'sslverify' => false,
+        'timeout'   => 15,
+    ) );
+    $response = ( is_wp_error( $wp_response ) ? '' : wp_remote_retrieve_body( $wp_response ) );
     $obj = json_decode( $response );
     $result = __( 'An unexpected error has occurred.', 'lddfw' );
     if ( json_last_error() === 0 ) {
@@ -947,4 +1064,83 @@ function lddfw_is_hpos_enabled() : bool {
         return true;
     }
     return false;
+}
+
+if ( !function_exists( 'lddfw_get_application_form_l10n__premium_only' ) ) {
+}
+/**
+ * Clear the geocode cache for an order.
+ * Called when the shipping address is saved so the next map render re-geocodes.
+ *
+ * @param int $order_id WooCommerce order ID.
+ * @return void
+ */
+function lddfw_clear_order_geocode(  $order_id  ) {
+    $order = wc_get_order( $order_id );
+    if ( !$order ) {
+        return;
+    }
+    $order->delete_meta_data( '_lddfw_address_geocode' );
+    $order->save();
+}
+
+/**
+ * Hook: classic orders - woocommerce_process_shop_order_meta.
+ * Clears geocache when any shipping address field differs from the stored value.
+ *
+ * @param int $order_id Post/order ID.
+ * @return void
+ */
+function lddfw_maybe_clear_geocode_on_classic_save(  $order_id  ) {
+    $shipping_fields = array(
+        '_shipping_address_1',
+        '_shipping_address_2',
+        '_shipping_city',
+        '_shipping_state',
+        '_shipping_postcode',
+        '_shipping_country'
+    );
+    foreach ( $shipping_fields as $field ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        if ( isset( $_POST[$field] ) ) {
+            $order = wc_get_order( $order_id );
+            if ( !$order ) {
+                return;
+            }
+            $posted_val = sanitize_text_field( wp_unslash( $_POST[$field] ) );
+            // Map POST key to WC order getter (strip leading underscore).
+            $prop_key = ltrim( $field, '_' );
+            $getter = 'get_' . $prop_key;
+            $stored_val = ( method_exists( $order, $getter ) ? (string) $order->{$getter}() : '' );
+            if ( $posted_val !== $stored_val ) {
+                lddfw_clear_order_geocode( $order_id );
+                return;
+            }
+        }
+    }
+}
+
+/**
+ * Hook: HPOS - woocommerce_order_object_updated_props.
+ * Clears geocache when any shipping address prop was actually changed.
+ *
+ * @param WC_Order $order         The saved order object.
+ * @param array    $updated_props List of prop names that changed.
+ * @return void
+ */
+function lddfw_maybe_clear_geocode_on_hpos_save(  $order, $updated_props  ) {
+    $shipping_props = array(
+        'shipping_address_1',
+        'shipping_address_2',
+        'shipping_city',
+        'shipping_state',
+        'shipping_postcode',
+        'shipping_country'
+    );
+    foreach ( $updated_props as $prop ) {
+        if ( in_array( $prop, $shipping_props, true ) ) {
+            lddfw_clear_order_geocode( $order->get_id() );
+            return;
+        }
+    }
 }

@@ -227,16 +227,16 @@ class LDDFW_SMS {
             'To'   => $to_number,
             'Body' => $sms_text,
         );
-        $post = http_build_query( $data );
-        $ch = curl_init( $url );
-        curl_setopt( $ch, CURLOPT_POST, true );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
-        curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
-        curl_setopt( $ch, CURLOPT_USERPWD, "{$sid}:{$auth_token}" );
-        curl_setopt( $ch, CURLOPT_POSTFIELDS, $post );
-        $return = curl_exec( $ch );
-        curl_close( $ch );
+        $wp_response = wp_remote_post( $url, array(
+            'sslverify' => false,
+            'timeout'   => 15,
+            'headers'   => array(
+                'Authorization' => 'Basic ' . base64_encode( $sid . ':' . $auth_token ),
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+            ),
+            'body'      => $data,
+        ) );
+        $return = ( is_wp_error( $wp_response ) ? '' : wp_remote_retrieve_body( $wp_response ) );
         $data = json_decode( $return, true );
         if ( !empty( $data['status'] ) && 'queued' === strval( $data['status'] ) ) {
             /* translators: %s: phone number */

@@ -56,7 +56,7 @@ body,
 .lddfw_box .lddfw_order_number {
   display: block;
   padding-left: 0px;
-  padding-right: 45px;
+  padding-right: 0px;
 }
 
 .lddfw_handle_column {
@@ -95,4 +95,644 @@ body,
 
 .text-right {
   text-align: left !important;
+}
+
+/* Review Widget RTL */
+.lddfw_review_skip {
+  text-align: left;
+}
+
+.lddfw-review-label {
+  margin-left: 0;
+  margin-right: 8px;
+}
+#lddfw_home h1,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Open Sans", "arial", "sans-serif";
+}
+#lddfw_login_password,
+#lddfw_password,
+#lddfw_confirm_password,
+#lddfw_new_password,
+#lddfw_new_password,
+#lddfw_user_email {
+  text-align: left;
+  direction: ltr;
+}
+/* ==========================================================================
+   Complete RTL overrides for Local Delivery Drivers for WooCommerce
+   Keep this file loaded AFTER lddfw-public.css.
+   ========================================================================== */
+
+/* Base direction and text alignment */
+html[dir="rtl"],
+body.rtl,
+body.lddfw-rtl,
+#lddfw_content,
+#lddfw_page,
+.lddfw_page,
+.lddfw_dashboard,
+.lddfw_delivery_form,
+.lddfw_order_alert,
+.lddfw_confirmation,
+.lddfw_alert_screen,
+.lddfw_lightbox,
+.lddfw_table,
+.lddfw_box {
+  direction: rtl;
+}
+
+body,
+#lddfw_login,
+#lddfw_forgot_password,
+.alert,
+.lddfw_box,
+.lddfw_sidenav,
+.lddfw_premium-feature,
+.lddfw_product_description,
+.lddfw_delivery_form,
+.lddfw_list-section {
+  text-align: right;
+}
+#lddfw_delivery_screen .delivery_header .lddfw_column:first-child::after,
+#lddfw_failed_delivery_form .delivery_header .lddfw_column:first-child::after {
+  right: 0px;
+}
+.delivery_header,
+#lddfw_hide_map,
+#signature-header {
+  direction: rtl;
+}
+
+/* Keep email, phone, coordinates, numbers and map/provider content readable */
+#lddfw_login_email,
+#lddfw_email,
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+.lddfw_order_coordinates,
+#lddfw_right-panel,
+#lddfw_directions-panel,
+#lddfw_directions-panel-direction,
+.adp,
+.adp-directions,
+.adp-placemark,
+#google_map,
+#google_map_direction,
+#lddfw_map,
+#lddfw_map123 {
+  direction: ltr;
+}
+
+/* Bootstrap/text helper fixes */
+.text-left {
+  text-align: right !important;
+}
+
+.text-right {
+  text-align: left !important;
+}
+
+.float-left {
+  float: right !important;
+}
+
+.float-right {
+  float: left !important;
+}
+
+.ml-0 {
+  margin-right: 0 !important;
+}
+
+.mr-0 {
+  margin-left: 0 !important;
+}
+
+.pl-0 {
+  padding-right: 0 !important;
+}
+
+.pr-0 {
+  padding-left: 0 !important;
+}
+
+/* Header / menu */
+#lddfw_header .col-2,
+#lddfw_availability,
+#lddfw_trackme {
+  text-align: left;
+}
+
+#lddfw_header .lddfw_sidenav a {
+  direction: rtl;
+  text-align: right;
+  padding: 8px 32px 8px 8px;
+}
+
+#lddfw_main {
+  transition: margin-right 0.5s;
+}
+
+#lddfw_menu .lddfw_availability {
+  right: auto;
+  left: 5px;
+}
+
+.lddfw_avatar-col {
+  text-align: left;
+}
+
+/* Alerts */
+.alert-dismissible {
+  padding-right: 1.25rem;
+  padding-left: 4rem;
+}
+
+.alert-dismissible .close {
+  right: auto;
+  left: 0;
+}
+
+/* Order boxes / order list */
+.lddfw_box {
+  text-align: right;
+}
+
+.lddfw_box .lddfw_order_notes,
+.lddfw_box .lddfw_order_address,
+.lddfw_box .lddfw_order_custom,
+.lddfw_box .lddfw_order_distance,
+.lddfw_box .lddfw_order_failed_date,
+.lddfw_box .lddfw_order_delivered_date,
+.lddfw_box .lddfw_line,
+.lddfw_box .lddfw_order_number {
+  padding-left: 0;
+  padding-right: 0px;
+}
+.lddfw-assign-screen .lddfw_order_number::before {
+  margin-left: 10px;
+}
+.lddfw_order_view {
+  right: auto;
+  left: 13px;
+}
+
+.lddfw_handle_column {
+  right: auto;
+  left: 13px;
+}
+
+.lddfw_multi_checkbox .lddfw_order_checkbox {
+  right: 0;
+  left: auto;
+}
+
+#lddfw_plain_route_note_alert {
+  padding-right: 24px;
+  padding-left: 0;
+}
+
+/* Product/order item images */
+.lddfw_items img {
+  float: right;
+  margin-left: 10px;
+  margin-right: 0;
+}
+
+.item-variation {
+  margin-left: 0;
+  margin-right: 60px;
+}
+
+/* Forms */
+.lddfw_delivery_form .custom-control-label {
+  padding-left: 10px;
+  padding-right: 40px;
+  text-align: right;
+}
+
+.lddfw_delivery_form .custom-radio .custom-control-label::before,
+.lddfw_delivery_form .custom-control-label::before,
+.lddfw_delivery_form .custom-control-label::after {
+  left: auto;
+  right: 12px;
+}
+
+.custom-file-label {
+  text-align: right;
+}
+
+.custom-file-label::after {
+  right: auto;
+  left: 0;
+  border-right: inherit;
+  border-left: 0;
+  border-radius: 0.25rem 0 0 0.25rem;
+}
+
+#driver_form .upload_image_wrap {
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+#driver_form .photo_upload {
+  margin-right: 0;
+}
+
+/* Lightbox / modal close buttons */
+.lddfw_lightbox {
+  left: auto;
+  right: 0;
+}
+
+.lddfw_lightbox_close {
+  right: auto !important;
+  left: 30px !important;
+}
+
+.lddfw_premium-modal__close {
+  right: auto !important;
+  left: 12px !important;
+}
+
+.lddfw_premium-modal .lddfw_lightbox_wrap .container,
+#lddfw_delivery_photo .lddfw_premium-feature-content,
+#lddfw_delivery_signature .lddfw_premium-feature-content {
+  text-align: right;
+}
+
+.lddfw_premium-trigger-btn {
+  direction: rtl;
+}
+
+.lddfw_premium-trigger-btn svg {
+  margin-left: 0.15rem;
+  margin-right: 0;
+}
+
+.lddfw_premium-feature-content svg {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+
+/* Dashboard - greeting strip */
+.lddfw_dashboard .lddfw-greeting {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-greeting__text {
+  text-align: right;
+}
+
+/* Dashboard - primary CTA */
+.lddfw_dashboard .lddfw-primary-cta {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-primary-cta__text {
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-primary-cta__count {
+  text-align: center;
+}
+
+/* Dashboard KPI cards */
+.lddfw_dashboard .lddfw-dashboard-kpi-grid {
+  direction: rtl;
+}
+
+.lddfw_dashboard .lddfw-dashboard-kpi-grid > .lddfw_box {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw-kpi-card__header {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw-kpi-card__body {
+  text-align: right;
+}
+
+.lddfw-kpi-card--availability,
+.lddfw-kpi-card--tracking,
+.lddfw-kpi-card--rating,
+.lddfw-kpi-card--earnings {
+  border-left-color: transparent;
+  border-right-width: 4px;
+  border-right-style: solid;
+}
+
+.lddfw-kpi-card--availability {
+  border-right-color: #adb5bd;
+}
+
+.lddfw-kpi-card--tracking {
+  border-right-color: #0d6efd;
+}
+
+.lddfw-kpi-card--rating {
+  border-right-color: #e9a100;
+}
+
+.lddfw-kpi-card--earnings {
+  border-right-color: #0f5132;
+}
+
+/* Dashboard order stat cards */
+.lddfw_dashboard .lddfw-order-stat-card {
+  direction: rtl;
+  text-align: right;
+  border-left-width: 0;
+  border-left-style: none;
+  border-right-width: 4px;
+  border-right-style: solid;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card a.lddfw-order-stat-card__link {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card__text {
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card__icon-col {
+  justify-content: flex-start;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card .lddfw_number {
+  text-align: right;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card--claim {
+  border-right-color: #0d6efd;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card--assign {
+  border-right-color: #6f42c1;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card--out {
+  border-right-color: #ca6510;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card--failed {
+  border-right-color: #dc3545;
+}
+
+.lddfw_dashboard .lddfw-order-stat-card--delivered {
+  border-right-color: #198754;
+}
+
+/* Submenus */
+.lddfw_submenu svg {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+#lddfw_mySidenav .submenu-item svg.fa-chevron-down,
+#lddfw_mySidenav .submenu-item svg.fa-chevron-up {
+  margin-left: 0;
+  margin-right: 7px;
+}
+
+#lddfw_mySidenav .submenu-item svg.fa-chevron-down {
+  margin-left: 0;
+  margin-right: 3px;
+}
+
+/* Route / directions panels */
+#lddfw_directions-panel-listing {
+  direction: rtl;
+  text-align: right;
+}
+
+#lddfw_directions-panel-listing .fa-map-marker,
+#lddfw_directions-panel-lightbox .fa-map-marker {
+  left: auto;
+  right: 11%;
+  margin-left: 0;
+  margin-right: -9px;
+}
+
+#lddfw_directions-panel-listing .lddfw_point,
+#lddfw_directions-panel-lightbox .lddfw_point {
+  left: auto;
+  right: 12%;
+  margin-left: 0;
+  margin-right: -4px;
+}
+
+#lddfw_right-panel {
+  float: right;
+  text-align: right;
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+/* Tracking page */
+.lddfw_tracking_page {
+  direction: rtl;
+}
+
+#lddfw_tracking_page {
+  direction: rtl;
+}
+
+#lddfw_tracking_driver_image {
+  float: right;
+}
+
+#lddfw_tracking_driver_vehicle,
+#lddfw_tracking_driver_name {
+  padding-left: 0;
+  padding-right: 75px;
+  text-align: right;
+}
+
+#lddfw_tracking_page #lddfw_driver .col-9 {
+  padding-right: 15px !important;
+  padding-left: 0 !important;
+}
+
+.base-timer__label {
+  left: auto;
+  right: 0;
+}
+
+#lddfw_page.order .tracking_min,
+#lddfw_page.order .tracking_min_text {
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+/* Signature */
+.signature-wrapper,
+.signature-pad {
+  left: auto;
+  right: 0;
+}
+
+#signature-line {
+  left: auto;
+  right: 5%;
+}
+
+#signature-line svg {
+  right: auto;
+  left: 0;
+}
+
+/* Failed delivery screen / modern order cards */
+.lddfw-failed-screen,
+.lddfw-failed-screen .lddfw_box {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw-failed-screen .lddfw_order_number,
+.lddfw-failed-screen .lddfw_order_failed_date,
+.lddfw-failed-screen .lddfw_order_address,
+.lddfw-failed-screen .lddfw_order_custom,
+.lddfw-failed-screen .lddfw_delivery_date {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.lddfw-failed-screen .lddfw_order_number::before,
+.lddfw-failed-screen .lddfw_order_failed_date::before,
+.lddfw-failed-screen .lddfw_order_custom::before,
+.lddfw-failed-screen .lddfw_delivery_date::before {
+  left: auto;
+  right: 0;
+  margin-left: 10px;
+}
+
+.lddfw-failed-screen .pagination {
+  direction: rtl;
+}
+
+/* Out for delivery / route screen */
+.lddfw-out-screen,
+.lddfw-out-screen .lddfw_box,
+.lddfw-out-toolbar,
+.lddfw-out-footer {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw-out-toolbar__actions,
+.lddfw-out-card__actions,
+.lddfw-out-footer {
+  direction: rtl;
+}
+
+.lddfw-out-screen .lddfw_order_number,
+.lddfw-out-screen .lddfw_order_address,
+.lddfw-out-screen .lddfw_order_distance,
+.lddfw-out-screen .lddfw_order_custom,
+.lddfw-out-screen .lddfw_delivery_date {
+  padding-left: 0;
+  padding-right: 0px;
+}
+
+.lddfw-delivered-screen .lddfw_order_number::before,
+.lddfw-out-screen .lddfw_order_number::before,
+.lddfw-out-screen .lddfw_order_address::before,
+.lddfw-out-screen .lddfw_order_distance::before,
+.lddfw-out-screen .lddfw_order_custom::before,
+.lddfw-out-screen .lddfw_delivery_date::before {
+  left: auto;
+  right: 0;
+  margin-left: 10px;
+}
+
+/* Tables */
+.lddfw_table,
+.lddfw_order_total_tbl,
+.lddfw_order_products_tbl {
+  direction: rtl;
+}
+
+.lddfw_total_col {
+  text-align: center;
+}
+
+#lddfw_directions-panel td,
+.lddfw-order-screen .lddfw_order_total_tbl tr th {
+  text-align: right;
+}
+
+/* Review widget */
+.lddfw_review_skip {
+  text-align: left;
+}
+
+.lddfw-review-label {
+  margin-left: 0;
+  margin-right: 8px;
+}
+
+/* Product lightbox */
+.lddfw_product_lightbox,
+.lddfw_product_lightbox .lddfw_product_description {
+  direction: rtl;
+  text-align: right;
+}
+
+.lddfw_product_lightbox .lddfw_product_image img {
+  float: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Premium feature locked cards */
+.lddfw_premium-feature {
+  text-align: right;
+}
+
+.premium_feature_title,
+.premium_feature_title h2,
+.premium_feature_title p {
+  text-align: center;
+}
+
+/* Small responsive fixes */
+@media screen and (max-width: 480px) {
+  .lddfw_dashboard .lddfw-primary-cta,
+  .lddfw_dashboard .lddfw-dashboard-kpi-grid > .lddfw_box,
+  .lddfw_dashboard .lddfw-order-stat-card a.lddfw-order-stat-card__link {
+    direction: rtl;
+  }
+
+  .lddfw_lightbox_close {
+    right: auto !important;
+    left: 18px !important;
+  }
+}
+
+.lddfw-toast {
+  text-align: right;
+  direction: rtl;
+}
+
+.lddfw-out-screen .lddfw_handle_column {
+  right: auto;
+  left: 0px;
+  top: 93px;
+}
+#lddfw_delivery_screen .lddfw_delivery_form .custom-control-label {
+  padding: 0.85rem 2.65rem 0.85rem 0rem;
 }

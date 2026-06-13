@@ -68,7 +68,8 @@ class LDDFW_Admin {
          * class.
          */
         $page = ( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' );
-        if ( 'lddfw-reports' === $page ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ( 'lddfw-reports' === $page || 'lddfw-drivers' === $page ) {
             wp_enqueue_style(
                 'lddfw-jquery-ui',
                 plugin_dir_url( __FILE__ ) . 'css/jquery-ui.css',
@@ -105,9 +106,30 @@ class LDDFW_Admin {
          */
         $script_array = array('jquery');
         $page = ( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' );
+        $page = ( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( 'lddfw-reports' === $page ) {
             // Add date picker script.
             $script_array = array('jquery', 'jquery-ui-core', 'jquery-ui-datepicker');
+        }
+        // Bundle the QR library for the dashboard page.
+        if ( 'lddfw-dashboard' === $page ) {
+            wp_enqueue_script(
+                'lddfw-qrcode',
+                plugin_dir_url( __FILE__ ) . 'js/vendor/qrcode.min.js',
+                array(),
+                $this->version,
+                true
+            );
+            $script_array[] = 'lddfw-qrcode';
+        }
+        // Drivers & Applications admin page needs jQuery UI Dialog.
+        if ( 'lddfw-drivers' === $page ) {
+            $script_array[] = 'jquery-ui-dialog';
+        }
+        // Routes admin page needs jQuery UI Sortable for manual stop reordering.
+        if ( 'lddfw-routes' === $page ) {
+            $script_array[] = 'jquery-ui-sortable';
         }
         wp_enqueue_script(
             $this->plugin_name,
@@ -121,6 +143,17 @@ class LDDFW_Admin {
         ) );
         wp_localize_script( $this->plugin_name, 'lddfw_nonce', array(
             'nonce' => esc_js( wp_create_nonce( 'lddfw-nonce' ) ),
+        ) );
+        wp_localize_script( $this->plugin_name, 'lddfw_admin_i18n', array(
+            'selectMedia'       => __( 'Select Media', 'lddfw' ),
+            'googleApiResults'  => __( 'Google API Test Results', 'lddfw' ),
+            'mapsEmbedApi'      => __( 'Maps Embed API', 'lddfw' ),
+            'mapsJsApi'         => __( 'Maps JavaScript API', 'lddfw' ),
+            'copied'            => __( 'Copied!', 'lddfw' ),
+            'dismiss'           => __( 'Dismiss', 'lddfw' ),
+            'senderIdRequired'  => __( 'Sender ID is required for the PowerfulWP provider.', 'lddfw' ),
+            'senderIdCharsOnly' => __( 'Only letters (A-Z) and numbers (0-9) are allowed. No spaces or special characters.', 'lddfw' ),
+            'senderIdMaxLen'    => __( 'Maximum 11 characters allowed.', 'lddfw' ),
         ) );
     }
 
@@ -137,6 +170,7 @@ class LDDFW_Admin {
         $user = new WP_User($driver_id, '', get_current_blog_id());
         if ( in_array( 'driver', (array) $user->roles, true ) ) {
             // Security check.
+            // phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified upstream in the AJAX dispatcher via lddfw_wpnonce / lddfw-nonce.
             if ( isset( $_POST['lddfw_wpnonce'] ) ) {
                 // Get list of orders.
                 $orders_list = ( isset( $_POST['lddfw_orders_list'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_orders_list'] ) ) : '' );
@@ -152,20 +186,21 @@ class LDDFW_Admin {
                             // Check if order belongs to driver and status is processing.
                             if ( intval( $order_driverid ) === intval( $driver_id ) && $current_order_status === $driver_assigned_status ) {
                                 // Update order status.
-                                $order->update_status( $out_for_delivery_status, __( 'The delivery driver changed the order status.', 'lddfw' ) );
+                                $order->update_status( $out_for_delivery_status, __( 'A delivery driver updated the order status.', 'lddfw' ) );
                                 $order->save();
                                 $result = 1;
-                                $error = '<div class=\'alert alert-success alert-dismissible fade show\'>' . __( 'Orders successfully marked as out for delivery.', 'lddfw' ) . '<button type=\'button\' class=\'close\' data-dismiss=\'alert\' aria-label=\'Close\'><span aria-hidden=\'true\'>&times;</span></button></div> <a id=\'view_out_of_delivery_orders_button\' href=\'' . lddfw_drivers_page_url( 'lddfw_screen=out_for_delivery' ) . '\'  class=\'btn btn-lg lddfw_loader btn-block btn-primary\'>' . __( 'View out for delivery orders', 'lddfw' ) . '</a>';
+                                $error = '<div class=\'alert alert-success alert-dismissible fade show\'>' . __( 'Orders have been successfully marked as out for delivery.', 'lddfw' ) . '<button type=\'button\' class=\'close\' data-dismiss=\'alert\' aria-label=\'Close\'><span aria-hidden=\'true\'>&times;</span></button></div> <a id=\'view_out_of_delivery_orders_button\' href=\'' . lddfw_drivers_page_url( 'lddfw_screen=out_for_delivery' ) . '\'  class=\'btn btn-lg lddfw_loader btn-block btn-primary\'>' . __( 'View out for delivery orders', 'lddfw' ) . '</a>';
                             }
                         }
                     }
                 } else {
-                    $error = __( 'Please choose the orders.', 'lddfw' );
+                    $error = __( 'Please select the orders.', 'lddfw' );
                 }
             }
         } else {
-            $error = __( 'User is not a delivery driver', 'lddfw' );
+            $error = __( 'This account is not registered as a delivery driver.', 'lddfw' );
         }
+        // phpcs:enable WordPress.Security.NonceVerification.Missing
         return "{\"result\":\"{$result}\",\"error\":\"{$error}\"}";
     }
 
@@ -185,7 +220,7 @@ class LDDFW_Admin {
          * Security check.
          */
         if ( !isset( $_POST['lddfw_wpnonce'] ) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['lddfw_wpnonce'] ) ), 'lddfw-nonce' ) ) {
-            $error = esc_js( __( 'Security Check Failure - This alert may occur when you are logged in as an administrator and as a delivery driver on the same browser and the same device. If you want to work on both panels please try to work with two different browsers.', 'lddfw' ) );
+            $error = esc_js( __( 'Security Check Failure - This alert may occur when you are logged in as both an administrator and a delivery driver in the same browser on the same device. If you want to use both panels, please try using two different browsers.', 'lddfw' ) );
             if ( 'json' === $lddfw_data_type ) {
                 echo "{\"result\":\"{$result}\",\"error\":\"{$error}\"}";
             } else {
@@ -199,6 +234,29 @@ class LDDFW_Admin {
         if ( 'lddfw_edit_driver' === $lddfw_service ) {
             $driver = new LDDFW_Driver();
             echo $driver->lddfw_edit_driver_service();
+        }
+        /*
+        	Driver panel theme (light/dark) toggle - persists to user meta.
+        */
+        if ( 'lddfw_driver_app_mode' === $lddfw_service ) {
+            $mode = ( isset( $_POST['lddfw_mode'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_mode'] ) ) : '' );
+            $driver_id = get_current_user_id();
+            $result = 0;
+            $error = '';
+            if ( !in_array( $mode, array('light', 'dark'), true ) ) {
+                $error = esc_js( __( 'Invalid theme mode.', 'lddfw' ) );
+            } elseif ( 0 === $driver_id ) {
+                $error = esc_js( __( 'You must be logged in.', 'lddfw' ) );
+            } else {
+                update_user_meta( $driver_id, 'lddfw_driver_app_mode', $mode );
+                $result = 1;
+            }
+            echo wp_json_encode( array(
+                'result' => (string) $result,
+                'mode'   => $mode,
+                'error'  => $error,
+            ) );
+            exit;
         }
         /* login driver service */
         if ( 'lddfw_login' === $lddfw_service ) {
@@ -312,7 +370,7 @@ class LDDFW_Admin {
                     /* Check if order belongs to driver and status is out for delivery */
                     if ( intval( $order_driverid ) === intval( $driver_id ) && ($current_order_status === $out_for_delivery_status || $current_order_status === $failed_attempt_status) ) {
                         /* Update order status */
-                        $status_note = esc_html__( 'Driver changed the order status.', 'lddfw' );
+                        $status_note = esc_html__( 'A driver updated the order status.', 'lddfw' );
                         if ( '' !== $note ) {
                             $driver_note = __( 'Driver note', 'lddfw' ) . ': ' . $note;
                             $order->update_meta_data( 'lddfw_driver_note', $note );
@@ -342,7 +400,7 @@ class LDDFW_Admin {
             wp_send_json_error( 'Unauthorized' );
         }
         $banner = ( isset( $_POST['banner'] ) ? sanitize_text_field( wp_unslash( $_POST['banner'] ) ) : '' );
-        $allowed = array('free_sms_cta', 'premium_sms_cta');
+        $allowed = array('free_sms_cta', 'premium_sms_cta', 'app_cta');
         if ( !in_array( $banner, $allowed, true ) ) {
             wp_send_json_error( 'Invalid banner' );
         }
@@ -506,6 +564,7 @@ class LDDFW_Admin {
     public function lddfw_settings_init() {
         // Get settings tab.
         $tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         register_setting( 'lddfw', 'lddfw_google_api_key' );
         register_setting( 'lddfw', 'lddfw_google_api_key_server' );
         register_setting( 'lddfw', 'lddfw_dispatch_phone_number' );
@@ -685,7 +744,7 @@ class LDDFW_Admin {
         if ( 'lddfw-drivers-settings' === $tab ) {
             add_settings_section(
                 'lddfw_delivery_panel_section',
-                __( 'Drivers Panel', 'lddfw' ),
+                __( 'Driver Panel', 'lddfw' ),
                 '',
                 'lddfw-drivers-settings'
             );
@@ -698,8 +757,15 @@ class LDDFW_Admin {
             );
             add_settings_field(
                 'lddfw_navigation_app',
-                __( 'Navigation APP', 'lddfw' ),
+                __( 'Navigation App', 'lddfw' ),
                 array($this, 'lddfw_navigation_app'),
+                'lddfw-drivers-settings',
+                'lddfw_delivery_panel_section'
+            );
+            add_settings_field(
+                'lddfw_default_route_origin',
+                __( 'Default route origin', 'lddfw' ),
+                array($this, 'lddfw_default_route_origin'),
                 'lddfw-drivers-settings',
                 'lddfw_delivery_panel_section'
             );
@@ -707,6 +773,13 @@ class LDDFW_Admin {
                 'lddfw_driver_feature_permission',
                 __( 'Driver permissions', 'lddfw' ),
                 array($this, 'lddfw_driver_feature_permission'),
+                'lddfw-drivers-settings',
+                'lddfw_delivery_panel_section'
+            );
+            add_settings_field(
+                'lddfw_assign_show_map',
+                __( 'Assigned orders map view', 'lddfw' ),
+                array($this, 'lddfw_assign_show_map'),
                 'lddfw-drivers-settings',
                 'lddfw_delivery_panel_section'
             );
@@ -732,7 +805,7 @@ class LDDFW_Admin {
             );
             add_settings_section(
                 'lddfw_delivery_notes',
-                __( 'Ready notes for the drivers', 'lddfw' ),
+                __( 'Ready notes for drivers', 'lddfw' ),
                 array($this, 'lddfw_delivery_notes_section'),
                 'lddfw-drivers-settings'
             );
@@ -771,6 +844,13 @@ class LDDFW_Admin {
                 'lddfw_delivery_assign_section'
             );
             add_settings_field(
+                'lddfw_self_assign_show_map',
+                __( 'Claim orders map view', 'lddfw' ),
+                array($this, 'lddfw_self_assign_show_map'),
+                'lddfw-drivers-settings',
+                'lddfw_delivery_assign_section'
+            );
+            add_settings_field(
                 'lddfw_auto_assign_delivery_drivers',
                 __( 'Auto-assign delivery drivers', 'lddfw' ),
                 array($this, 'lddfw_auto_assign_delivery_drivers'),
@@ -785,6 +865,13 @@ class LDDFW_Admin {
                 'lddfw_delivery_assign_section'
             );
             add_settings_field(
+                'lddfw_auto_assign_fallback_method',
+                __( 'Auto-assign fallback method', 'lddfw' ),
+                array($this, 'lddfw_auto_assign_fallback_method'),
+                'lddfw-drivers-settings',
+                'lddfw_delivery_assign_section'
+            );
+            add_settings_field(
                 'lddfw_auto_assign_suborders',
                 __( 'Auto-assign drivers to suborders', 'lddfw' ),
                 array($this, 'lddfw_auto_assign_suborders'),
@@ -792,9 +879,16 @@ class LDDFW_Admin {
                 'lddfw_delivery_assign_section'
             );
             add_settings_field(
-                'lddfw_driver_application',
-                __( 'New drivers application form', 'lddfw' ),
-                array($this, 'lddfw_driver_application'),
+                'lddfw_auto_assign_max_radius',
+                __( 'Nearest driver - maximum radius (km)', 'lddfw' ),
+                array($this, 'lddfw_auto_assign_max_radius'),
+                'lddfw-drivers-settings',
+                'lddfw_delivery_assign_section'
+            );
+            add_settings_field(
+                'lddfw_auto_assign_gps_staleness',
+                __( 'Nearest driver - GPS timeout (minutes)', 'lddfw' ),
+                array($this, 'lddfw_auto_assign_gps_staleness'),
                 'lddfw-drivers-settings',
                 'lddfw_delivery_assign_section'
             );
@@ -842,7 +936,7 @@ class LDDFW_Admin {
             );
             add_settings_field(
                 'lddfw_whatsapp_api_auth_token',
-                __( 'API AUTH TOKEN', 'lddfw' ),
+                __( 'API Auth Token', 'lddfw' ),
                 array($this, 'lddfw_whatsapp_api_auth_token'),
                 'lddfw-whatsapp-settings',
                 'lddfw_whatsapp_settings'
@@ -865,6 +959,27 @@ class LDDFW_Admin {
                 'lddfw_whatsapp_out_for_delivery',
                 __( 'WhatsApp to the customer', 'lddfw' ),
                 array($this, 'lddfw_whatsapp_out_for_delivery'),
+                'lddfw-whatsapp-settings',
+                'lddfw_whatsapp_settings'
+            );
+            add_settings_field(
+                'lddfw_review_whatsapp',
+                __( 'Review notifications (WhatsApp)', 'lddfw' ),
+                array($this, 'lddfw_review_whatsapp'),
+                'lddfw-whatsapp-settings',
+                'lddfw_whatsapp_settings'
+            );
+            add_settings_field(
+                'lddfw_admin_failed_delivery_whatsapp',
+                __( 'Failed delivery (WhatsApp to admin)', 'lddfw' ),
+                array($this, 'lddfw_admin_failed_delivery_whatsapp'),
+                'lddfw-whatsapp-settings',
+                'lddfw_whatsapp_settings'
+            );
+            add_settings_field(
+                'lddfw_application_whatsapp',
+                __( 'Driver application notifications (WhatsApp)', 'lddfw' ),
+                array($this, 'lddfw_application_whatsapp'),
                 'lddfw-whatsapp-settings',
                 'lddfw_whatsapp_settings'
             );
@@ -941,11 +1056,32 @@ class LDDFW_Admin {
                 'lddfw-sms-settings',
                 'lddfw_sms_settings'
             );
+            add_settings_field(
+                'lddfw_review_sms',
+                __( 'Review notifications (SMS)', 'lddfw' ),
+                array($this, 'lddfw_review_sms'),
+                'lddfw-sms-settings',
+                'lddfw_sms_settings'
+            );
+            add_settings_field(
+                'lddfw_admin_failed_delivery_sms',
+                __( 'Failed delivery (SMS to admin)', 'lddfw' ),
+                array($this, 'lddfw_admin_failed_delivery_sms'),
+                'lddfw-sms-settings',
+                'lddfw_sms_settings'
+            );
+            add_settings_field(
+                'lddfw_application_sms',
+                __( 'Driver application notifications (SMS)', 'lddfw' ),
+                array($this, 'lddfw_application_sms'),
+                'lddfw-sms-settings',
+                'lddfw_sms_settings'
+            );
         }
         if ( 'lddfw-branding' === $tab ) {
             add_settings_section(
                 'lddfw_branding',
-                __( 'Drivers initial screen', 'lddfw' ),
+                __( 'Driver\'s initial screen', 'lddfw' ),
                 '',
                 'lddfw-branding'
             );
@@ -1135,7 +1271,7 @@ class LDDFW_Admin {
             '<a href="#" data="[delivery_driver_last_name]">' . esc_html( __( 'Delivery Driver Last Name', 'lddfw' ) ) . '</a>',
             '<a href="#" data="[delivery_driver_page]">' . esc_html( __( 'Delivery Driver Page', 'lddfw' ) ) . '</a>',
             '<a href="#" data="[store_name]">' . esc_html( __( 'Store Name', 'lddfw' ) ) . '</a>',
-            '<a href="#" data="[order_id]">' . esc_html( __( 'Order Id', 'lddfw' ) ) . '</a>',
+            '<a href="#" data="[order_id]">' . esc_html( __( 'Order ID', 'lddfw' ) ) . '</a>',
             '<a href="#" data="[order_create_date]">' . esc_html( __( 'Order Create Date', 'lddfw' ) ) . '</a>',
             '<a href="#" data="[order_status]">' . esc_html( __( 'Order Status', 'lddfw' ) ) . '</a>',
             '<a href="#" data="[order_amount]">' . esc_html( __( 'Order Amount', 'lddfw' ) ) . '</a>',
@@ -1176,9 +1312,44 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_customer_sms() {
-        $this->lddfw_generate_sms_settings( 'sms_out_for_delivery', __( 'SMS to customer when order is out for delivery.', 'lddfw' ), __( 'Hello [billing_first_name], status of your order #[order_id] with [store_name] has been changed to [order_status].', 'lddfw' ) );
-        $this->lddfw_generate_sms_settings( '', __( 'SMS to Customer upon driver confirmation of delivery.', 'lddfw' ), __( 'Hello [billing_first_name], your order #[order_id] from [store_name] has been successfully delivered.', 'lddfw' ) );
-        $this->lddfw_generate_sms_settings( 'sms_not_delivered', __( 'SMS to Customer upon driver notification of non-delivery.', 'lddfw' ), __( 'Hello [billing_first_name], we apologize, but your order #[order_id] from [store_name] could not be delivered as scheduled.', 'lddfw' ) );
+        $this->lddfw_generate_sms_settings( 'sms_out_for_delivery', __( 'SMS to customer when an order is out for delivery.', 'lddfw' ), __( 'Hello [billing_first_name], the status of your order #[order_id] with [store_name] has been updated to [order_status].', 'lddfw' ) );
+        $this->lddfw_generate_sms_settings( '', __( 'SMS to customer when the driver confirms delivery.', 'lddfw' ), __( 'Hello [billing_first_name], your order #[order_id] from [store_name] has been successfully delivered.', 'lddfw' ) );
+        $this->lddfw_generate_sms_settings( 'sms_not_delivered', __( 'SMS to customer when the driver marks the order as not delivered.', 'lddfw' ), __( 'Hi [billing_first_name], we\'re sorry, but your order #[order_id] from [store_name] could not be delivered as scheduled.', 'lddfw' ) );
+    }
+
+    /**
+     * Review SMS notification settings (premium).
+     *
+     * Renders enable/disable toggles and templates for the review-related SMS
+     * notifications (new review, updated review, low-rating alert).
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_review_sms() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Failed-delivery SMS to admin (premium).
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_admin_failed_delivery_sms() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Driver application notifications SMS (premium, Plan 5).
+     *
+     * Renders 3 SMS template blocks for the three driver-application events:
+     * received (SMS to admin), approved (SMS to applicant), rejected
+     * (SMS to applicant). Each block is rendered by the shared SMS helper
+     * so it automatically picks up the Show/Hide tags UI.
+     *
+     * @since 2.3.0
+     */
+    public function lddfw_application_sms() {
+        echo lddfw_admin_premium_feature( '' );
     }
 
     /**
@@ -1196,6 +1367,35 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_self_assign_delivery_drivers() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Show/Hide the Map view on the Claim Orders driver screen.
+     *
+     * Default = enabled. The map is additionally gated at render time by the
+     * presence of `lddfw_google_api_key` and at least one claimable order,
+     * so this toggle is a pure UX opt-out (admins who want the list-only
+     * experience can disable it without removing the API key).
+     *
+     * @since 2.0.0 (Claim Orders map view)
+     */
+    public function lddfw_self_assign_show_map() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Setting field - toggle the Map view on the Assigned Orders screen.
+     *
+     * Mirrors `lddfw_self_assign_show_map` (which controls the claim screen):
+     * default = enabled, additionally gated at render time by the presence of
+     * `lddfw_google_api_key` and at least one assigned order. The existing
+     * "Preview route" lightbox is unaffected - this toggle only controls
+     * whether the segmented List / Map control + pin map are emitted.
+     *
+     * @since 2.0.0 (Assigned Orders map view)
+     */
+    public function lddfw_assign_show_map() {
         echo lddfw_admin_premium_feature( '' );
     }
 
@@ -1235,6 +1435,42 @@ class LDDFW_Admin {
     }
 
     /**
+     * Enable driver reviews field.
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_enable_driver_reviews_field() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Show review column field.
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_show_review_column_field() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Review edit window field.
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_review_edit_window_field() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Review page expiry field.
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_review_page_expiry_field() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
      * Plugin settings.
      *
      * @since 1.1.2
@@ -1256,6 +1492,18 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_navigation_app() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Default route origin setting.
+     *
+     * Controls which address is pre-selected as the route starting point
+     * before the driver begins deliveries.
+     *
+     * @since 2.1.0
+     */
+    public function lddfw_default_route_origin() {
         echo lddfw_admin_premium_feature( '' );
     }
 
@@ -1305,6 +1553,33 @@ class LDDFW_Admin {
     }
 
     /**
+     * Nearest driver max radius setting field.
+     *
+     * @since 2.1.0
+     */
+    public function lddfw_auto_assign_max_radius() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Nearest driver GPS staleness setting field.
+     *
+     * @since 2.1.0
+     */
+    public function lddfw_auto_assign_gps_staleness() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Auto-assign fallback method setting field.
+     *
+     * @since 2.2.0
+     */
+    public function lddfw_auto_assign_fallback_method() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
      * Plugin settings.
      *
      * @since 1.0.0
@@ -1328,7 +1603,7 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_sms_assign_to_driver() {
-        $default_template = __( 'Hello [delivery_driver_first_name], order #[order_id] with [store_name] has been assigned to you. [delivery_driver_page]', 'lddfw' );
+        $default_template = __( 'Hello [delivery_driver_first_name], order #[order_id] from [store_name] has been assigned to you. [delivery_driver_page]', 'lddfw' );
         $this->lddfw_generate_sms_settings( 'sms_assign_to_driver', __( 'SMS to the delivery driver when a new order is assigned.', 'lddfw' ), $default_template );
     }
 
@@ -1344,7 +1619,7 @@ class LDDFW_Admin {
         echo esc_attr( get_option( 'lddfw_sms_api_phone', '' ) );
         ?>'>
 			<p class="lddfw_description"><?php 
-        echo esc_html( __( 'Phone number to send SMS should be in the following format (+)(country code)(area code)(phone number) e.g +15024658206', 'lddfw' ) );
+        echo esc_html( __( 'The phone number for sending SMS messages should use the following format: (+)(country code)(area code)(phone number), e.g. +15024658206.', 'lddfw' ) );
         ?></p>
 		</div>
 		<?php 
@@ -1467,6 +1742,7 @@ class LDDFW_Admin {
      */
     public function lddfw_sanitize_sender_id( $value ) {
         $provider = ( isset( $_POST['lddfw_sms_provider'] ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_sms_provider'] ) ) : get_option( 'lddfw_sms_provider', '' ) );
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing
         if ( empty( $value ) ) {
             if ( 'powerfulwp' === $provider ) {
                 add_settings_error(
@@ -1650,6 +1926,41 @@ class LDDFW_Admin {
     }
 
     /**
+     * Review WhatsApp notification settings (premium).
+     *
+     * Renders enable/disable toggles, Content SIDs and variables for review
+     * WhatsApp notifications (new review, updated review, low-rating alert).
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_review_whatsapp() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Failed-delivery WhatsApp to admin (premium).
+     *
+     * @since 2.0.0
+     */
+    public function lddfw_admin_failed_delivery_whatsapp() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Driver application notifications WhatsApp (premium, Plan 5).
+     *
+     * Renders 3 WhatsApp template blocks: received (to admin), approved
+     * (to applicant), rejected (to applicant). Each block reuses the
+     * existing Content Template SID + variables pattern so the store can
+     * use Twilio-approved WhatsApp Content Templates.
+     *
+     * @since 2.3.0
+     */
+    public function lddfw_application_whatsapp() {
+        echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
      * Plugin whatsapp settings.
      *
      * @since 1.0.0
@@ -1720,7 +2031,7 @@ class LDDFW_Admin {
         echo sprintf(
             esc_html( 
                 /* translators: 1: line break, 2: opening link tag, 3: closing link tag */
-                __( 'In order to use the Google Maps API, we need to create two keys for application restrictions purposes.%1$s For more information about how to create the Google API key %2$sclick here%3$s.', 'lddfw' )
+                __( 'To use the Google Maps API, you need to create two keys for application restriction purposes.%1$s For more information about how to create a Google API key, %2$sclick here%3$s.', 'lddfw' )
              ),
             '<br>',
             '<a href="https://powerfulwp.com/docs/local-delivery-drivers-for-woocommerce-premium/getting-started/how-to-generate-and-set-google-maps-api-keys/" target="_blank">',
@@ -1732,7 +2043,7 @@ class LDDFW_Admin {
         echo esc_attr( get_option( 'lddfw_google_api_key', '' ) );
         ?>'><br>
 			<span class="description" id="lddfw-gooogle-api-key-description"><?php 
-        echo esc_html( __( 'Key for Maps Embed API, Maps JavaScript API, Directions API and Geocoding API. ( Application restrictions: HTTP referrers )', 'lddfw' ) );
+        echo esc_html( __( 'Key for Maps Embed API, Maps JavaScript API, Directions API, and Geocoding API. (Application restrictions: HTTP referrers)', 'lddfw' ) );
         ?></span>
 		</p>
 		<p style="margin-top:20px">
@@ -1740,16 +2051,16 @@ class LDDFW_Admin {
         echo esc_attr( get_option( 'lddfw_google_api_key_server', '' ) );
         ?>'><br>
 			<span class="description" id="lddfw-gooogle-api-key-description"><?php 
-        echo esc_html( __( 'Key for Maps Directions API, Distance Matrix API and Geocoding API. ( Application restrictions: IP addresses )', 'lddfw' ) );
+        echo esc_html( __( 'Key for Maps Directions API, Distance Matrix API, and Geocoding API. (Application restrictions: IP addresses)', 'lddfw' ) );
         ?></span>
 		</p>
 		<p style="margin-top:20px">
 			<a href="#" class="button button-secondary" data-loading="<?php 
         echo esc_attr( __( 'Loading...', 'lddfw' ) );
         ?>" data-title="<?php 
-        echo esc_attr( __( 'Test results for Key', 'lddfw' ) );
+        echo esc_attr( __( 'Test Results for Key', 'lddfw' ) );
         ?>" data-alert="<?php 
-        echo esc_attr( __( 'Please enter both Google keys.', 'lddfw' ) );
+        echo esc_attr( __( 'Please enter both Google API keys.', 'lddfw' ) );
         ?>" id="lddfw_check_google_keys"><?php 
         echo esc_html( __( 'Test Your Google Keys', 'lddfw' ) );
         ?></a>
@@ -1787,7 +2098,7 @@ class LDDFW_Admin {
         ?>
 		</select>
 		<p class="lddfw_description" id="lddfw-gooogle-api-key-description"><?php 
-        echo esc_html( __( 'The orders are ready for delivery and drivers are able to claim.', 'lddfw' ) );
+        echo esc_html( __( 'Orders are ready for delivery and available for drivers to claim.', 'lddfw' ) );
         ?></p>
 		<?php 
     }
@@ -1889,7 +2200,7 @@ class LDDFW_Admin {
         ?>
 		</select>
 		<p class="lddfw_description" id="lddfw-gooogle-api-key-description"><?php 
-        echo esc_html( __( 'The delivery driver was assigned to order.', 'lddfw' ) );
+        echo esc_html( __( 'The delivery driver was assigned to the order.', 'lddfw' ) );
         ?></p>
 		<?php 
     }
@@ -1923,7 +2234,7 @@ class LDDFW_Admin {
         ?>
 		</select>
 		<p class="lddfw_description" id="lddfw-gooogle-api-key-description"><?php 
-        echo esc_html( __( 'The delivery driver is about to deliver the shipment.', 'lddfw' ) );
+        echo esc_html( __( 'The delivery driver is on the way to deliver the order.', 'lddfw' ) );
         ?></p>
 		<?php 
     }
@@ -1934,7 +2245,7 @@ class LDDFW_Admin {
      * @since 1.0.0
      */
     public function lddfw_settings_section_callback() {
-        echo esc_html( __( 'This Section Description', 'lddfw' ) );
+        echo esc_html( __( 'This section description.', 'lddfw' ) );
     }
 
     /**
@@ -1947,43 +2258,71 @@ class LDDFW_Admin {
         $settings_title = esc_html( __( 'General Settings', 'lddfw' ) );
         // Get the current tab from the $_GET param.
         $current_tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         // Tabs array.
         $tabs = array(array(
-            'slug'  => '',
-            'label' => esc_html( __( 'General settings', 'lddfw' ) ),
-            'title' => esc_html( __( 'General settings', 'lddfw' ) ),
-            'url'   => '?page=lddfw-settings',
+            'slug'     => '',
+            'label'    => esc_html( __( 'General settings', 'lddfw' ) ),
+            'title'    => esc_html( __( 'General settings', 'lddfw' ) ),
+            'url'      => '?page=lddfw-settings',
+            'dashicon' => 'admin-generic',
         ));
         $premium_tabs = array(
             array(
-                'slug'  => 'lddfw-drivers-settings',
-                'label' => esc_html( __( 'Drivers settings', 'lddfw' ) ),
-                'title' => esc_html( __( 'Drivers settings', 'lddfw' ) ),
-                'url'   => '?page=lddfw-settings&tab=lddfw-drivers-settings',
+                'slug'     => 'lddfw-drivers-settings',
+                'label'    => esc_html( __( 'Driver settings', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Driver settings', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-drivers-settings',
+                'dashicon' => 'groups',
             ),
             array(
-                'slug'  => 'lddfw-sms-settings',
-                'label' => esc_html( __( 'SMS settings', 'lddfw' ) ),
-                'title' => esc_html( __( 'SMS settings', 'lddfw' ) ),
-                'url'   => '?page=lddfw-settings&tab=lddfw-sms-settings',
+                'slug'     => 'lddfw-sms-settings',
+                'label'    => esc_html( __( 'SMS settings', 'lddfw' ) ),
+                'title'    => esc_html( __( 'SMS settings', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-sms-settings',
+                'dashicon' => 'email-alt',
             ),
             array(
-                'slug'  => 'lddfw-whatsapp-settings',
-                'label' => esc_html( __( 'WhatsApp settings', 'lddfw' ) ),
-                'title' => esc_html( __( 'WhatsApp settings', 'lddfw' ) ),
-                'url'   => '?page=lddfw-settings&tab=lddfw-whatsapp-settings',
+                'slug'     => 'lddfw-whatsapp-settings',
+                'label'    => esc_html( __( 'WhatsApp settings', 'lddfw' ) ),
+                'title'    => esc_html( __( 'WhatsApp settings', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-whatsapp-settings',
+                'dashicon' => 'format-chat',
             ),
             array(
-                'slug'  => 'lddfw-branding',
-                'label' => esc_html( __( 'Branding', 'lddfw' ) ),
-                'title' => esc_html( __( 'Branding', 'lddfw' ) ),
-                'url'   => '?page=lddfw-settings&tab=lddfw-branding',
+                'slug'     => 'lddfw-tracking',
+                'label'    => esc_html( __( 'Tracking', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Tracking', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-tracking',
+                'dashicon' => 'location',
             ),
             array(
-                'slug'  => 'lddfw-tracking',
-                'label' => esc_html( __( 'Tracking', 'lddfw' ) ),
-                'title' => esc_html( __( 'Tracking', 'lddfw' ) ),
-                'url'   => '?page=lddfw-settings&tab=lddfw-tracking',
+                'slug'     => 'lddfw-branding',
+                'label'    => esc_html( __( 'Branding', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Branding', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-branding',
+                'dashicon' => 'art',
+            ),
+            array(
+                'slug'     => 'lddfw-application-form',
+                'label'    => esc_html( __( 'Application form', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Application form', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-application-form',
+                'dashicon' => 'feedback',
+            ),
+            array(
+                'slug'     => 'lddfw-custom-fields',
+                'label'    => esc_html( __( 'Custom Fields', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Custom Fields', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-custom-fields',
+                'dashicon' => 'editor-table',
+            ),
+            array(
+                'slug'     => 'lddfw-diagnostics',
+                'label'    => esc_html( __( 'Diagnostics', 'lddfw' ) ),
+                'title'    => esc_html( __( 'Diagnostics', 'lddfw' ) ),
+                'url'      => '?page=lddfw-settings&tab=lddfw-diagnostics',
+                'dashicon' => 'heart',
             )
         );
         $tabs = array_merge( $tabs, $premium_tabs );
@@ -1998,44 +2337,125 @@ class LDDFW_Admin {
             }
         }
         ?>
-		<div class="wrap">
+		<div class="wrap lddfw-settings-page">
 		<form action='options.php' method='post'>
 			<h1 class="wp-heading-inline"><?php 
         echo $settings_title;
         ?></h1>
 			<?php 
         echo self::lddfw_admin_plugin_bar();
+        // Place wp-header-end BEFORE the tabs so WordPress admin notices
+        // (Settings saved, etc.) render above the tab bar, not between
+        // the tabs and the section cards.
+        echo '<hr class="wp-header-end">';
         if ( 1 < count( $tabs ) ) {
             ?>
-							<nav class="nav-tab-wrapper">
+							<nav class="nav-tab-wrapper lddfw-settings-nav">
 						<?php 
             foreach ( $tabs as $tab ) {
                 $url = ( '' !== $tab['slug'] ? 'admin.php?page=lddfw-settings&tab=' . esc_attr( $tab['slug'] ) : 'admin.php?page=lddfw-settings' );
-                echo '<a href="' . esc_html( admin_url( $url ) ) . '" class="nav-tab ' . (( $current_tab === $tab['slug'] ? 'nav-tab-active' : '' )) . '">' . esc_html( $tab['label'] ) . '</a>';
+                $dashicon = ( isset( $tab['dashicon'] ) && '' !== $tab['dashicon'] ? $tab['dashicon'] : 'admin-generic' );
+                echo '<a href="' . esc_html( admin_url( $url ) ) . '" class="nav-tab ' . (( $current_tab === $tab['slug'] ? 'nav-tab-active' : '' )) . '">' . '<span class="dashicons dashicons-' . esc_attr( $dashicon ) . '"></span>' . '<span class="lddfw-tab-label">' . esc_html( $tab['label'] ) . '</span>' . '</a>';
             }
             ?>
 							</nav>
 						<?php 
         }
-        echo '<hr class="wp-header-end">';
         echo self::lddfw_sms_cta_banner();
         echo self::lddfw_powerfulwp_cta_banner();
+        // Read-only tabs don't participate in the WordPress Settings API.
+        // They render custom content instead of settings_fields() +
+        // do_settings_sections(), and the Save button is suppressed.
+        $readonly_tabs = array('lddfw-diagnostics', 'lddfw-application-form', 'lddfw-custom-fields');
         foreach ( $tabs as $tab ) {
             if ( '' === $current_tab ) {
                 settings_fields( 'lddfw' );
-                do_settings_sections( 'lddfw' );
+                self::lddfw_do_settings_sections_card( 'lddfw' );
                 break;
             } elseif ( $current_tab === $tab['slug'] ) {
-                settings_fields( $tab['slug'] );
-                do_settings_sections( $tab['slug'] );
+                if ( 'lddfw-diagnostics' === $tab['slug'] ) {
+                    $diagnostics_reports = new LDDFW_Reports();
+                    echo '<div class="lddfw-page-section lddfw-settings-section">';
+                    echo '<h2 class="lddfw-section-title"><span class="dashicons dashicons-heart"></span>' . esc_html__( 'Plugin health check', 'lddfw' ) . '</h2>';
+                    echo '<p class="description" style="margin:0 0 12px;">' . esc_html__( 'Runs automatic checks for common configuration issues. Results are cached for a few minutes.', 'lddfw' ) . '</p>';
+                    echo $diagnostics_reports->plugin_health_check();
+                    //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- returns pre-escaped HTML.
+                    echo '</div>';
+                } elseif ( 'lddfw-custom-fields' === $tab['slug'] ) {
+                    echo '<div class="lddfw-page-section lddfw-settings-section">';
+                    echo '<h2 class="lddfw-section-title"><span class="dashicons dashicons-editor-table"></span>' . esc_html__( 'Custom Fields Builder', 'lddfw' ) . '</h2>';
+                    $this->lddfw_custom_fields_builder_section();
+                    echo '</div>';
+                } elseif ( 'lddfw-application-form' === $tab['slug'] ) {
+                    echo '<div class="lddfw-page-section lddfw-settings-section">';
+                    echo '<h2 class="lddfw-section-title"><span class="dashicons dashicons-feedback"></span>' . esc_html__( 'Application form builder', 'lddfw' ) . '</h2>';
+                    $this->lddfw_application_form_builder_section();
+                    echo '</div>';
+                } else {
+                    settings_fields( $tab['slug'] );
+                    self::lddfw_do_settings_sections_card( $tab['slug'] );
+                }
                 break;
             }
         }
-        submit_button();
+        if ( !in_array( $current_tab, $readonly_tabs, true ) ) {
+            echo '<div class="lddfw-settings-footer">';
+            submit_button();
+            echo '</div>';
+        }
         ?>
 		</form>
 	</div>
 		<?php 
+    }
+
+    /**
+     * Render settings sections as cards.
+     *
+     * Mirrors WordPress core `do_settings_sections()` behavior but wraps
+     * each registered section in a `.lddfw-page-section` card with a
+     * dashicon in the section title so the Settings page visually matches
+     * the Dashboard design language.
+     *
+     * Preserves all existing `add_settings_section()` / `add_settings_field()`
+     * registrations; only the outer markup differs.
+     *
+     * @since 2.4.0
+     * @param string $page Settings page slug (same value passed to do_settings_sections).
+     * @return void
+     */
+    public static function lddfw_do_settings_sections_card( $page ) {
+        global $wp_settings_sections, $wp_settings_fields;
+        if ( !isset( $wp_settings_sections[$page] ) ) {
+            return;
+        }
+        $icons = apply_filters( 'lddfw_settings_section_icons', array(
+            'lddfw_setting_section'   => 'admin-site',
+            'lddfw_status_section'    => 'list-view',
+            'lddfw_pickup_section'    => 'location-alt',
+            'lddfw_drivers_settings'  => 'groups',
+            'lddfw_sms_settings'      => 'email-alt',
+            'lddfw_whatsapp_settings' => 'format-chat',
+            'lddfw_branding'          => 'art',
+            'lddfw_tracking'          => 'location',
+        ) );
+        foreach ( (array) $wp_settings_sections[$page] as $section ) {
+            $section_id = ( isset( $section['id'] ) ? $section['id'] : '' );
+            $icon = ( isset( $icons[$section_id] ) ? $icons[$section_id] : 'admin-generic' );
+            echo '<div class="lddfw-page-section lddfw-settings-section" id="section-' . esc_attr( $section_id ) . '">';
+            if ( !empty( $section['title'] ) ) {
+                echo '<h2 class="lddfw-section-title"><span class="dashicons dashicons-' . esc_attr( $icon ) . '"></span>' . esc_html( $section['title'] ) . '</h2>';
+            }
+            if ( !empty( $section['callback'] ) ) {
+                call_user_func( $section['callback'], $section );
+            }
+            if ( !empty( $wp_settings_fields[$page][$section_id] ) ) {
+                echo '<table class="form-table" role="presentation"><tbody>';
+                do_settings_fields( $page, $section_id );
+                echo '</tbody></table>';
+            }
+            echo '</div>';
+        }
     }
 
     /**
@@ -2065,6 +2485,22 @@ class LDDFW_Admin {
         );
         add_submenu_page(
             'lddfw-dashboard',
+            esc_html( __( 'Settings', 'lddfw' ) ),
+            esc_html( __( 'Settings', 'lddfw' ) ),
+            'edit_pages',
+            'lddfw-settings',
+            array(&$this, 'lddfw_settings')
+        );
+        add_submenu_page(
+            'lddfw-dashboard',
+            esc_html( __( 'Drivers', 'lddfw' ) ),
+            esc_html( __( 'Drivers', 'lddfw' ) ),
+            'edit_users',
+            'lddfw-drivers',
+            array(&$this, 'lddfw_drivers_page')
+        );
+        add_submenu_page(
+            'lddfw-dashboard',
             esc_html( __( 'Routes', 'lddfw' ) ),
             esc_html( __( 'Routes', 'lddfw' ) ),
             'edit_pages',
@@ -2078,14 +2514,6 @@ class LDDFW_Admin {
             'edit_pages',
             'lddfw-reports',
             array(&$this, 'lddfw_reports')
-        );
-        add_submenu_page(
-            'lddfw-dashboard',
-            esc_html( __( 'Settings', 'lddfw' ) ),
-            esc_html( __( 'Settings', 'lddfw' ) ),
-            'edit_pages',
-            'lddfw-settings',
-            array(&$this, 'lddfw_settings')
         );
         add_submenu_page(
             'lddfw-dashboard',
@@ -2118,6 +2546,7 @@ class LDDFW_Admin {
             return '';
         }
         $current_tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( 'lddfw-sms-settings' === $current_tab ) {
             return '';
         }
@@ -2128,8 +2557,8 @@ class LDDFW_Admin {
         return '<div class="lddfw_sms_cta_banner" data-banner="free_sms_cta">
 			<button type="button" class="lddfw_banner_dismiss" title="' . esc_attr__( 'Dismiss', 'lddfw' ) . '">&times;</button>
 			<div class="lddfw_sms_cta_banner_content">
-				<h3>' . esc_html__( 'Send SMS Notifications to Your Customers', 'lddfw' ) . '</h3>
-				<p>' . esc_html__( 'Keep your customers informed with real-time SMS delivery updates. Notify them when an order is assigned to a driver, out for delivery, and delivered.', 'lddfw' ) . '</p>
+				<h3>' . esc_html__( 'Send SMS notifications to your customers', 'lddfw' ) . '</h3>
+				<p>' . esc_html__( 'Keep your customers informed with real-time SMS delivery updates. Notify them when an order is assigned to a driver, marked out for delivery, or delivered.', 'lddfw' ) . '</p>
 				<a href="' . esc_url( $settings_url ) . '" class="lddfw_sms_cta_button">' . esc_html__( 'Set Up SMS Notifications', 'lddfw' ) . '</a>
 			</div>
 		</div>';
@@ -2150,6 +2579,7 @@ class LDDFW_Admin {
             return '';
         }
         $current_tab = ( isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '' );
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( 'lddfw-sms-settings' === $current_tab ) {
             return '';
         }
@@ -2161,8 +2591,45 @@ class LDDFW_Admin {
 			<button type="button" class="lddfw_banner_dismiss" title="' . esc_attr__( 'Dismiss', 'lddfw' ) . '">&times;</button>
 			<div class="lddfw_sms_cta_banner_content">
 				<h3>' . esc_html__( 'Try PowerfulWP SMS Provider', 'lddfw' ) . '</h3>
-				<p>' . esc_html__( 'Send SMS notifications using the PowerfulWP SMS service. Easy setup, competitive pricing, and no external accounts needed. Get started in minutes.', 'lddfw' ) . '</p>
+				<p>' . esc_html__( 'Send SMS notifications using the PowerfulWP SMS service. Easy setup, competitive pricing, and no external accounts required. Get started in minutes.', 'lddfw' ) . '</p>
 				<a href="' . esc_url( $settings_url ) . '" class="lddfw_sms_cta_button">' . esc_html__( 'Get Started', 'lddfw' ) . '</a>
+			</div>
+		</div>';
+    }
+
+    /**
+     * CTA banner promoting the native "App for Delivery Drivers" add-on.
+     *
+     * Hidden automatically when the companion add-on plugin is already
+     * installed + active (nothing to upsell) or when the current user has
+     * dismissed the banner (`lddfw_dismissed_app_cta` user meta, stored via
+     * the shared `lddfw_dismiss_banner` AJAX handler).
+     *
+     * Reuses `.lddfw_sms_cta_banner` / `.lddfw_banner_dismiss` so it inherits
+     * the existing WordPress-native styling and the dismiss JS in
+     * `admin/js/lddfw-admin.js` without duplication.
+     *
+     * @since 2.3.0
+     * @return string HTML markup or empty string.
+     */
+    public static function lddfw_app_cta_banner() {
+        $addon_plugin_path = 'app-for-delivery-drivers-premium/app-for-delivery-drivers.php';
+        if ( !function_exists( 'is_plugin_active' ) ) {
+            include_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        if ( is_plugin_active( $addon_plugin_path ) ) {
+            return '';
+        }
+        if ( get_user_meta( get_current_user_id(), 'lddfw_dismissed_app_cta', true ) ) {
+            return '';
+        }
+        $app_page_url = admin_url( 'admin.php?page=lddfw-app' );
+        return '<div class="lddfw_sms_cta_banner lddfw_app_cta_banner" data-banner="app_cta">
+			<button type="button" class="lddfw_banner_dismiss" title="' . esc_attr__( 'Dismiss', 'lddfw' ) . '">&times;</button>
+			<div class="lddfw_sms_cta_banner_content">
+				<h3><span class="dashicons dashicons-smartphone" aria-hidden="true"></span> ' . esc_html__( 'Give your drivers a native mobile app', 'lddfw' ) . '</h3>
+				<p>' . esc_html__( 'The "App for Delivery Drivers" add-on turns the driver panel into a native Android and iOS app - with push notifications, background tracking, and a faster, more reliable on-the-road experience.', 'lddfw' ) . '</p>
+				<a href="' . esc_url( $app_page_url ) . '" class="lddfw_sms_cta_button">' . esc_html__( 'Learn more', 'lddfw' ) . '</a>
 			</div>
 		</div>';
     }
@@ -2188,21 +2655,112 @@ class LDDFW_Admin {
     }
 
     /**
+     * Drivers & Applications admin page.
+     *
+     * @since 2.3.0
+     * @return void
+     */
+    public function lddfw_drivers_page() {
+        if ( !current_user_can( 'edit_users' ) ) {
+            wp_die( esc_html__( 'You do not have permission to access this page.', 'lddfw' ) );
+        }
+        if ( class_exists( 'LDDFW_Drivers_Page' ) ) {
+            LDDFW_Drivers_Page::render();
+        }
+    }
+
+    /**
+     * AJAX: return the driver create/edit form HTML for the modal.
+     *
+     * @since 2.3.0
+     * @return void
+     */
+    public function lddfw_driver_form_ajax() {
+        check_ajax_referer( 'lddfw-drivers-page', 'nonce' );
+        if ( !current_user_can( 'edit_users' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'Insufficient permissions.', 'lddfw' ),
+            ), 403 );
+        }
+        $driver_id = ( isset( $_POST['driver_id'] ) ? intval( $_POST['driver_id'] ) : 0 );
+        $driver = new LDDFW_Driver();
+        $html = $driver->lddfw_admin_driver_form( $driver_id );
+        wp_send_json_success( array(
+            'html'      => $html,
+            'driver_id' => $driver_id,
+            'is_new'    => 0 === $driver_id,
+            'title'     => ( 0 === $driver_id ? __( 'Add new driver', 'lddfw' ) : __( 'Edit driver', 'lddfw' ) ),
+        ) );
+    }
+
+    /**
+     * AJAX: save a new or existing driver from the modal.
+     *
+     * @since 2.3.0
+     * @return void
+     */
+    public function lddfw_driver_save_ajax() {
+        check_ajax_referer( 'lddfw-drivers-page', 'nonce' );
+        if ( !current_user_can( 'edit_users' ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'Insufficient permissions.', 'lddfw' ),
+            ), 403 );
+        }
+        $driver = new LDDFW_Driver();
+        $json = $driver->lddfw_admin_driver_save_service();
+        $decoded = json_decode( $json, true );
+        if ( !is_array( $decoded ) ) {
+            wp_send_json_error( array(
+                'message' => __( 'Unknown error saving driver.', 'lddfw' ),
+            ) );
+        }
+        if ( empty( $decoded['result'] ) ) {
+            wp_send_json_error( array(
+                'message' => ( isset( $decoded['error'] ) ? $decoded['error'] : '' ),
+            ) );
+        }
+        wp_send_json_success( $decoded );
+    }
+
+    /**
      * Admin routes screen.
      *
      * @since 1.0.0
      */
     public function lddfw_routes() {
         if ( lddfw_is_free() ) {
-            $content = lddfw_admin_premium_feature( '' ) . ' ' . esc_html( __( "View drivers' routes on a map.", 'lddfw' ) ) . '
-					<hr>' . lddfw_admin_premium_feature( '' ) . ' ' . esc_html( __( "View routes' duration and distance.", 'lddfw' ) ) . '
-					<hr>
-					' . esc_html( __( 'Upgrading to Premium will unlock it.', 'lddfw' ) ) . '
-					<br><a target="_blank" href="https://powerfulwp.com/local-delivery-drivers-for-woocommerce-premium#pricing" class="lddfw_premium_buynow">' . esc_html( __( 'UNLOCK PREMIUM', 'lddfw' ) ) . '</a>
-					<br>
-					<img style="max-width:100%" src="' . plugins_url() . '/' . LDDFW_FOLDER . '/public/images/routes-preview.png?ver=' . LDDFW_VERSION . '">
-					';
-            echo lddfw_premium_feature_notice_content( $content );
+            $pricing_url = 'https://powerfulwp.com/local-delivery-drivers-for-woocommerce-premium#pricing';
+            $plugin_bootstrap = dirname( dirname( __FILE__ ) ) . '/local-delivery-drivers-for-wooCommerce.php';
+            $preview_src = plugins_url( 'public/images/routes-preview.png', $plugin_bootstrap );
+            if ( defined( 'LDDFW_VERSION' ) ) {
+                $preview_src = add_query_arg( 'ver', LDDFW_VERSION, $preview_src );
+            }
+            $star = ( function_exists( 'lddfw_admin_premium_feature' ) ? lddfw_admin_premium_feature( '' ) : '' );
+            $bullets = '<p>' . $star . ' ' . esc_html__( "See every driver's active route plotted on a live map.", 'lddfw' ) . '</p>';
+            $bullets .= '<p>' . $star . ' ' . esc_html__( "Monitor each route's duration and total distance at a glance.", 'lddfw' ) . '</p>';
+            $bullets .= '<p>' . $star . ' ' . esc_html__( 'Identify delays and optimize your delivery operations.', 'lddfw' ) . '</p>';
+            echo '<div class="wrap lddfw-routes-wrap lddfw-routes-wrap--free-gate">';
+            echo '<h1 class="wp-heading-inline">' . esc_html__( 'Driver Routes', 'lddfw' ) . '</h1>';
+            echo '<hr class="wp-header-end">';
+            echo '<div class="lddfw-page-section">';
+            echo '<div class="lddfw-routes-premium-gate">';
+            if ( function_exists( 'lddfw_premium_feature_notice_content' ) ) {
+                echo lddfw_premium_feature_notice_content( $bullets );
+            } else {
+                echo '<div class="lddfw_premium-feature-content"><h2>' . esc_html__( 'Premium Feature', 'lddfw' ) . '</h2>';
+                echo '<p>' . esc_html__( 'You Discovered a Premium Feature!', 'lddfw' ) . '</p>';
+                echo wp_kses_post( $bullets );
+                echo '</div>';
+            }
+            echo '<p class="lddfw-routes-premium-gate__cta">';
+            echo '<a href="' . esc_url( lddfw_fs()->checkout_url() ) . '" class="button button-primary button-hero" target="_blank" rel="noopener noreferrer">' . esc_html__( 'UNLOCK PREMIUM', 'lddfw' ) . '</a>';
+            echo '</p>';
+            echo '<figure class="lddfw-routes-premium-gate__preview">';
+            echo '<img src="' . esc_url( $preview_src ) . '" alt="' . esc_attr__( 'Preview of the Routes admin screen with map and driver list.', 'lddfw' ) . '" loading="lazy" />';
+            echo '</figure>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
         }
     }
 
@@ -2214,6 +2772,7 @@ class LDDFW_Admin {
      */
     public function lddfw_users_list_columns( $column ) {
         if ( isset( $_GET['role'] ) && 'driver' === $_GET['role'] ) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $column['lddfw_driver_availability'] = 'Availability';
             $column['lddfw_driver_claim'] = 'Claim orders';
             $column['lddfw_driver_account'] = 'Account';
@@ -2241,6 +2800,9 @@ class LDDFW_Admin {
                 return lddfw_admin_premium_feature( $driver_claim_icon );
             case 'lddfw_driver_account':
                 return lddfw_admin_premium_feature( $driver_account_icon );
+            case 'lddfw_driver_avg_rating':
+                $rating_html = '';
+                return lddfw_admin_premium_feature( $rating_html );
             default:
         }
         return $val;
@@ -2262,6 +2824,8 @@ class LDDFW_Admin {
                 if ( !empty( $user ) ) {
                     echo esc_html( $user->display_name );
                 }
+                break;
+            case 'lddfw_driver_rating':
                 break;
         }
     }
@@ -2382,7 +2946,7 @@ class LDDFW_Admin {
             ?></option>
 						</select>
 						<p class="lddfw_description"><?php 
-            echo esc_html( __( 'Only drivers with active accounts can access the drivers\' panel.', 'lddfw' ) );
+            echo esc_html( __( 'Only drivers with active accounts can access the driver panel.', 'lddfw' ) );
             ?></p>
 					</td>
 			</tr>
@@ -2405,7 +2969,7 @@ class LDDFW_Admin {
             ?></option>
 						</select>
 						<p class="lddfw_description"><?php 
-            echo esc_html( __( 'The delivery driver availability for work today.', 'lddfw' ) );
+            echo esc_html( __( 'The delivery driver\'s availability for work today.', 'lddfw' ) );
             ?></p>
 					</td>
 			</tr>
@@ -2489,6 +3053,8 @@ class LDDFW_Admin {
             ?>
 				</td>
 			</tr>
+			<?php 
+            ?>
 			</table>
 
 			<?php 
@@ -2550,11 +3116,11 @@ class LDDFW_Admin {
 				<p>
 					<b><a target="_blank" href="' . lddfw_drivers_page_url( '' ) . '">' . lddfw_drivers_page_url( '' ) . '</a></b><br>' . sprintf( esc_html( 
             /* translators: 1: line break, 2: line break */
-            __( 'The link above is the delivery driver\'s Mobile-Friendly panel URL. %1$s The delivery drivers can access it from their mobile phones. %2$s', 'lddfw' )
+            __( 'The link above is the delivery driver\'s mobile-friendly panel URL. %1$s Delivery drivers can access it from their mobile phones. %2$s', 'lddfw' )
          ), '<br>', '<br>' ) . sprintf(
             esc_html( 
                 /* translators: 1: line break, 2: opening bold tag, 3: closing bold tag */
-                __( 'Notice: If you want to be logged in as an administrator and to check the drivers\' panel on the same device, %1$s %2$syou must work with two different browsers otherwise you will log out from the admin panel and the drivers\' panel won\'t function correctly.%3$s', 'lddfw' )
+                __( 'Notice: To stay logged in as both an administrator and a delivery driver, you must use two different browsers. Otherwise you may be logged out of the admin panel and the driver panel may not work correctly.', 'lddfw' )
              ),
             '<br>',
             '<b>',
@@ -2631,6 +3197,38 @@ class LDDFW_Admin {
      */
     public function lddfw_proof_of_delivery_max_images() {
         echo lddfw_admin_premium_feature( '' );
+    }
+
+    /**
+     * Settings: Custom Fields Builder (Custom Fields tab).
+     *
+     * Renders the UI for managing lddfw_custom_fields CPT posts via
+     * a visual builder interface instead of the raw WordPress editor.
+     *
+     * @return void
+     */
+    public function lddfw_custom_fields_builder_section() {
+        if ( !lddfw_fs()->is__premium_only() || !lddfw_fs()->can_use_premium_code() ) {
+            echo '<p>' . esc_html__( 'This feature requires a premium license.', 'lddfw' ) . '</p>';
+            echo '<p><a href="' . esc_url( lddfw_fs()->checkout_url() ) . '" class="button button-primary button-hero" target="_blank" rel="noopener noreferrer">' . esc_html__( 'UNLOCK PREMIUM', 'lddfw' ) . '</a></p>';
+            return;
+        }
+    }
+
+    /**
+     * Settings: Application form builder (Application form tab).
+     *
+     * @return void
+     */
+    public function lddfw_application_form_builder_section() {
+        if ( !lddfw_fs()->is__premium_only() || !lddfw_fs()->can_use_premium_code() ) {
+            echo '<p>' . esc_html__( 'This feature requires a premium license.', 'lddfw' ) . '</p>';
+            echo '<p><a href="' . esc_url( lddfw_fs()->checkout_url() ) . '" class="button button-primary button-hero" target="_blank" rel="noopener noreferrer">' . esc_html__( 'UNLOCK PREMIUM', 'lddfw' ) . '</a></p>';
+            return;
+        }
+        if ( !class_exists( 'LDDFW_Application_Fields' ) ) {
+            return;
+        }
     }
 
 }

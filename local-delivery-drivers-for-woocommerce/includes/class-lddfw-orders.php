@@ -134,6 +134,140 @@ class LDDFW_Orders {
     }
 
     /**
+     * Status counts for the dashboard KPI cards (orders with a driver assigned).
+     *
+     * Matches the admin order list filter `lddfw_orders_filter=-1` ("With drivers"):
+     * only orders where `lddfw_driverid` exists and is not empty or `-1`.
+     * - Driver-assigned, out-for-delivery, failed-attempt: current count regardless of date.
+     * - Delivered: today only, joined via the ldddfw_orders sync table for the delivered_date.
+     *
+     * @since 2.3.1
+     * @return array Associative array of status => order count.
+     */
+    public function lddfw_all_orders_status_counts() {
+        global $wpdb;
+        $driver_assigned_status = get_option( 'lddfw_driver_assigned_status', '' );
+        $out_for_delivery_status = get_option( 'lddfw_out_for_delivery_status', '' );
+        $failed_attempt_status = get_option( 'lddfw_failed_attempt_status', '' );
+        $delivered_status = get_option( 'lddfw_delivered_status', '' );
+        $today = date_i18n( 'Y-m-d' );
+        $counts = array(
+            $driver_assigned_status  => 0,
+            $out_for_delivery_status => 0,
+            $failed_attempt_status   => 0,
+            $delivered_status        => 0,
+        );
+        if ( lddfw_is_hpos_enabled() ) {
+            $rows = $wpdb->get_results( $wpdb->prepare( 'SELECT o.status AS post_status, COUNT(o.id) AS orders
+					FROM ' . $wpdb->prefix . 'wc_orders o
+					INNER JOIN ' . $wpdb->prefix . 'wc_orders_meta om ON o.id = om.order_id AND om.meta_key = \'lddfw_driverid\'
+					LEFT JOIN ' . $wpdb->prefix . 'lddfw_orders ldo ON o.id = ldo.order_id
+					WHERE o.type = \'shop_order\'
+					AND om.meta_value != %s AND om.meta_value != \'\'
+					AND (
+						o.status IN (%s, %s, %s) OR
+						( o.status = %s AND CAST( ldo.delivered_date AS DATE ) = %s )
+					)
+					GROUP BY o.status', array(
+                '-1',
+                $driver_assigned_status,
+                $out_for_delivery_status,
+                $failed_attempt_status,
+                $delivered_status,
+                $today
+            ) ) );
+        } else {
+            $rows = $wpdb->get_results( $wpdb->prepare( 'SELECT p.post_status, COUNT(p.ID) AS orders
+					FROM ' . $wpdb->prefix . 'posts p
+					INNER JOIN ' . $wpdb->prefix . 'postmeta pm ON p.ID = pm.post_id AND pm.meta_key = \'lddfw_driverid\'
+					LEFT JOIN ' . $wpdb->prefix . 'lddfw_orders ldo ON p.ID = ldo.order_id
+					WHERE p.post_type = \'shop_order\'
+					AND pm.meta_value != %s AND pm.meta_value != \'\'
+					AND (
+						p.post_status IN (%s, %s, %s) OR
+						( p.post_status = %s AND CAST( ldo.delivered_date AS DATE ) = %s )
+					)
+					GROUP BY p.post_status', array(
+                '-1',
+                $driver_assigned_status,
+                $out_for_delivery_status,
+                $failed_attempt_status,
+                $delivered_status,
+                $today
+            ) ) );
+            // db call ok; no-cache ok.
+        }
+        if ( !empty( $rows ) ) {
+            foreach ( $rows as $row ) {
+                $counts[$row->post_status] = (int) $row->orders;
+            }
+        }
+        return $counts;
+    }
+
+    /**
+     * Count delivery-pipeline orders in a status but without a driver assigned.
+     *
+     * Matches the admin order list filter `lddfw_orders_filter=-2` ("Without drivers")
+     * for driver-assigned, out-for-delivery, and failed-attempt statuses.
+     *
+     * @since 2.3.2
+     * @return array Associative array of status => order count.
+     */
+    public function lddfw_delivery_status_orphan_counts() {
+        global $wpdb;
+        $driver_assigned_status = get_option( 'lddfw_driver_assigned_status', '' );
+        $out_for_delivery_status = get_option( 'lddfw_out_for_delivery_status', '' );
+        $failed_attempt_status = get_option( 'lddfw_failed_attempt_status', '' );
+        $counts = array(
+            $driver_assigned_status  => 0,
+            $out_for_delivery_status => 0,
+            $failed_attempt_status   => 0,
+        );
+        if ( '' === $driver_assigned_status && '' === $out_for_delivery_status && '' === $failed_attempt_status ) {
+            return $counts;
+        }
+        if ( lddfw_is_hpos_enabled() ) {
+            $rows = $wpdb->get_results( $wpdb->prepare( 'SELECT o.status AS post_status, COUNT(o.id) AS orders
+					FROM ' . $wpdb->prefix . 'wc_orders o
+					LEFT JOIN ' . $wpdb->prefix . 'wc_orders_meta om ON o.id = om.order_id AND om.meta_key = \'lddfw_driverid\'
+					WHERE o.type = \'shop_order\'
+					AND o.status IN (%s, %s, %s)
+					AND ( om.meta_value IS NULL OR om.meta_value = %s OR om.meta_value = %s )
+					GROUP BY o.status', array(
+                $driver_assigned_status,
+                $out_for_delivery_status,
+                $failed_attempt_status,
+                '-1',
+                ''
+            ) ) );
+        } else {
+            $rows = $wpdb->get_results( $wpdb->prepare( 'SELECT p.post_status, COUNT(p.ID) AS orders
+					FROM ' . $wpdb->prefix . 'posts p
+					LEFT JOIN ' . $wpdb->prefix . 'postmeta pm ON p.ID = pm.post_id AND pm.meta_key = \'lddfw_driverid\'
+					WHERE p.post_type = \'shop_order\'
+					AND p.post_status IN (%s, %s, %s)
+					AND ( pm.meta_value IS NULL OR pm.meta_value = %s OR pm.meta_value = %s )
+					GROUP BY p.post_status', array(
+                $driver_assigned_status,
+                $out_for_delivery_status,
+                $failed_attempt_status,
+                '-1',
+                ''
+            ) ) );
+            // db call ok; no-cache ok.
+        }
+        if ( !empty( $rows ) ) {
+            foreach ( $rows as $row ) {
+                if ( isset( $counts[$row->post_status] ) ) {
+                    $counts[$row->post_status] = (int) $row->orders;
+                }
+            }
+        }
+        return $counts;
+    }
+
+    /**
      * Dashboard claim report query.
      *
      * @since 1.0.0
@@ -342,6 +476,7 @@ class LDDFW_Orders {
             }
             // Execute the query.
             $result = $wpdb->get_results( $query );
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Query is built via $wpdb->prepare(); post-filter value is intentionally trusted (documented extension point).
         }
         return $result;
     }
@@ -410,9 +545,7 @@ class LDDFW_Orders {
                 }
                 // Print coordinates.
                 if ( '' !== $coordinates ) {
-                    $html .= '<a class="lddfw_order_address lddfw_order_coordinates lddfw_loader" href="' . esc_url( lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) ) . '">
-							<span><svg style="width:14px;height:14px;" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="map-marker-alt" class="svg-inline--fa fa-map-marker-alt fa-w-12" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path></svg>
-					 		' . esc_attr( $coordinates ) . '</span></a>';
+                    $html .= '<a class="lddfw_order_address lddfw_order_coordinates lddfw_loader" href="' . esc_url( lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) ) . '">' . esc_html( $coordinates ) . '</a>';
                 }
                 $html .= '<div class="lddfw_handle_column"  style="display:none"><button  class="lddfw_sort-up btn btn-secondary "><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-up" class="svg-inline--fa fa-chevron-up fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M240.971 130.524l194.343 194.343c9.373 9.373 9.373 24.569 0 33.941l-22.667 22.667c-9.357 9.357-24.522 9.375-33.901.04L224 227.495 69.255 381.516c-9.379 9.335-24.544 9.317-33.901-.04l-22.667-22.667c-9.373-9.373-9.373-24.569 0-33.941L207.03 130.525c9.372-9.373 24.568-9.373 33.941-.001z"></path></svg></button><button class="btn btn-secondary lddfw_sort-down">
 							<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg></button></div>
@@ -474,7 +607,7 @@ class LDDFW_Orders {
                     $html .= '<a class=\'lddfw_order_distance lddfw_loader lddfw_line\' href=\'' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '\'>' . esc_html( __( 'Distance', 'lddfw' ) ) . ': ' . $distance . '</a>';
                 }
                 if ( '' !== $delivered_date ) {
-                    $html .= '<a class=\'lddfw_order_failed_date lddfw_loader lddfw_line\' href=\'' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '\'>' . esc_html( __( 'Failed Date', 'lddfw' ) ) . ': ' . date( $date_format . ' ' . $time_format, strtotime( $failed_date ) ) . '</a>';
+                    $html .= '<a class=\'lddfw_order_failed_date lddfw_loader lddfw_line\' href=\'' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '\'>' . esc_html( __( 'Failed Date', 'lddfw' ) ) . ': ' . gmdate( $date_format . ' ' . $time_format, strtotime( $failed_date ) ) . '</a>';
                 }
                 $html .= '<input style="display:none" orderid="' . $orderid . '" type="checkbox" value="' . $orderid . '" class="lddfw_address_chk">
 						</div>
@@ -500,6 +633,16 @@ class LDDFW_Orders {
         $counter = 0;
         $results = $this->lddfw_orders_query( $driver_id, get_option( 'lddfw_driver_assigned_status', '' ) );
         if ( !empty( $results ) ) {
+            // Map view support - lazy geocode cache. Same pattern as the claim
+            // screen: only resolve coordinates when the map feature is likely
+            // in use (premium + Google key + admin toggle on) so list-only
+            // installs never incur a Geocoding bill. The "Preview route"
+            // feature already requires the API key, so most assigned-orders
+            // installs already have it - this reuses the same `_lddfw_address_geocode`
+            // meta cache that LDDFW_Driver / LDDFW_Tracking warm elsewhere.
+            $lddfw_assign_geocode_enabled = lddfw_fs()->is__premium_only() && lddfw_fs()->is_plan( 'premium', true ) && '' !== get_option( 'lddfw_google_api_key', '' ) && '0' !== get_option( 'lddfw_assign_show_map', '1' );
+            $lddfw_assign_geocode_budget = 20;
+            $lddfw_assign_route = ( $lddfw_assign_geocode_enabled ? new LDDFW_Route() : null );
             $lddfw_order = new LDDFW_Order();
             foreach ( $results as $result ) {
                 $orderid = $result->ID;
@@ -507,9 +650,35 @@ class LDDFW_Orders {
                 // Get and fromat shipping address.
                 $shipping_array = $lddfw_order->lddfw_order_address( 'shipping', $order, $orderid );
                 $shipping_address = lddfw_format_address( 'address', $shipping_array );
+                // Resolve/warm geocode for the map view. Cheap when meta exists.
+                $assign_lat = '';
+                $assign_lng = '';
+                if ( $lddfw_assign_geocode_enabled ) {
+                    $geocode_array = $order->get_meta( '_lddfw_address_geocode' );
+                    if ( empty( $geocode_array ) && $lddfw_assign_geocode_budget > 0 ) {
+                        --$lddfw_assign_geocode_budget;
+                        $lddfw_assign_route->set_order_geocode( $orderid );
+                        $fresh_order = wc_get_order( $orderid );
+                        if ( $fresh_order ) {
+                            $geocode_array = $fresh_order->get_meta( '_lddfw_address_geocode' );
+                        }
+                    }
+                    if ( !empty( $geocode_array ) && is_array( $geocode_array ) && isset( $geocode_array[0] ) && 'ZERO_RESULTS' !== $geocode_array[0] && !empty( $geocode_array[1] ) ) {
+                        $coord_parts = explode( ',', $geocode_array[1] );
+                        if ( 2 === count( $coord_parts ) ) {
+                            $lat_candidate = trim( $coord_parts[0] );
+                            $lng_candidate = trim( $coord_parts[1] );
+                            if ( is_numeric( $lat_candidate ) && is_numeric( $lng_candidate ) ) {
+                                $assign_lat = $lat_candidate;
+                                $assign_lng = $lng_candidate;
+                            }
+                        }
+                    }
+                }
                 ++$counter;
+                $assign_order_label = '#' . $order->get_order_number();
                 $html .= '
-					<div class="lddfw_box lddfw_multi_checkbox">
+					<div class="lddfw_box lddfw_multi_checkbox"' . ' data-orderid="' . esc_attr( $orderid ) . '"' . ' data-label="' . esc_attr( $assign_order_label ) . '"' . ' data-address="' . esc_attr( wp_strip_all_tags( $shipping_address ) ) . '"' . (( '' !== $assign_lat ? ' data-lat="' . esc_attr( $assign_lat ) . '"' : '' )) . (( '' !== $assign_lng ? ' data-lng="' . esc_attr( $assign_lng ) . '"' : '' )) . '>
 						<div class="row">
 							<div class="col-12">';
                 $order_number_html = '<div class="lddfw_order_number"><b>' . esc_html( __( 'Order #', 'lddfw' ) ) . $order->get_order_number() . '</b></div>';
@@ -611,7 +780,7 @@ class LDDFW_Orders {
                     $html .= '<a class="lddfw_order_distance lddfw_loader lddfw_line" href="' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '">' . esc_html( __( 'Distance', 'lddfw' ) ) . ': ' . $distance . '</a>';
                 }
                 if ( '' !== $delivered_date ) {
-                    $html .= '<a class="lddfw_order_delivered_date lddfw_loader lddfw_line" href="' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '">' . esc_html( __( 'Delivered Date', 'lddfw' ) ) . ': ' . date( $date_format . ' ' . $time_format, strtotime( $delivered_date ) ) . '</a>';
+                    $html .= '<a class="lddfw_order_delivered_date lddfw_loader lddfw_line" href="' . lddfw_drivers_page_url( 'lddfw_screen=order&lddfw_orderid=' . $orderid ) . '">' . esc_html( __( 'Delivered Date', 'lddfw' ) ) . ': ' . gmdate( $date_format . ' ' . $time_format, strtotime( $delivered_date ) ) . '</a>';
                 }
                 $html .= '<input style="display:none" orderid="' . $orderid . '" type="checkbox" value="' . $orderid . '" class="address_chk">
 						</div>

@@ -139,12 +139,15 @@ class LDDFW_MetaBoxes {
             return;
         }
         // Check the nonce.
-        if ( !isset( $_POST['lddfw_metaboxes_key'] ) || !wp_verify_nonce( $_POST['lddfw_metaboxes_key'], 'lddfw-save-order' ) ) {
+        if ( !isset( $_POST['lddfw_metaboxes_key'] ) || !wp_verify_nonce( sanitize_key( wp_unslash( $_POST['lddfw_metaboxes_key'] ) ), 'lddfw-save-order' ) ) {
             return;
         }
-        // Check the post being saved == the $post_id to prevent triggering this call for other save_post events.
-        if ( empty( $_POST['post_ID'] ) || absint( $_POST['post_ID'] ) !== $post_id ) {
-            return;
+        // On legacy CPT screens, verify the saved post matches $post_id to prevent stray save_post events.
+        // On HPOS screens the order edit form does not include a post_ID field, so skip this check.
+        if ( !lddfw_is_hpos_enabled() ) {
+            if ( empty( $_POST['post_ID'] ) || absint( $_POST['post_ID'] ) !== $post_id ) {
+                return;
+            }
         }
         // Check user has permission to edit.
         if ( !current_user_can( 'edit_post', $post_id ) ) {

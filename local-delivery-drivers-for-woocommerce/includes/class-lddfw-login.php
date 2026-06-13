@@ -58,6 +58,7 @@ class LDDFW_Login {
 				<div class="container">
 					<div class="row">
 						<div class="col-12">
+						<div class="lddfw-auth-card">
 							<h1>' . esc_html( __( 'Login', 'lddfw' ) ) . '</h1>
 							<p>' . esc_html( __( 'Enter your details below to continue.', 'lddfw' ) ) . '</p>
 							<form method="post" name="lddfw_login_frm" id="lddfw_login_frm" action="' . esc_url( admin_url( 'admin-ajax.php' ) ) . '" nextpage="' . lddfw_drivers_page_url( 'lddfw_screen=dashboard' ) . '">
@@ -74,6 +75,7 @@ class LDDFW_Login {
 								</button>
 								<a href="#" id="lddfw_forgot_password_link">' . esc_html( __( 'Forgot password?', 'lddfw' ) ) . '</a>
 							</form>
+							</div>
 						</div>';
         $html .= '</div>
 				</div>
@@ -114,6 +116,7 @@ class LDDFW_Login {
         $error = '';
         $result = '0';
         // Security check.
+        // phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified upstream in the AJAX dispatcher via lddfw_wpnonce / lddfw-nonce.
         if ( isset( $_POST['lddfw_wpnonce'] ) ) {
             if ( isset( $_POST['lddfw_login_email'] ) ) {
                 $email = sanitize_email( wp_unslash( $_POST['lddfw_login_email'] ) );
@@ -121,6 +124,7 @@ class LDDFW_Login {
             if ( isset( $_POST['lddfw_login_password'] ) ) {
                 $password = sanitize_text_field( wp_unslash( $_POST['lddfw_login_password'] ) );
             }
+            // phpcs:enable WordPress.Security.NonceVerification.Missing
             // Check for empty fields.
             if ( empty( $email ) ) {
                 // No email.
@@ -132,20 +136,20 @@ class LDDFW_Login {
                 } else {
                     if ( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
                         // Invalid Email.
-                        $error = __( 'The email is invalid.', 'lddfw' );
+                        $error = __( 'The email address is invalid.', 'lddfw' );
                     } else {
                         // Check if user exists in WordPress database.
                         $user = get_user_by( 'email', $email );
                         // Bad email.
                         if ( !$user ) {
-                            $error = __( 'Either the email or password you entered is invalid.', 'lddfw' );
+                            $error = __( 'The email or password you entered is invalid.', 'lddfw' );
                         } else {
                             $user_id = $user->ID;
                             $user = new WP_User($user_id, '', get_current_blog_id());
                             // Check password.
                             if ( !wp_check_password( $password, $user->user_pass, $user->ID ) ) {
                                 // Bad password.
-                                $error = __( 'Either the email or password you entered is invalid.', 'lddfw' );
+                                $error = __( 'The email or password you entered is invalid.', 'lddfw' );
                             } else {
                                 if ( !in_array( 'driver', (array) $user->roles, true ) ) {
                                     $error = __( 'You are not a registered delivery driver.', 'lddfw' );

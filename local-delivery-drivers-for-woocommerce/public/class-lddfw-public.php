@@ -56,17 +56,17 @@ class LDDFW_Public {
      * @since 1.0.0
      */
     public function enqueue_styles() {
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in LDDFW_Loader as all of the hooks are defined
-         * in that particular class.
-         *
-         * The LDDFW_Loader will then create the relationship
-         * between the defined hooks and the functions defined in this
-         * class.
-         */
+        // Load lddfw-public.css on My Account > View Order so the review UI (rating display, comment bubble)
+        // renders with the correct styles without relying on inline CSS.
+        if ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'view-order' ) ) {
+            wp_enqueue_style(
+                'lddfw-public',
+                plugins_url() . '/' . LDDFW_FOLDER . '/public/css/lddfw-public.css',
+                array(),
+                LDDFW_VERSION,
+                'all'
+            );
+        }
     }
 
     /**
@@ -177,9 +177,15 @@ class LDDFW_Public {
         $lddfw_driver_name = $lddfw_user->display_name;
         $lddfw_driver_availability = get_user_meta( $lddfw_driver_id, 'lddfw_driver_availability', true );
         /**
-         * Set current status names
+         * Set current status names (driver panel labels).
+         *
+         * The assign-to-driver workspace uses a fixed driver-facing label
+         * "Assigned Orders" for the header, menu, and dashboard card - it
+         * intentionally does not mirror the WooCommerce order-status label
+         * for `driver-assigned`, so renaming that status in WC admin does
+         * not change this navigation copy.
          */
-        $lddfw_driver_assigned_status_name = esc_html( __( 'Driver assigned', 'lddfw' ) );
+        $lddfw_driver_assigned_status_name = esc_html( __( 'Assigned orders', 'lddfw' ) );
         $lddfw_out_for_delivery_status_name = esc_html( __( 'Out for delivery', 'lddfw' ) );
         $lddfw_failed_attempt_status_name = esc_html( __( 'Failed delivery', 'lddfw' ) );
         if ( function_exists( 'wc_get_order_statuses' ) ) {
@@ -195,11 +201,6 @@ class LDDFW_Public {
                         case get_option( 'lddfw_failed_attempt_status' ):
                             if ( $status !== esc_html( __( 'Failed Delivery Attempt', 'lddfw' ) ) ) {
                                 $lddfw_failed_attempt_status_name = $status;
-                            }
-                            break;
-                        case get_option( 'lddfw_driver_assigned_status' ):
-                            if ( $status !== $lddfw_driver_assigned_status_name ) {
-                                $lddfw_driver_assigned_status_name = $status;
                             }
                             break;
                     }

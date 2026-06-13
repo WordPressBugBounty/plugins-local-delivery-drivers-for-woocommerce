@@ -31,18 +31,20 @@ class LDDFW_Password {
 	public function lddfw_reset_password() {
 		$error  = '';
 		$result = '0';
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified upstream in the AJAX dispatcher via lddfw_wpnonce / lddfw-nonce.
 		if ( isset( $_POST['lddfw_wpnonce'] ) ) {
 
 			if ( isset( $_POST['lddfw_user_email'] ) ) {
 				$email = sanitize_email( wp_unslash( $_POST['lddfw_user_email'] ) );
 			}
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 			if ( empty( $email ) ) {
 				// email is empty.
 				$error = __( 'Email field is empty.', 'lddfw' );
 			} else {
 				// email is invalid.
 				if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-					$error = __( 'The email you entered is invalid.', 'lddfw' );
+					$error = __( 'The email address you entered is invalid.', 'lddfw' );
 				} else {
 					// Check if user exists in WordPress database.
 					$user = get_user_by( 'email', $email );
@@ -90,12 +92,14 @@ class LDDFW_Password {
 	 * @return json
 	 */
 	public function lddfw_new_password() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce verified upstream in the AJAX dispatcher via lddfw_wpnonce / lddfw-nonce.
 		if ( isset( $_POST['lddfw_wpnonce'] ) ) {
 
 				$new_password     = ( isset( $_POST['lddfw_new_password'] ) ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_new_password'] ) ) : '';
 				$confirm_password = ( isset( $_POST['lddfw_confirm_password'] ) ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_confirm_password'] ) ) : '';
 				$reset_key        = ( isset( $_POST['lddfw_reset_key'] ) ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_reset_key'] ) ) : '';
 				$reset_login      = ( isset( $_POST['lddfw_reset_login'] ) ) ? sanitize_text_field( wp_unslash( $_POST['lddfw_reset_login'] ) ) : '';
+				// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 				$result = '0';
 				$error  = '';
@@ -146,6 +150,7 @@ class LDDFW_Password {
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
+					<div class="lddfw-auth-card">
 					<h1>' . esc_html( __( 'Forgot your password?', 'lddfw' ) ) . '</h1>
 					<p>' . esc_html( __( "Enter your email, and we'll email you a link to change your password.", 'lddfw' ) ) . '</p>
 					<form method="post" name="lddfw_forgot_password_frm" id="lddfw_forgot_password_frm" action="' . esc_url( admin_url( 'admin-ajax.php' ) ) . '" nextpage="' . lddfw_drivers_page_url( 'lddfw_screen=dashboard' ) . '">
@@ -161,6 +166,7 @@ class LDDFW_Password {
 						<a href="#" class="lddfw_back_to_login_link">
 						<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg> ' . esc_html( __( 'Back to login', 'lddfw' ) ) . '</a>
 					</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -191,11 +197,13 @@ class LDDFW_Password {
 <div class="container">
 	<div class="row">
 		<div class="col-12">
+			<div class="lddfw-auth-card">
 			<h1>' . esc_html( __( 'Your password has been changed successfully.', 'lddfw' ) ) . '</h1>
-			<p>' . esc_html( __( 'Please click on the login button to login with your new password', 'lddfw' ) ) . '</p>
+			<p>' . esc_html( __( 'Please click the login button to log in with your new password.', 'lddfw' ) ) . '</p>
 			<button id="lddfw_login_button" class="btn btn-lg btn-primary btn-block" type="button">
 				' . esc_html( __( 'Login', 'lddfw' ) ) . '
 			</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -223,14 +231,16 @@ class LDDFW_Password {
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
+					<div class="lddfw-auth-card">
 					<h1>' . esc_html( __( 'Reset password', 'lddfw' ) ) . '</h1>
-					<p>' . esc_html( __( 'A password reset link was sent. Click the link in the email to create a new password. If you do not receive an email within 5 minutes, please click on the resend email button below.', 'lddfw' ) ) . '</p>
+					<p>' . esc_html( __( 'A password reset link has been sent. Click the link in the email to set a new password. If you don\'t receive an email within 5 minutes, click the Resend email button below.', 'lddfw' ) ) . '</p>
 					<button id="lddfw_resend_button" class="btn btn-lg btn-primary btn-block" type="button">
 						' . esc_html( __( 'Resend email', 'lddfw' ) ) . '
 					</button>
 					<a href="#" id="lddfw_back_to_forgot_password_link">
-					<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg> ' . esc_html( __( 'Back to forgot password', 'lddfw' ) ) . '</a>
-				</div>
+					<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg> ' . esc_html( __( 'Back to Forgot Password', 'lddfw' ) ) . '</a>
+					</div>
+					</div>
 			</div>
 		</div>
 		</div>
@@ -266,6 +276,7 @@ class LDDFW_Password {
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
+					<div class="lddfw-auth-card">
 					<form method="post" name="lddfw_new_password_frm" id="lddfw_new_password_frm" action="' . esc_url( admin_url( 'admin-ajax.php' ) ) . '" nextpage="' . lddfw_drivers_page_url( 'lddfw_screen=dashboard' ) . '">
 					<h1>' . esc_html( __( 'Create a new password.', 'lddfw' ) ) . '</h1>
 					<div class="lddfw_alert_wrap"></div>
@@ -282,9 +293,10 @@ class LDDFW_Password {
 					</button>
 					<div class="lddfw_links">
 					<a href="#" id="lddfw_new_password_reset_link">
-					<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg> ' . esc_html( __( 'Back to forgot password', 'lddfw' ) ) . '</a>
+					<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg> ' . esc_html( __( 'Back to Forgot Password', 'lddfw' ) ) . '</a>
 					  </div>
 					</form>
+					</div>
 				</div>
 			</div>
 		</div>

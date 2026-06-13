@@ -159,6 +159,10 @@ if ( !class_exists( 'LDDFW' ) ) {
              */
             include_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lddfw-reports.php';
             /**
+             * The file responsible for the Drivers & Applications admin page.
+             */
+            include_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lddfw-drivers-page.php';
+            /**
              * The file responsible for the sms (available for all users).
              */
             include_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lddfw-sms.php';
@@ -261,6 +265,20 @@ if ( !class_exists( 'LDDFW' ) ) {
             $this->loader->add_action( 'wp_ajax_nopriv_lddfw_ajax', $plugin_admin, 'lddfw_ajax' );
             $this->loader->add_action( 'wp_ajax_lddfw_dismiss_banner', $plugin_admin, 'lddfw_dismiss_banner' );
             /**
+             * Dashboard operational tools AJAX.
+             *
+             * Note: the Broadcast widget was removed from the Dashboard in 2.3.x.
+             * Its AJAX endpoints (lddfw_broadcast_preview / lddfw_broadcast_send)
+             * are no longer registered. The underlying PHP methods on
+             * LDDFW_Reports are kept for backward compatibility.
+             */
+            add_action( 'wp_ajax_lddfw_dismiss_checklist', array('LDDFW_Reports', 'dismiss_checklist_ajax') );
+            /**
+             * Drivers AJAX (available for all users).
+             */
+            $this->loader->add_action( 'wp_ajax_lddfw_driver_form', $plugin_admin, 'lddfw_driver_form_ajax' );
+            $this->loader->add_action( 'wp_ajax_lddfw_driver_save', $plugin_admin, 'lddfw_driver_save_ajax' );
+            /**
              * Add menu
              */
             $this->loader->add_action(
@@ -310,7 +328,16 @@ if ( !class_exists( 'LDDFW' ) ) {
             if ( is_admin() ) {
                 // Insert into sync table when WooCommerce order has been updated.
                 add_action( 'woocommerce_process_shop_order_meta', 'lddfw_insert_sync_order_by_id' );
+                // Clear geocode cache when shipping address is edited (classic orders).
+                add_action( 'woocommerce_process_shop_order_meta', 'lddfw_maybe_clear_geocode_on_classic_save', 20 );
             }
+            // Clear geocode cache when shipping address is edited (HPOS orders).
+            add_action(
+                'woocommerce_order_object_updated_props',
+                'lddfw_maybe_clear_geocode_on_hpos_save',
+                10,
+                2
+            );
             /**
              * Users
              */

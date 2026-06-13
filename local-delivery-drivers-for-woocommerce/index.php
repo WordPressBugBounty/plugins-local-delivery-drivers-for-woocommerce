@@ -5,7 +5,7 @@ if ( !defined( 'WPINC' ) ) {
     die;
 }
 if ( !class_exists( 'WooCommerce' ) ) {
-    die( esc_html( __( 'Local delivery drivers for WooCommerce is a WooCommerce add-on, you must activate a WooCommerce on your site.', 'lddfw' ) ) );
+    die( esc_html( __( 'Local Delivery Drivers for WooCommerce is a WooCommerce add-on. Please activate WooCommerce on your site before continuing.', 'lddfw' ) ) );
 }
 /**
  * Get WordPress query_var.
@@ -75,7 +75,7 @@ if ( !is_user_logged_in() ) {
         if ( 'settings' === $lddfw_screen && '' !== $lddfw_driver_id ) {
             $lddfw_content = $lddfw_screens->lddfw_driver_settings_screen( $lddfw_driver_id );
         }
-        if ( 'assign_to_driver' === $lddfw_screen ) {
+        if ( 'assigned_orders' === $lddfw_screen ) {
             $lddfw_content = $lddfw_screens->lddfw_assign_to_driver_screen( $lddfw_driver_id );
         }
         if ( 'order' === $lddfw_screen && '' !== $lddfw_order_id ) {
@@ -135,6 +135,38 @@ wp_register_style(
     LDDFW_VERSION,
     'all'
 );
+/**
+ * Application form enhancements (country/state Select2 + datepicker polish).
+ *
+ * Select2 is normally registered by WC_Frontend_Scripts via the wp_enqueue_scripts
+ * action - but this /driver/ template is rendered from template_redirect and never
+ * calls wp_head(), so that action never fires. We therefore register Select2 ourselves,
+ * pointing at WooCommerce's bundled copy when available. If WC isn't active we just
+ * skip Select2 and the form degrades to a plain populated <select> (still works).
+ */
+if ( !wp_script_is( 'select2', 'registered' ) && defined( 'WC_PLUGIN_FILE' ) ) {
+    $lddfw_wc_url = plugins_url( '', WC_PLUGIN_FILE );
+    $lddfw_wc_path = dirname( WC_PLUGIN_FILE );
+    $lddfw_select2_js = $lddfw_wc_path . '/assets/js/select2/select2.full.min.js';
+    $lddfw_select2_css = $lddfw_wc_path . '/assets/css/select2.css';
+    if ( file_exists( $lddfw_select2_js ) ) {
+        wp_register_script(
+            'select2',
+            $lddfw_wc_url . '/assets/js/select2/select2.full.min.js',
+            array('jquery'),
+            LDDFW_VERSION,
+            true
+        );
+    }
+    if ( file_exists( $lddfw_select2_css ) ) {
+        wp_register_style(
+            'select2',
+            $lddfw_wc_url . '/assets/css/select2.css',
+            array(),
+            LDDFW_VERSION
+        );
+    }
+}
 // Get the proof of delivery max images option
 $lddfw_proof_of_delivery_max_images = min( 10, max( 1, absint( get_option( 'lddfw_proof_of_delivery_max_images', 1 ) ) ) );
 // Localize script with translation strings for alerts.
@@ -142,13 +174,31 @@ $lddfw_alert_texts = array(
     'max_images'                => esc_js( sprintf( __( 'You cannot upload more than %d images', 'lddfw' ), $lddfw_proof_of_delivery_max_images ) ),
     'max_images_total'          => esc_js( sprintf( __( 'You cannot upload more than %d images in total', 'lddfw' ), $lddfw_proof_of_delivery_max_images ) ),
     'image_too_large'           => esc_js( __( 'Image data is too large', 'lddfw' ) ),
-    'error_saving'              => esc_js( __( 'Error saving images', 'lddfw' ) ),
-    'error_saving_single'       => esc_js( __( 'Error saving image', 'lddfw' ) ),
-    'error_saving_server'       => esc_js( __( 'Error saving image on server', 'lddfw' ) ),
+    'error_saving'              => esc_js( __( 'Error saving images.', 'lddfw' ) ),
+    'error_saving_single'       => esc_js( __( 'Error saving image.', 'lddfw' ) ),
+    'error_saving_server'       => esc_js( __( 'Error saving image on the server.', 'lddfw' ) ),
     'error_saving_ajax'         => esc_js( __( 'Failed to contact server to save image.', 'lddfw' ) ),
-    'error_deleting_server'     => esc_js( __( 'Error deleting image on server', 'lddfw' ) ),
+    'error_deleting_server'     => esc_js( __( 'Error deleting image on the server.', 'lddfw' ) ),
     'error_deleting_ajax'       => esc_js( __( 'Failed to contact server to delete image.', 'lddfw' ) ),
-    'directions_request_failed' => esc_js( __( 'Directions request failed due to', 'lddfw' ) ),
+    'directions_request_failed' => esc_js( __( 'Directions request failed:', 'lddfw' ) ),
+    'view_orders'               => esc_js( __( 'View orders', 'lddfw' ) ),
+    'claim_more'                => esc_js( __( 'Claim more', 'lddfw' ) ),
+    'view_out_for_delivery'     => esc_js( __( 'View orders', 'lddfw' ) ),
+    'send_more'                 => esc_js( __( 'Add more', 'lddfw' ) ),
+    'delivery_started'          => esc_js( __( 'Delivery started', 'lddfw' ) ),
+    'delivery_start_failed'     => esc_js( __( 'Failed to start delivery', 'lddfw' ) ),
+    'invalid_image_type'        => esc_js( __( 'Only JPG, PNG or GIF images are allowed.', 'lddfw' ) ),
+    'image_too_large_file'      => esc_js( __( 'Image is too large (max 6 MB).', 'lddfw' ) ),
+    'toast_close'               => esc_js( __( 'Close', 'lddfw' ) ),
+    'hide_password'             => esc_js( __( 'Hide password', 'lddfw' ) ),
+    'show_password'             => esc_js( __( 'Show password', 'lddfw' ) ),
+    'password_strength_weak'    => esc_js( __( 'Weak', 'lddfw' ) ),
+    'password_strength_fair'    => esc_js( __( 'Fair', 'lddfw' ) ),
+    'password_strength_good'    => esc_js( __( 'Good', 'lddfw' ) ),
+    'password_strength_strong'  => esc_js( __( 'Strong', 'lddfw' ) ),
+    'tracking_error'            => esc_js( __( 'Tracking error', 'lddfw' ) ),
+    'geolocation_not_supported' => esc_js( __( 'Geolocation is not supported by your browser', 'lddfw' ) ),
+    'directions_link_label'     => esc_js( __( 'Directions', 'lddfw' ) ),
 );
 wp_localize_script( 'lddfw-public', 'lddfw_alert_texts', $lddfw_alert_texts );
 ?>
@@ -160,7 +210,7 @@ echo '<title>' . esc_js( __( 'Delivery Driver', 'lddfw' ) ) . '</title>';
 ?>
 <meta name="robots" content="noindex" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
 <link rel="icon" href="<?php 
 echo get_site_icon_url( 32, esc_url( plugin_dir_url( __FILE__ ) . 'public/images/favicon-32x32.png?ver=' . LDDFW_VERSION ) );
 ?>" >
@@ -171,6 +221,11 @@ wp_print_styles( array(
     'lddfw-bootstrap',
     'lddfw-public'
 ) );
+// Application form: Select2 (shipped by WooCommerce) + our polish CSS. Safe to print even on screens
+// that don't render the application form - negligible weight and avoids FOUC when it's present.
+if ( wp_style_is( 'select2', 'registered' ) ) {
+    wp_print_styles( array('select2') );
+}
 if ( is_rtl() === true ) {
     wp_register_style(
         'lddfw-public-rtl',
@@ -220,6 +275,11 @@ if ( lddfw_is_free() ) {
     wp_print_scripts( array('lddfw-bootstrap', 'lddfw-public') );
 } else {
     wp_print_scripts( array('lddfw-bootstrap', 'lddfw-signature', 'lddfw-public') );
+}
+// Application form JS (country/state Select2 + datepicker wiring). Select2's JS is
+// registered by WooCommerce; print it first so our script can call $.fn.select2.
+if ( wp_script_is( 'select2', 'registered' ) ) {
+    wp_print_scripts( array('select2') );
 }
 ?>
 
